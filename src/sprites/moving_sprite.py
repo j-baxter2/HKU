@@ -1,5 +1,4 @@
 import arcade
-from src.data.constants import SPRITE_SIZE
 
 class MovingSprite(arcade.Sprite):
     def __init__(self, data: dict):
@@ -33,6 +32,9 @@ class MovingSprite(arcade.Sprite):
         self.animation_timer = 0
         self.frame_rate = animation_data["framerate"]
         self.walk_cycle_frames = animation_data["walk"]
+
+        self.base_speed = data["speed"]
+        self.speed = 0
 
     def walk_cycle(self, starting_frame: int, ending_frame: int):
         if self.textures:

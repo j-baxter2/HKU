@@ -7,9 +7,11 @@ class Player(MovingSprite):
         # Load player data from JSON
         with open("resources/data/player.json", "r") as file:
             player_dict = json.load(file)
-        player_data = player_dict[str(id)]
+        self.player_data = player_dict[str(id)]
 
-        super().__init__(player_data)
+        super().__init__(self.player_data)
+
+        self.sprint_multiplier = self.player_data["sprint multiplier"]
 
         self.cuteness = 0
         self.score = 0

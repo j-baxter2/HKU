@@ -1,7 +1,6 @@
 import arcade
 import arcade.color
 from src.sprites.player import Player
-from src.data.constants import MOVEMENT_SPEED, PLAYER_SCALING
 from src.data import controls
 from pyglet.math import Vec2
 
@@ -95,9 +94,9 @@ class GameSection(arcade.Section):
 
     def update_movement_speed(self):
         if self.sprint_pressed:
-            self.player_sprite.speed = MOVEMENT_SPEED*2
+            self.player_sprite.speed = self.player_sprite.base_speed * self.player_sprite.sprint_multiplier
         else:
-            self.player_sprite.speed = MOVEMENT_SPEED
+            self.player_sprite.speed = self.player_sprite.base_speed
 
     def update_movement(self):
         self.update_movement_direction()
