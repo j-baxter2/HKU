@@ -28,6 +28,7 @@ class GameSection(arcade.Section):
 
     def setup(self):
         self.player_sprite = Player(id=0)
+
         self.player_sprite.center_x = self.width//2
         self.player_sprite.center_y = self.height//2
 
@@ -49,8 +50,14 @@ class GameSection(arcade.Section):
 
 
     def on_update(self, delta_time: float):
+
         self.update_movement()
         self.update_animation()
+
+        # Check if sprinting and update stamina
+        self.player_sprite.sprinting = self.sprint_pressed
+        self.player_sprite.update_stamina(delta_time)
+
         self.physicsEngine.update()
 
     def on_draw(self):
@@ -93,8 +100,11 @@ class GameSection(arcade.Section):
             self.player_sprite.velocity += Vec2(1, 0)
 
     def update_movement_speed(self):
-        if self.sprint_pressed:
-            self.player_sprite.speed = self.player_sprite.base_speed * self.player_sprite.sprint_multiplier
+        if self.player_sprite.stamina > 0:
+            if self.sprint_pressed:
+                self.player_sprite.speed = self.player_sprite.base_speed * self.player_sprite.sprint_multiplier
+            else:
+                self.player_sprite.speed = self.player_sprite.base_speed
         else:
             self.player_sprite.speed = self.player_sprite.base_speed
 
@@ -119,19 +129,39 @@ class GameSection(arcade.Section):
         self.player_sprite.advance_walk_cycle()
 
 class UISection(arcade.Section):
-    def __init__(self, left: int, bottom: int, width: int, height: int,
-                 **kwargs):
+    def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
         super().__init__(left, bottom, width, height,
                           **kwargs)
+        self.player = None
 
     def setup(self):
-        pass
+        self.player = self.get_player()
 
     def on_update(self, delta_time: float):
         pass
 
     def on_draw(self):
-        pass
+        self.draw_stamina_bar()
+
+    def draw_stamina_bar(self):
+        if self.player:
+            # Calculate the width of the filled portion of the stamina bar
+            filled_width = (self.player.stamina / self.player.max_stamina) * 100
+            # Draw the background of the stamina bar
+            arcade.draw_rectangle_filled(center_x=self.left + 100,
+                                         center_y=self.bottom + 70,
+                                         width=100,
+                                         height=10,
+                                         color=arcade.color.BLACK)
+            # Draw the filled portion of the stamina bar
+            arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
+                                         center_y=self.bottom + 70,
+                                         width=filled_width,
+                                         height=10,
+                                         color=arcade.color.GREEN)
+
+    def get_player(self):
+        return self.view.game_section.player_sprite
 
 class GameView(arcade.View):
     def __init__(self):
@@ -146,7 +176,10 @@ class GameView(arcade.View):
         self.sectionManager.add_section(self.game_section)
         self.sectionManager.add_section(self.ui_section)
 
+        self.player_sprite = None
+
     def setup(self):
+
         self.game_section.setup()
         self.ui_section.setup()
 

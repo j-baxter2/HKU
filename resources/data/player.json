@@ -3,7 +3,8 @@
         "name": "Meepo",
         "cuteness limit": 10,
         "stamina": 100,
-        "stamina regen": 1,
+        "stamina regen": 30,
+        "stationary stamina bonus": 100,
         "speed": 2,
         "sprint multiplier": 2,
         "spritesheet": {
@@ -15,7 +16,7 @@
             "scale": 2
             },
         "animation": {
-            "framerate": 1,
+            "frametime": 1,
             "walk": {
                 "up": [0, 3],
                 "down": [4, 7],
