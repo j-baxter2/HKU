@@ -1,5 +1,3 @@
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 800
 WINDOW_TITLE = "( Hungry Kitty Uprising | A BestKitty Game )"
 
 SPRITE_SIZE = 16
