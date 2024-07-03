@@ -18,7 +18,7 @@ class GameSection(arcade.Section):
         self.right_pressed = False
         self.sprint_pressed = False
 
-        self.wallSpriteList = None
+        self.tile_map = None
 
         # Physics engine
         self.physicsEngine = None
@@ -32,20 +32,13 @@ class GameSection(arcade.Section):
         self.player_sprite.center_x = self.width//2
         self.player_sprite.center_y = self.height//2
 
-        self.player_sprite_list = arcade.SpriteList()
-        self.player_sprite_list.append(self.player_sprite)
+        self.load_map("resources/maps/map.json")
 
-        self.wallSpriteList = arcade.SpriteList(use_spatial_hash=True)
-
-        for x in range(0, int(self.width), 64):
-            wall = arcade.Sprite("resources/textures/wall.png")
-            wall.center_x = x
-            wall.center_y = self.bottom+self.height//2
-            self.wallSpriteList.append(wall)
+        self.scene.add_sprite("Player", self.player_sprite)
 
         self.physicsEngine = arcade.PhysicsEngineSimple(
             self.player_sprite,
-            self.wallSpriteList
+            walls=self.scene["Walls"]
         )
 
 
@@ -61,8 +54,10 @@ class GameSection(arcade.Section):
         self.physicsEngine.update()
 
     def on_draw(self):
-        self.player_sprite.draw()
-        self.wallSpriteList.draw()
+        self.scene.draw()
+
+        for sprite_list in self.scene.sprite_lists:
+            sprite_list.draw_hit_boxes(arcade.color.RED)
 
     def on_key_press(self, key, modifiers):
         if key == controls.UP:
@@ -127,6 +122,17 @@ class GameSection(arcade.Section):
             elif self.right_pressed:
                 self.player_sprite.start_walk_cycle('right')
         self.player_sprite.advance_walk_cycle()
+
+    def load_map(self, map_path):
+        layer_options = {
+            "Walls": {
+                "use_spatial_hash": True
+            }
+        }
+
+        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options, hit_box_algorithm='Detailed')
+
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
 class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):

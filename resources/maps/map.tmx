@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="48" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" name="my_tiles" tilewidth="64" tileheight="64" tilecount="2" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="1">
+   <image source="../textures/grass.png" width="64" height="64"/>
+  </tile>
+  <tile id="2">
+   <image source="../textures/wall.png" width="32" height="32"/>
+  </tile>
+ </tileset>
+ <layer id="1" name="Floor" width="48" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztzsEJADAMA7HQ/YfuDs2nBzLc06CZ9k44fn7+bi/+WXx/8P8UPz9/N35+/m78/Pzd+Pn5u/Hzb/0XVlQLXw==
+  </data>
+ </layer>
+ <layer id="2" name="Walls" width="48" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztl9sKwCAMQwX//5/3PrZu6SVWyQGfhmmiULsxhBBCiH9MYHUE8dUxY3ZNdiaGfmUO1p3LP1eXVUv+19bazb/Vn5Fe53nHuvSKr4w7+Le+dfYfOfsu/j17I97R7JHzR/Uy9qMzo2fmjmD1ySf9aP+518ggeyZ/y105L1forv7/EuIULnRWAXU=
+  </data>
+ </layer>
+</map>
