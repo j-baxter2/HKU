@@ -1,6 +1,7 @@
 import arcade
 import arcade.color
 from src.sprites.player import Player
+from src.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
 
@@ -23,7 +24,7 @@ class GameSection(arcade.Section):
         # Physics engine
         self.physicsEngine = None
 
-        self.camera = arcade.Camera(self.width, self.height)
+        self.camera = None
 
 
     def setup(self):
@@ -32,7 +33,7 @@ class GameSection(arcade.Section):
         self.player_sprite.center_x = self.width//2
         self.player_sprite.center_y = self.height//2
 
-        self.load_map("resources/maps/map.json")
+        self.load_map("resources/maps/map2.json")
 
         self.scene.add_sprite("Player", self.player_sprite)
 
@@ -40,6 +41,8 @@ class GameSection(arcade.Section):
             self.player_sprite,
             walls=self.scene["Walls"]
         )
+
+        self.camera = HKUCamera(self.width, self.height)
 
 
     def on_update(self, delta_time: float):
@@ -51,13 +54,12 @@ class GameSection(arcade.Section):
         self.player_sprite.sprinting = self.sprint_pressed
         self.player_sprite.update_stamina(delta_time)
 
+        self.update_camera()
+
         self.physicsEngine.update()
 
     def on_draw(self):
         self.scene.draw()
-
-        for sprite_list in self.scene.sprite_lists:
-            sprite_list.draw_hit_boxes(arcade.color.RED)
 
     def on_key_press(self, key, modifiers):
         if key == controls.UP:
@@ -123,6 +125,11 @@ class GameSection(arcade.Section):
                 self.player_sprite.start_walk_cycle('right')
         self.player_sprite.advance_walk_cycle()
 
+    def update_camera(self):
+        player_position_for_cam = Vec2(self.player_sprite.center_x-(self.width//2), self.player_sprite.center_y-(self.height//2))
+        self.camera.move_to(player_position_for_cam)
+        self.camera.use()
+
     def load_map(self, map_path):
         layer_options = {
             "Walls": {
@@ -139,14 +146,17 @@ class UISection(arcade.Section):
         super().__init__(left, bottom, width, height,
                           **kwargs)
         self.player = None
+        self.camera = None
 
     def setup(self):
         self.player = self.get_player()
+        self.camera = arcade.Camera(self.width, self.height)
 
     def on_update(self, delta_time: float):
         pass
 
     def on_draw(self):
+        self.camera.use()
         self.draw_stamina_bar()
 
     def draw_stamina_bar(self):
@@ -173,8 +183,8 @@ class GameView(arcade.View):
     def __init__(self):
         super().__init__()
 
-        self.game_section = GameSection(0.05*self.window.width, 0.2*self.window.height,
-                                       0.9*self.window.width, 0.6*self.window.height, accept_keyboard_events=True)
+        self.game_section = GameSection(0, 0,
+                                       self.window.width, self.window.height, accept_keyboard_events=True)
         self.ui_section = UISection(0, 0,
                                    self.window.width, self.window.height)
 
@@ -194,10 +204,7 @@ class GameView(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
-        #draw a rectangle bounding the game section
-        arcade.draw_lrtb_rectangle_outline(self.game_section.left, self.game_section.right,
-                                      self.game_section.top, self.game_section.bottom,
-                                      arcade.color.BLACK, 3)
+
         self.game_section.on_draw()
         self.ui_section.on_draw()
 

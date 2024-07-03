@@ -30,7 +30,7 @@ class Player(MovingSprite):
         if self.sprinting:
             self.stamina -= 1
         # Regenerate quicker when stationary
-        elif self.speed == 0:
+        elif Vec2(self.velocity[0], self.velocity[1]).mag < 0.01:
             self.stamina += (self.stamina_regen + self.stamina_regen_bonus_stationary) * delta_time
         # Normal regeneration when walking
         else:
