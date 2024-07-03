@@ -130,7 +130,7 @@ class GameSection(arcade.Section):
             }
         }
 
-        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options, hit_box_algorithm='Detailed')
+        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options)
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 

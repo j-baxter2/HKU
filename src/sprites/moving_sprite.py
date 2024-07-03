@@ -30,6 +30,10 @@ class MovingSprite(arcade.Sprite):
         if self.textures:
             self.set_texture(0)
 
+        # Initialise hitbox
+        self._hit_box_algorithm = 'Simple'
+        self.set_hit_box(self.texture.hit_box_points)
+
         # Load animation data from JSON
         animation_data = data["animation"]
 
