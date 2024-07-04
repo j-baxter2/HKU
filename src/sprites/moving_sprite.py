@@ -77,3 +77,14 @@ class MovingSprite(arcade.Sprite):
                     next(self.current_walk_cycle)
                 except StopIteration:
                     self.current_walk_cycle = None  # Reset the cycle if it's finished
+
+    @property
+    def stationary(self):
+        if self.velocity == [0, 0]:
+            return True
+        else:
+            return False
+
+    def on_sprint_start(self):
+        if not self.dust_emitter:  # Check if an emitter does not already exist
+            self.create_dust_emitter(self.position)

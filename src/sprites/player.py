@@ -4,6 +4,7 @@ import json
 from pyglet.math import Vec2
 
 class Player(MovingSprite):
+
     def __init__(self, id: int):
         # Load player data from JSON
         with open("resources/data/player.json", "r") as file:
@@ -25,12 +26,22 @@ class Player(MovingSprite):
         self.stamina = self.max_stamina
         self.sprinting = False
 
+    def update(self):
+        super().update()
+        if self.sprinting and self.dust_emitter:
+            self.dust_emitter.update()
+
+    def draw(self):
+        super().draw()
+        if self.dust_emitter:
+            self.dust_emitter.draw()
+
     def update_stamina(self, delta_time):
         # Subtract stamina when sprinting
         if self.sprinting:
             self.stamina -= 1
         # Regenerate quicker when stationary
-        elif Vec2(self.velocity[0], self.velocity[1]).mag < 0.01:
+        elif self.stationary:
             self.stamina += (self.stamina_regen + self.stamina_regen_bonus_stationary) * delta_time
         # Normal regeneration when walking
         else:

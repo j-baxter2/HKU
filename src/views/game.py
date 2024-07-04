@@ -51,7 +51,8 @@ class GameSection(arcade.Section):
         self.update_animation()
 
         # Check if sprinting and update stamina
-        self.player_sprite.sprinting = self.sprint_pressed
+        if not self.player_sprite.stationary and self.sprint_pressed:
+            self.player_sprite.stamina -= 1
         self.player_sprite.update_stamina(delta_time)
 
         self.update_camera()
@@ -194,13 +195,15 @@ class GameView(arcade.View):
 
         self.player_sprite = None
 
+        self.debug = False
+
     def setup(self):
 
         self.game_section.setup()
         self.ui_section.setup()
 
     def on_show_view(self):
-        arcade.set_background_color(arcade.color.ANDROID_GREEN)
+        arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
 
     def on_draw(self):
         arcade.start_render()
@@ -208,11 +211,24 @@ class GameView(arcade.View):
         self.game_section.on_draw()
         self.ui_section.on_draw()
 
+        if self.debug:
+            self.ui_section.camera.use()
+            arcade.draw_text("Debug Mode", self.window.width - 100, self.window.height - 20, arcade.color.RED, 12)
+            self.game_section.camera.use()
+            for sprite_list in self.game_section.scene.sprite_lists:
+                # Iterate through each sprite in the sprite list
+                for sprite in sprite_list:
+                    # Draw the hitbox for each sprite
+                    sprite.draw_hit_box(arcade.color.RED, line_thickness=2)
+
     def on_update(self, delta_time: float):
         self.game_section.on_update(delta_time)
         self.ui_section.on_update(delta_time)
 
     def on_key_press(self, key, modifiers):
+        if key == arcade.key.APOSTROPHE:
+            self.debug = not self.debug
+
         self.game_section.on_key_press(key, modifiers)
 
     def on_key_release(self, key, modifiers):
