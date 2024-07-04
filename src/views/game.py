@@ -4,6 +4,7 @@ from src.sprites.player import Player
 from src.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
+from src.sprites.kitty import FollowingKitty
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -12,6 +13,8 @@ class GameSection(arcade.Section):
                           **kwargs)
         self.player_sprite = None
         self.player_sprite_list = None
+
+        self.kitty_sprite_list = None
 
         self.up_pressed = False
         self.down_pressed = False
@@ -30,16 +33,19 @@ class GameSection(arcade.Section):
     def setup(self):
         self.player_sprite = Player(id=0)
 
+        self.kitty_sprite = FollowingKitty(id=0, player=self.player_sprite)
+
         self.player_sprite.center_x = self.width//2
         self.player_sprite.center_y = self.height//2
 
         self.load_map("resources/maps/map2.json")
 
         self.scene.add_sprite("Player", self.player_sprite)
+        self.scene.add_sprite("Kitty", self.kitty_sprite)
 
         self.physicsEngine = arcade.PhysicsEngineSimple(
             self.player_sprite,
-            walls=self.scene["Walls"]
+            walls=self.scene["Wall"]
         )
 
         self.camera = HKUCamera(self.width, self.height)
@@ -54,6 +60,8 @@ class GameSection(arcade.Section):
         if not self.player_sprite.stationary and self.sprint_pressed:
             self.player_sprite.stamina -= 1
         self.player_sprite.update_stamina(delta_time)
+
+        self.kitty_sprite.update()
 
         self.update_camera()
 

@@ -1,15 +1,25 @@
 import arcade
+from src.sprites.moving_sprite import MovingSprite
+import json
 
-class Kitty(arcade.Sprite):
-    def __init__(self, image_file, scale=1):
-        super().__init__(image_file, scale)
-        self.center_x = 0  # Set the initial x position of the kitty
-        self.center_y = 0  # Set the initial y position of the kitty
+class FollowingKitty(MovingSprite):
+    def __init__(self, id : int, player : arcade.Sprite):
+        # Load player data from JSON
+        with open("resources/data/kitty.json", "r") as file:
+            kitty_dict = json.load(file)
+        self.kitty_data = kitty_dict[str(id)]
+
+        self.player = player
+        self.follow_distance = self.kitty_data["follow radius"]
+        super().__init__(self.kitty_data)
 
     def update(self):
-        # Add any update logic for the kitty here
-        pass
+        # Calculate the distance to the player
+        distance_to_player = arcade.get_distance_between_sprites(self, self.player)
 
-    def draw(self):
-        # Add any drawing logic for the kitty here
-        self.draw()
+        # If the kitty is further away from the player than the follow distance, move towards the player
+        if distance_to_player > self.follow_distance:
+            self.center_x += (self.player.center_x - self.center_x) * 0.05
+            self.center_y += (self.player.center_y - self.center_y) * 0.05
+
+        super().update()
