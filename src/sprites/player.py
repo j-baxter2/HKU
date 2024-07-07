@@ -28,13 +28,9 @@ class Player(MovingSprite):
 
     def update(self):
         super().update()
-        if self.sprinting and self.dust_emitter:
-            self.dust_emitter.update()
 
     def draw(self):
         super().draw()
-        if self.dust_emitter:
-            self.dust_emitter.draw()
 
     def update_stamina(self, delta_time):
         # Subtract stamina when sprinting
@@ -55,3 +51,6 @@ class Player(MovingSprite):
 
     def increase_score(self, points):
         self.score += points
+
+    def get_integer_position(self):
+        return (int(self.center_x), int(self.center_y))

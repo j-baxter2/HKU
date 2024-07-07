@@ -1,8 +1,9 @@
 {
     "0" : {
         "name": "Rue",
-        "follow radius": 100,
-        "speed": 1,
+        "follow radius": 500,
+        "speed": 5,
+        "follow speed bonus": 1.8,
         "spritesheet": {
             "path": "resources/spritesheets/cat.png",
             "columns": 4,

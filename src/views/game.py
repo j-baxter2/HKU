@@ -1,16 +1,19 @@
 import arcade
 import arcade.color
 from src.sprites.player import Player
-from src.camera import HKUCamera
+from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
 from src.sprites.kitty import FollowingKitty
+from src.utils.level import Level
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
                  **kwargs):
         super().__init__(left, bottom, width, height,
                           **kwargs)
+        self.current_level = None
+
         self.player_sprite = None
         self.player_sprite_list = None
 
@@ -33,15 +36,17 @@ class GameSection(arcade.Section):
     def setup(self):
         self.player_sprite = Player(id=0)
 
-        self.kitty_sprite = FollowingKitty(id=0, player=self.player_sprite)
+        self.load_map("resources/maps/map2.json")
+
+        self.current_level = Level(level_id=1, player=self.player_sprite, game_section=self)
+        self.current_level.load_kitties()
 
         self.player_sprite.center_x = self.width//2
         self.player_sprite.center_y = self.height//2
 
-        self.load_map("resources/maps/map2.json")
 
         self.scene.add_sprite("Player", self.player_sprite)
-        self.scene.add_sprite("Kitty", self.kitty_sprite)
+        self.scene.add_sprite_list(name = "Kitty", use_spatial_hash=True, sprite_list=self.current_level.kitties)
 
         self.physicsEngine = arcade.PhysicsEngineSimple(
             self.player_sprite,
@@ -55,13 +60,12 @@ class GameSection(arcade.Section):
 
         self.update_movement()
         self.update_animation()
+        self.scene.update()
 
         # Check if sprinting and update stamina
         if not self.player_sprite.stationary and self.sprint_pressed:
             self.player_sprite.stamina -= 1
         self.player_sprite.update_stamina(delta_time)
-
-        self.kitty_sprite.update()
 
         self.update_camera()
 
@@ -150,6 +154,10 @@ class GameSection(arcade.Section):
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
+    @property
+    def map_bounds(self):
+        return (self.tile_map.width * self.tile_map.tile_width, self.tile_map.height * self.tile_map.tile_height)
+
 class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
         super().__init__(left, bottom, width, height,
@@ -220,14 +228,7 @@ class GameView(arcade.View):
         self.ui_section.on_draw()
 
         if self.debug:
-            self.ui_section.camera.use()
-            arcade.draw_text("Debug Mode", self.window.width - 100, self.window.height - 20, arcade.color.RED, 12)
-            self.game_section.camera.use()
-            for sprite_list in self.game_section.scene.sprite_lists:
-                # Iterate through each sprite in the sprite list
-                for sprite in sprite_list:
-                    # Draw the hitbox for each sprite
-                    sprite.draw_hit_box(arcade.color.RED, line_thickness=2)
+            self.debug_draw()
 
     def on_update(self, delta_time: float):
         self.game_section.on_update(delta_time)
@@ -241,3 +242,19 @@ class GameView(arcade.View):
 
     def on_key_release(self, key, modifiers):
         self.game_section.on_key_release(key, modifiers)
+
+    def debug_draw(self):
+        self.ui_section.camera.use()
+        arcade.draw_text("Debug Mode", self.window.width - 100, self.window.height - 20, arcade.color.RED, 12)
+        kitty_count = len(self.game_section.scene.get_sprite_list("Kitty"))
+        arcade.draw_text(f"Kitties: {kitty_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
+        player_pos = self.game_section.player_sprite.get_integer_position()
+        arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 60, arcade.color.RED, 12)
+        self.game_section.camera.use()
+        for sprite_list in self.game_section.scene.sprite_lists:
+            # Iterate through each sprite in the sprite list
+            for sprite in sprite_list:
+                # Draw the hitbox for each sprite
+                sprite.draw_hit_box(arcade.color.RED, line_thickness=2)
+                #if sprite_list.name == "Kitty":
+                #    sprite.draw_follow_radius()

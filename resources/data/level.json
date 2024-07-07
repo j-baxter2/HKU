@@ -1,0 +1,10 @@
+{
+    "1": {
+        "kitties": {
+        "kitty amount": 5,
+        "kitty ratio": {
+            "0": 1
+            }
+        }
+    }
+}
