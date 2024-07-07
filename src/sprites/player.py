@@ -54,3 +54,7 @@ class Player(MovingSprite):
 
     def get_integer_position(self):
         return (int(self.center_x), int(self.center_y))
+
+    def debug_draw(self):
+        self.draw_hit_box()
+        super().debug_draw()

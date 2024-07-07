@@ -75,3 +75,7 @@ class FollowingKitty(MovingSprite):
 
     def draw_follow_radius(self):
         arcade.draw_circle_outline(self.center_x, self.center_y, self.follow_distance, arcade.color.BLUE, 2)
+
+    def debug_draw(self):
+        self.draw_follow_radius()
+        super().debug_draw()

@@ -50,7 +50,9 @@ class GameSection(arcade.Section):
 
         self.physicsEngine = arcade.PhysicsEngineSimple(
             self.player_sprite,
-            walls=self.scene["Wall"]
+            walls=[
+                self.scene["Wall"]
+            ]
         )
 
         self.camera = HKUCamera(self.width, self.height)
@@ -250,11 +252,3 @@ class GameView(arcade.View):
         arcade.draw_text(f"Kitties: {kitty_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
         player_pos = self.game_section.player_sprite.get_integer_position()
         arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 60, arcade.color.RED, 12)
-        self.game_section.camera.use()
-        for sprite_list in self.game_section.scene.sprite_lists:
-            # Iterate through each sprite in the sprite list
-            for sprite in sprite_list:
-                # Draw the hitbox for each sprite
-                sprite.draw_hit_box(arcade.color.RED, line_thickness=2)
-                #if sprite_list.name == "Kitty":
-                #    sprite.draw_follow_radius()
