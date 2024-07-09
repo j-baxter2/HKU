@@ -31,8 +31,11 @@ class MenuView(arcade.View):
             )
         )
 
+    def on_update(self,delta_time):
+        self.manager.on_update(delta_time)
+
     def on_show_view(self):
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcade.set_background_color(arcade.color.AIR_SUPERIORITY_BLUE)
         self.manager.enable()
 
     def on_draw(self):

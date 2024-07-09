@@ -15,9 +15,6 @@ class GameSection(arcade.Section):
         self.current_level = None
 
         self.player_sprite = None
-        self.player_sprite_list = None
-
-        self.kitty_sprite_list = None
 
         self.up_pressed = False
         self.down_pressed = False
@@ -28,7 +25,7 @@ class GameSection(arcade.Section):
         self.tile_map = None
 
         # Physics engine
-        self.physicsEngine = None
+        self.physics_engine = None
 
         self.camera = None
 
@@ -36,7 +33,7 @@ class GameSection(arcade.Section):
     def setup(self):
         self.player_sprite = Player(id=0)
 
-        self.load_map("resources/maps/map2.json")
+        self.load_map("resources/maps/map.json")
 
         self.current_level = Level(level_id=1, player=self.player_sprite, game_section=self)
         self.current_level.load_kitties()
@@ -48,12 +45,15 @@ class GameSection(arcade.Section):
         self.scene.add_sprite("Player", self.player_sprite)
         self.scene.add_sprite_list(name = "Kitty", use_spatial_hash=True, sprite_list=self.current_level.kitties)
 
-        self.physicsEngine = arcade.PhysicsEngineSimple(
+        self.physics_engine = arcade.PhysicsEngineSimple(
             self.player_sprite,
             walls=[
                 self.scene["Wall"]
             ]
         )
+
+        for kitty in self.scene.get_sprite_list("Kitty"):
+            kitty.setup()
 
         self.camera = HKUCamera(self.width, self.height)
 
@@ -65,13 +65,12 @@ class GameSection(arcade.Section):
         self.scene.update()
 
         # Check if sprinting and update stamina
-        if not self.player_sprite.stationary and self.sprint_pressed:
-            self.player_sprite.stamina -= 1
+        self.player_sprite.sprinting = (self.sprint_pressed and not self.player_sprite.stationary)
         self.player_sprite.update_stamina(delta_time)
 
         self.update_camera()
 
-        self.physicsEngine.update()
+        self.physics_engine.update()
 
     def on_draw(self):
         self.scene.draw()
@@ -252,3 +251,9 @@ class GameView(arcade.View):
         arcade.draw_text(f"Kitties: {kitty_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
         player_pos = self.game_section.player_sprite.get_integer_position()
         arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 60, arcade.color.RED, 12)
+
+        self.game_section.camera.use()
+        self.game_section.player_sprite.debug_draw()
+        kitties = self.game_section.scene.get_sprite_list("Kitty")
+        for kitty in kitties:
+            kitty.debug_draw()

@@ -1,6 +1,5 @@
 import json
 import arcade
-import numpy as np
 from src.sprites.kitty import FollowingKitty
 from src.sprites.player import Player
 
@@ -25,6 +24,5 @@ class Level:
         for kitty_id, ratio in kitty_ratio.items():
             for _ in range(int(ratio * kitty_amount)):
                 kitty = FollowingKitty(id=int(kitty_id), player=self.player)
-                kitty.center_x = np.random.uniform(0, map_bounds[0])
-                kitty.center_y = np.random.uniform(0, map_bounds[1])
+                kitty.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
                 self.kitties.append(kitty)

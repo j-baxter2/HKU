@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="48" height="32" tilewidth="128" tileheight="128" infinite="0" nextlayerid="6" nextobjectid="13">
+ <editorsettings>
+  <export target="map3.json" format="json"/>
+ </editorsettings>
+ <tileset firstgid="1" name="HKU_Tileset" tilewidth="128" tileheight="128" tilecount="27" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image source="../textures/map_tiles/default_bookshelf.png" width="128" height="128"/>
+  </tile>
+  <tile id="2">
+   <image source="../textures/map_tiles/default_cobble.png" width="128" height="128"/>
+  </tile>
+  <tile id="3">
+   <image source="../textures/map_tiles/default_grass.png" width="128" height="128"/>
+  </tile>
+  <tile id="4">
+   <image source="../textures/map_tiles/vessels_shelf.png" width="128" height="128"/>
+  </tile>
+  <tile id="5">
+   <image source="../textures/map_tiles/default_grass_side.png" width="128" height="128"/>
+  </tile>
+  <tile id="6">
+   <image source="../textures/map_tiles/default_desert_sand.png" width="128" height="128"/>
+  </tile>
+  <tile id="7">
+   <image source="../textures/map_tiles/farming_soil.png" width="128" height="128"/>
+  </tile>
+  <tile id="8">
+   <image source="../textures/map_tiles/flowers_mushroom_red.png" width="64" height="64"/>
+  </tile>
+  <tile id="9">
+   <image source="../textures/map_tiles/flowers_mushroom_brown.png" width="64" height="64"/>
+  </tile>
+  <tile id="10">
+   <image source="../textures/map_tiles/default_aspen_sapling.png" width="128" height="128"/>
+  </tile>
+  <tile id="11">
+   <image source="../textures/map_tiles/default_acacia_sapling.png" width="128" height="128"/>
+  </tile>
+  <tile id="12">
+   <image source="../textures/map_tiles/default_stone_brick.png" width="128" height="128"/>
+  </tile>
+  <tile id="13">
+   <image source="../textures/map_tiles/default_water.png" width="128" height="128"/>
+  </tile>
+  <tile id="14">
+   <image source="../textures/map_tiles/wool_blue.png" width="128" height="128"/>
+  </tile>
+  <tile id="15">
+   <image source="../textures/map_tiles/wool_brown.png" width="128" height="128"/>
+  </tile>
+  <tile id="16">
+   <image source="../textures/map_tiles/wool_cyan.png" width="128" height="128"/>
+  </tile>
+  <tile id="17">
+   <image source="../textures/map_tiles/wool_dark_green.png" width="128" height="128"/>
+  </tile>
+  <tile id="18">
+   <image source="../textures/map_tiles/wool_dark_grey.png" width="128" height="128"/>
+  </tile>
+  <tile id="19">
+   <image source="../textures/map_tiles/wool_green.png" width="128" height="128"/>
+  </tile>
+  <tile id="20">
+   <image source="../textures/map_tiles/wool_grey.png" width="128" height="128"/>
+  </tile>
+  <tile id="21">
+   <image source="../textures/map_tiles/wool_magenta.png" width="128" height="128"/>
+  </tile>
+  <tile id="22">
+   <image source="../textures/map_tiles/wool_orange.png" width="128" height="128"/>
+  </tile>
+  <tile id="23">
+   <image source="../textures/map_tiles/wool_pink.png" width="128" height="128"/>
+  </tile>
+  <tile id="24">
+   <image source="../textures/map_tiles/wool_red.png" width="128" height="128"/>
+  </tile>
+  <tile id="25">
+   <image source="../textures/map_tiles/wool_violet.png" width="128" height="128"/>
+  </tile>
+  <tile id="26">
+   <image source="../textures/map_tiles/wool_white.png" width="128" height="128"/>
+  </tile>
+  <tile id="27">
+   <image source="../textures/map_tiles/wool_yellow.png" width="128" height="128"/>
+  </tile>
+ </tileset>
+ <layer id="1" name="Floor" width="48" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzd1kELwjAMBeCCg3rZYOBl//+POg+BENqlLOnyYiFQ9OD3HnFaSv5znPM5Zxf3es4mZgEaOtJN9yoyRHt7/ozdc39vf1Y20Vatf74zR8HdHd4pnZ3Zt4K7O2tp+1t9I/mlW/p59yhmzb4wv7RHmzU/vUcHsfc7fq/PfClj3Rvp9+7sZ3w33PSah32239J/z/9k/9n3x+rnGeQ9i/8qD/fXCX7L9xfB793/1fPf2z9jND9yBu3391/8iBlGnv+14Ga440fKYfEj5PDwR2YY+f+ZxW/pPyqDpz8ixwz/kzlG9j/z+QIA5R3q
+  </data>
+ </layer>
+ <layer id="3" name="Wall" width="48" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt1VsKhTAMRdHjh4IPOkaH5lAcmgYtlNJaQWsSzIKg+HHdBPUCQAesGgdH+4ILLnMuwd4+l/qJg7x2Uup30Uhzd/9S3emXunuS6nfBUfKzQ3L9qZEo7tfQHAr7NXV7vl/b3r24X5ua3/8+cW16+R5/+P96qt2nqfTbtv9v5N6bmv1j4trw8j207D/H+nlZPy/r52X9vKyfl/Xzov7zqHLIBgrZRik=
+  </data>
+ </layer>
+</map>

@@ -85,6 +85,5 @@ class MovingSprite(arcade.Sprite):
         else:
             return False
 
-    def on_sprint_start(self):
-        if not self.dust_emitter:  # Check if an emitter does not already exist
-            self.create_dust_emitter(self.position)
+    def debug_draw(self):
+        self.draw_hit_box()
