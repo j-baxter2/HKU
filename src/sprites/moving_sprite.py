@@ -1,4 +1,6 @@
 import arcade
+import random
+from pyglet.math import Vec2
 
 class MovingSprite(arcade.Sprite):
     def __init__(self, data: dict):
@@ -87,3 +89,9 @@ class MovingSprite(arcade.Sprite):
 
     def debug_draw(self):
         self.draw_hit_box()
+
+    def randomize_velocity(self):
+        if isinstance(self.velocity, list):
+            self.velocity = [random.uniform(-1, 1), random.uniform(-1,1)]
+        elif isinstance(self.velocity, Vec2):
+            self.velocity = Vec2(random.uniform(-1, 1), random.uniform(-1,1))

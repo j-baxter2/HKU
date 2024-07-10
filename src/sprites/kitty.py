@@ -5,6 +5,7 @@ from pyglet.math import Vec2
 import random
 import math
 import json
+from src.utils.constants import MAP_WIDTH, MAP_HEIGHT
 
 class FollowingKitty(MovingSprite):
     def __init__(self, id : int, player : Player):
@@ -26,7 +27,7 @@ class FollowingKitty(MovingSprite):
         super().__init__(self.kitty_data)
 
     def setup(self):
-        self.velocity = Vec2(random.uniform(-1, 1), random.uniform(-1, 1))
+        self.randomize_velocity()
 
     def update(self):
         self.update_movement()
@@ -38,10 +39,10 @@ class FollowingKitty(MovingSprite):
     def update_movement_direction(self):
         #todo: implement treats taking priority over player
         if self.in_range:
-            self.velocity = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
-        elif self.random_movement_timer >= (self.change_direction_time+random.uniform(-0.1, 5)):
+            self.face_player()
+        elif self.should_turn:
             #set movement direction to random
-            self.velocity = Vec2(random.uniform(-1, 1), random.uniform(-1, 1))
+            self.randomize_velocity()
             self.random_movement_timer = 0
 
     def update_movement_speed(self):
@@ -63,9 +64,9 @@ class FollowingKitty(MovingSprite):
         self.handle_out_of_bounds()
 
     def handle_out_of_bounds(self):
-        if self.center_x < 0 or self.center_x > (128*48):
+        if self.center_x < 0 or self.center_x > MAP_WIDTH:
             self.velocity = [self.velocity[0] * -1, self.velocity[1]]
-        elif self.center_y < 0 or self.center_y > (128*32):
+        elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
             self.velocity = [self.velocity[0], self.velocity[1] * -1]
 
     @property
@@ -99,9 +100,17 @@ class FollowingKitty(MovingSprite):
         if arcade.check_for_collision(self, self.player):
             self.kill()
 
+    def face_player(self):
+        self.velocity = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
+
     @property
     def in_range(self):
         return arcade.get_distance_between_sprites(self, self.player) < self.follow_distance
+
+    @property
+    def should_turn(self):
+        return self.random_movement_timer >= (self.change_direction_time+random.uniform(-0.1, 5))
+
 
     def debug_draw(self):
         self.draw_follow_radius()

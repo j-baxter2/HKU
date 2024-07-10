@@ -231,6 +231,9 @@ class GameView(arcade.View):
         if self.debug:
             self.debug_draw()
 
+        if len(self.game_section.scene.get_sprite_list("Kitty")) == 0:
+            self.draw_victory_message()
+
     def on_update(self, delta_time: float):
         self.game_section.on_update(delta_time)
         self.ui_section.on_update(delta_time)
@@ -257,3 +260,6 @@ class GameView(arcade.View):
         kitties = self.game_section.scene.get_sprite_list("Kitty")
         for kitty in kitties:
             kitty.debug_draw()
+
+    def draw_victory_message(self):
+        arcade.draw_text("Congrats, you snuggled all the kitties <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
