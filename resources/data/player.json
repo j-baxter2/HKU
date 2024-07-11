@@ -24,5 +24,31 @@
                 "right": [12, 15]
             }
         }
+    },
+    "1" : {
+        "name": "Lyra",
+        "cuteness limit": 10,
+        "stamina": 100,
+        "stamina regen": 10,
+        "stationary stamina bonus": 20,
+        "speed": 10,
+        "sprint multiplier": 2,
+        "spritesheet": {
+            "path": "resources/spritesheets/lyra.png",
+            "columns": 4,
+            "count": 16,
+            "width": 32,
+            "height": 48,
+            "scale": 4
+            },
+        "animation": {
+            "frametime": 1,
+            "walk": {
+                "up": [12, 15],
+                "down": [0, 3],
+                "left": [4, 7],
+                "right": [8, 11]
+            }
+        }
     }
 }

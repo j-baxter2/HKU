@@ -31,7 +31,7 @@ class GameSection(arcade.Section):
 
 
     def setup(self):
-        self.player_sprite = Player(id=0)
+        self.player_sprite = Player(id=1)
 
         self.load_map("resources/maps/map.json")
 
@@ -66,8 +66,8 @@ class GameSection(arcade.Section):
 
         # Check if sprinting and update stamina
         self.player_sprite.sprinting = (self.sprint_pressed and not self.player_sprite.stationary)
-        self.player_sprite.update_stamina(delta_time)
 
+        self.player_sprite.update_stamina(delta_time)
         self.update_camera()
 
         self.physics_engine.update()
