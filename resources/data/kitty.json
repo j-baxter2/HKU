@@ -1,6 +1,7 @@
 {
     "0" : {
         "name": "Rue",
+        "hp": 2,
         "follow radius": 500,
         "speed": 5,
         "follow speed bonus": 1.4,

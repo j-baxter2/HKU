@@ -51,6 +51,8 @@ class MovingSprite(arcade.Sprite):
         self.base_speed = data["speed"]
         self.speed = 0
 
+        self.hp=0
+
     def walk_cycle(self, starting_frame: int, ending_frame: int):
         # Loop through the walk cycle frames
         if self.textures:
@@ -95,3 +97,21 @@ class MovingSprite(arcade.Sprite):
             self.velocity = [random.uniform(-1, 1), random.uniform(-1,1)]
         elif isinstance(self.velocity, Vec2):
             self.velocity = Vec2(random.uniform(-1, 1), random.uniform(-1,1))
+
+    @property
+    def is_alive(self):
+        return self.hp > 0
+
+    def kill(self):
+        # Freeze the sprite in place
+        self.velocity = [0, 0] if isinstance(self.velocity, list) else Vec2(0, 0)
+        # Change the sprite's color to purple
+        self.color = arcade.color.PURPLE
+        # Schedule the actual removal of the sprite after 2 seconds
+        arcade.schedule(self._delayed_kill, 2)
+
+    def _delayed_kill(self, delta_time):
+        # Call the original kill method
+        super().kill()
+        # Unschedules the _delayed_kill method to prevent it from being called again
+        arcade.unschedule(self._delayed_kill)

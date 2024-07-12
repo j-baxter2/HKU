@@ -1,7 +1,7 @@
 {
     "0" : {
         "name": "Meepo",
-        "cuteness limit": 10,
+        "hp": 10,
         "stamina": 100,
         "stamina regen": 10,
         "stationary stamina bonus": 20,
@@ -27,7 +27,7 @@
     },
     "1" : {
         "name": "Lyra",
-        "cuteness limit": 10,
+        "hp": 10,
         "stamina": 100,
         "stamina regen": 10,
         "stationary stamina bonus": 20,

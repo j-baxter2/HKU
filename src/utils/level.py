@@ -26,3 +26,6 @@ class Level:
                 kitty = FollowingKitty(id=int(kitty_id), player=self.player)
                 kitty.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
                 self.kitties.append(kitty)
+
+    def spawn_player(self):
+        self.player.center_x, self.player.center_y = 300, 300

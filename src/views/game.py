@@ -5,7 +5,9 @@ from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
 from src.sprites.kitty import FollowingKitty
+from src.utils.move import Move
 from src.utils.level import Level
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -37,10 +39,7 @@ class GameSection(arcade.Section):
 
         self.current_level = Level(level_id=1, player=self.player_sprite, game_section=self)
         self.current_level.load_kitties()
-
-        self.player_sprite.center_x = self.width//2
-        self.player_sprite.center_y = self.height//2
-
+        self.current_level.spawn_player()
 
         self.scene.add_sprite("Player", self.player_sprite)
         self.scene.add_sprite_list(name = "Kitty", use_spatial_hash=True, sprite_list=self.current_level.kitties)
@@ -55,6 +54,10 @@ class GameSection(arcade.Section):
         for kitty in self.scene.get_sprite_list("Kitty"):
             kitty.setup()
 
+        # Set up player moves
+        basic_attack = Move("basic attack", self.scene)
+        self.player_sprite.add_move(basic_attack)
+
         self.camera = HKUCamera(self.width, self.height)
 
 
@@ -63,6 +66,9 @@ class GameSection(arcade.Section):
         self.update_movement()
         self.update_animation()
         self.scene.update()
+
+        for move in self.player_sprite.move_set:
+            move.on_update(delta_time)
 
         # Check if sprinting and update stamina
         self.player_sprite.sprinting = (self.sprint_pressed and not self.player_sprite.stationary)
@@ -74,6 +80,9 @@ class GameSection(arcade.Section):
 
     def on_draw(self):
         self.scene.draw()
+        for move in self.player_sprite.move_set:
+            if move.active:
+                move.draw(self.player_sprite)
 
     def on_key_press(self, key, modifiers):
         if key == controls.UP:
@@ -86,6 +95,8 @@ class GameSection(arcade.Section):
             self.right_pressed = True
         elif key == controls.SPRINT:
             self.sprint_pressed = True
+        elif key == arcade.key.H:
+            self.player_sprite.do_move("basic attack", self.scene)
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
@@ -110,6 +121,8 @@ class GameSection(arcade.Section):
         if self.right_pressed:
             self.player_sprite.velocity += Vec2(1, 0)
 
+        self.player_sprite.velocity = self.player_sprite.velocity.normalize()
+
     def update_movement_speed(self):
         if self.player_sprite.stamina > 0:
             if self.sprint_pressed:
@@ -118,14 +131,16 @@ class GameSection(arcade.Section):
                 self.player_sprite.speed = self.player_sprite.base_speed
         else:
             self.player_sprite.speed = self.player_sprite.base_speed
+        self.player_sprite.velocity = self.player_sprite.velocity.scale(self.player_sprite.speed)
 
     def update_movement(self):
         self.update_movement_direction()
-        self.player_sprite.velocity = self.player_sprite.velocity.normalize()
         self.update_movement_speed()
 
-        self.player_sprite.velocity = self.player_sprite.velocity.scale(self.player_sprite.speed)
         self.player_sprite.velocity = [self.player_sprite.velocity.x, self.player_sprite.velocity.y]
+
+        self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.map_bounds[0]))
+        self.player_sprite.center_y = max(0, min(self.player_sprite.center_y, self.map_bounds[1]))
 
     def update_animation(self):
         if not self.player_sprite.current_walk_cycle:
@@ -140,8 +155,11 @@ class GameSection(arcade.Section):
         self.player_sprite.advance_walk_cycle()
 
     def update_camera(self):
-        player_position_for_cam = Vec2(self.player_sprite.center_x-(self.width//2), self.player_sprite.center_y-(self.height//2))
-        self.camera.move_to(player_position_for_cam)
+        if self.player_sprite.is_alive:
+            player_position_for_cam = Vec2(self.player_sprite.center_x-(self.width//2), self.player_sprite.center_y-(self.height//2))
+            self.camera.move_to(player_position_for_cam)
+        else:
+            arcade.set_viewport(0, self.width, 0, self.height)
         self.camera.use()
 
     def load_map(self, map_path):
@@ -176,6 +194,9 @@ class UISection(arcade.Section):
     def on_draw(self):
         self.camera.use()
         self.draw_stamina_bar()
+
+        self.view.game_section.camera.use()
+        self.view.game_section.player_sprite.draw()
 
     def draw_stamina_bar(self):
         if self.player:
@@ -230,9 +251,10 @@ class GameView(arcade.View):
 
         if self.debug:
             self.debug_draw()
-
-        if len(self.game_section.scene.get_sprite_list("Kitty")) == 0:
+        elif len(self.game_section.scene.get_sprite_list("Kitty")) == 0:
             self.draw_victory_message()
+        elif self.game_section.player_sprite.hp <= 0:
+            self.draw_defeat_message()
 
     def on_update(self, delta_time: float):
         self.game_section.on_update(delta_time)
@@ -263,3 +285,6 @@ class GameView(arcade.View):
 
     def draw_victory_message(self):
         arcade.draw_text("Congrats, you snuggled all the kitties <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
+
+    def draw_defeat_message(self):
+        arcade.draw_text("You have been defeated by cuteness", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)

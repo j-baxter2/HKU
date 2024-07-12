@@ -2,6 +2,7 @@ import arcade
 from src.sprites.moving_sprite import MovingSprite
 import json
 from pyglet.math import Vec2
+from src.utils.move import Move
 
 class Player(MovingSprite):
 
@@ -14,23 +15,33 @@ class Player(MovingSprite):
         # Initialise the MovingSprite class
         super().__init__(self.player_data)
 
+        self.name = self.player_data["name"]
+
         # Load movement data from JSON
         self.sprint_multiplier = self.player_data["sprint multiplier"]
         self.max_stamina = self.player_data["stamina"]
         self.stamina_regen = self.player_data["stamina regen"]
         self.stamina_regen_bonus_stationary = self.player_data["stationary stamina bonus"]
 
+        # Initialise moveset
+        self.move_set = []
+
         # Set up player variables
-        self.cuteness = 0
+        self.max_hp = self.player_data["hp"]
+        self.hp = self.max_hp
         self.score = 0
         self.stamina = self.max_stamina
         self.sprinting = False
+
+    def setup(self):
+        super().setup()
 
     def update(self):
         super().update()
 
     def draw(self):
         super().draw()
+        arcade.draw_text(f"HP: {self.hp}/{self.max_hp}", self.center_x - 50, self.center_y + 50, arcade.color.BLACK, 12)
 
     def update_stamina(self, delta_time):
         # Subtract stamina when sprinting
@@ -47,7 +58,9 @@ class Player(MovingSprite):
         self.stamina = max(0, min(self.stamina, self.max_stamina))
 
     def take_damage(self, damage):
-        self.cuteness += damage
+        self.hp -= damage
+        if self.hp <= 0:
+            self.kill()
 
     def increase_score(self, points):
         self.score += points
@@ -55,6 +68,16 @@ class Player(MovingSprite):
     def get_integer_position(self):
         return (int(self.center_x), int(self.center_y))
 
+    def add_move(self, move):
+        self.move_set.append(move)
+
+    def do_move(self, move_name: Move, scene: arcade.Scene):
+        for move in self.move_set:
+            if move.name == move_name and move.executable:
+                move.execute(self)
+
     def debug_draw(self):
         self.draw_hit_box()
+        for move in self.move_set:
+            move.debug_draw(self)
         super().debug_draw()

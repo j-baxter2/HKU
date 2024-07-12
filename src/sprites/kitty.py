@@ -16,6 +16,8 @@ class FollowingKitty(MovingSprite):
 
         self.player = player
 
+        self.hp = self.kitty_data["hp"]
+
         self.follow_distance = self.kitty_data["follow radius"]
         self.follow_speed_bonus = self.kitty_data["follow speed bonus"]
 
@@ -23,6 +25,9 @@ class FollowingKitty(MovingSprite):
         self.random_movement_timer = 0
 
         self.velocity = Vec2(0, 0)
+
+        self.just_attacked = False
+        self.attack_refresh_time = 0
 
         super().__init__(self.kitty_data)
 
@@ -32,6 +37,11 @@ class FollowingKitty(MovingSprite):
     def update(self):
         self.update_movement()
         self.random_movement_timer += 1/60
+        if self.just_attacked:
+            self.attack_refresh_time += 1/60
+            if self.attack_refresh_time >= 1:
+                self.just_attacked = False
+                self.attack_refresh_time = 0
         self.update_animation(delta_time = 1/60)
         self.handle_player_collision()
         super().update()
@@ -97,11 +107,17 @@ class FollowingKitty(MovingSprite):
         arcade.draw_circle_outline(self.center_x, self.center_y, self.follow_distance, arcade.color.BLUE, 8)
 
     def handle_player_collision(self):
-        if arcade.check_for_collision(self, self.player):
-            self.kill()
+       if self.can_attack and arcade.check_for_collision(self, self.player):
+           self.player.take_damage(1)
+           self.just_attacked = True
 
     def face_player(self):
         self.velocity = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
+
+    def take_damage(self, amount: int):
+        self.hp -= amount
+        if self.hp <= 0:
+            self.kill()
 
     @property
     def in_range(self):
@@ -116,3 +132,8 @@ class FollowingKitty(MovingSprite):
         self.draw_follow_radius()
         self.draw_hit_box()
         arcade.draw_text(f"RMT: {round(self.random_movement_timer,1)}", self.center_x, self.top + 60, arcade.color.RED, 12)
+        arcade.draw_text(f"HP: {round(self.hp)}", self.center_x, self.top + 120, arcade.color.RED, 12)
+
+    @property
+    def can_attack(self):
+        return not self.just_attacked
