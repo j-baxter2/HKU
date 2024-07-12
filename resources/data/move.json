@@ -1,0 +1,9 @@
+{
+    "basic pat": {
+        "hp": 1,
+        "cost": 10,
+        "regen time": 1,
+        "range": 100,
+        "affects": "Kitty"
+    }
+}
