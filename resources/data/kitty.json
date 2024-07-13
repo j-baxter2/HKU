@@ -1,7 +1,8 @@
 {
     "0" : {
         "name": "Rue",
-        "hp": 2,
+        "hp": 1,
+        "attack": 1,
         "follow radius": 500,
         "speed": 5,
         "follow speed bonus": 2.2,
@@ -22,6 +23,33 @@
                 "down": [8, 11],
                 "left": [4, 7],
                 "right": [0, 3]
+            }
+        }
+    },
+    "1" : {
+        "name": "Gobu",
+        "hp": 2,
+        "attack": 2,
+        "follow radius": 500,
+        "speed": 2.5,
+        "follow speed bonus": 5,
+        "change direction time": 3,
+        "fade color": "brown",
+        "spritesheet": {
+            "path": "resources/spritesheets/gobu.png",
+            "columns": 6,
+            "count": 18,
+            "width": 32,
+            "height": 32,
+            "scale": 4
+            },
+        "animation": {
+            "fps": 30,
+            "walk": {
+                "up": [12, 17],
+                "down": [0, 5],
+                "left": [6, 11],
+                "right": [6, 11]
             }
         }
     }

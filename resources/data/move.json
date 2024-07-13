@@ -14,7 +14,7 @@
     },
     "1": {
         "name": "basic heal",
-        "damage": -5,
+        "damage": -20,
         "cost": 50,
         "refresh time": 15,
         "range": null,

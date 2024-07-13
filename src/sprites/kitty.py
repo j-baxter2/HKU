@@ -18,6 +18,7 @@ class FollowingKitty(MovingSprite):
 
         self.max_hp = self.kitty_data["hp"]
         self.hp = self.max_hp
+        self.attack = self.kitty_data["attack"]
 
         self.follow_distance = self.kitty_data["follow radius"]
         self.follow_speed_bonus = self.kitty_data["follow speed bonus"]
@@ -130,7 +131,7 @@ class FollowingKitty(MovingSprite):
 
     def handle_player_collision(self):
        if self.can_attack and arcade.check_for_collision(self, self.player):
-           self.player.take_damage(1)
+           self.player.take_damage(self.attack)
            self.just_attacked = True
            self.player.just_been_hit = True
 
