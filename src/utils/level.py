@@ -2,6 +2,7 @@ import json
 import arcade
 from src.sprites.kitty import FollowingKitty
 from src.sprites.player import Player
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT
 
 class Level:
     def __init__(self, level_id, player: Player, game_section):
@@ -19,7 +20,7 @@ class Level:
     def load_kitties(self):
         kitty_amount = self.kitty_data["kitty amount"]
         kitty_ratio = self.kitty_data["kitty ratio"]
-        map_bounds = self.game_section.map_bounds
+        map_bounds = [MAP_WIDTH, MAP_HEIGHT]
 
         for kitty_id, ratio in kitty_ratio.items():
             for _ in range(int(ratio * kitty_amount)):

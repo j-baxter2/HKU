@@ -32,7 +32,8 @@
         "stamina regen": 10,
         "stationary stamina bonus": 20,
         "speed": 10,
-        "sprint multiplier": 2,
+        "sprint multiplier": 1.5,
+        "fade color": "purple",
         "spritesheet": {
             "path": "resources/spritesheets/lyra.png",
             "columns": 4,

@@ -34,7 +34,6 @@ class FollowingKitty(MovingSprite):
         self.fade_timer = 0
         self.fade_time = 1
         self.fade_color_key = self.kitty_data["fade color"]
-
         self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
 
         super().__init__(self.kitty_data)
@@ -78,7 +77,7 @@ class FollowingKitty(MovingSprite):
 
     def update_movement_direction(self):
         #todo: implement treats taking priority over player
-        if self.in_range:
+        if self.in_range and not self.player.faded:
             self.face_player()
         elif self.should_turn:
             #set movement direction to random

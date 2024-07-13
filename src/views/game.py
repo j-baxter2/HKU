@@ -7,7 +7,7 @@ from pyglet.math import Vec2
 from src.sprites.kitty import FollowingKitty
 from src.utils.move import Move
 from src.utils.level import Level
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -60,20 +60,13 @@ class GameSection(arcade.Section):
         self.camera = HKUCamera(self.width, self.height)
 
 
-    def on_update(self, delta_time: float):
-        self.update_movement()
-        self.update_animation()
-        self.scene.update()
-
-        for move in self.player_sprite.move_set:
-            move.on_update(delta_time)
-
-        # Check if sprinting and update stamina
-        self.player_sprite.sprinting = (self.sprint_pressed and not self.player_sprite.stationary)
-
-        self.player_sprite.update_stamina(delta_time)
+    def on_update(self):
+        if self.player_sprite.fading:
+            self.player_sprite.update_fade()
+        else:
+            self.update_player()
+        self.scene.update(["Kitty"])
         self.update_camera()
-
         self.physics_engine.update()
 
     def on_draw(self):
@@ -108,7 +101,23 @@ class GameSection(arcade.Section):
         elif key == controls.SPRINT:
             self.sprint_pressed = False
 
-    def update_movement_direction(self):
+    def update_player(self):
+        self.update_player_movement()
+        self.update_player_animation()
+        self.update_sprinting_flag()
+        self.player_sprite.update_stamina(DELTA_TIME)
+        self.update_moves()
+
+    def update_player_movement(self):
+        self.update_player_movement_direction()
+        self.update_player_movement_speed()
+
+        self.player_sprite.velocity = [self.player_sprite.velocity.x, self.player_sprite.velocity.y]
+
+        self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, MAP_WIDTH))
+        self.player_sprite.center_y = max(0, min(self.player_sprite.center_y, MAP_HEIGHT))
+
+    def update_player_movement_direction(self):
         self.player_sprite.velocity = Vec2(0, 0)
         if self.up_pressed:
             self.player_sprite.velocity += Vec2(0, 1)
@@ -121,7 +130,7 @@ class GameSection(arcade.Section):
 
         self.player_sprite.velocity = self.player_sprite.velocity.normalize()
 
-    def update_movement_speed(self):
+    def update_player_movement_speed(self):
         if self.player_sprite.stamina > 0:
             if self.sprint_pressed:
                 self.player_sprite.speed = self.player_sprite.base_speed * self.player_sprite.sprint_multiplier
@@ -131,16 +140,14 @@ class GameSection(arcade.Section):
             self.player_sprite.speed = self.player_sprite.base_speed
         self.player_sprite.velocity = self.player_sprite.velocity.scale(self.player_sprite.speed)
 
-    def update_movement(self):
-        self.update_movement_direction()
-        self.update_movement_speed()
+    def update_moves(self):
+        for move in self.player_sprite.move_set:
+                    move.on_update(DELTA_TIME)
 
-        self.player_sprite.velocity = [self.player_sprite.velocity.x, self.player_sprite.velocity.y]
+    def update_sprinting_flag(self):
+        self.player_sprite.sprinting = (self.sprint_pressed and not self.player_sprite.stationary)
 
-        self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.map_bounds[0]))
-        self.player_sprite.center_y = max(0, min(self.player_sprite.center_y, self.map_bounds[1]))
-
-    def update_animation(self):
+    def update_player_animation(self):
         if not self.player_sprite.current_walk_cycle:
             if self.up_pressed:
                 self.player_sprite.start_walk_cycle('up')
@@ -171,10 +178,6 @@ class GameSection(arcade.Section):
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
-    @property
-    def map_bounds(self):
-        return (self.tile_map.width * self.tile_map.tile_width, self.tile_map.height * self.tile_map.tile_height)
-
 class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
         super().__init__(left, bottom, width, height,
@@ -186,14 +189,15 @@ class UISection(arcade.Section):
         self.player = self.get_player()
         self.camera = arcade.Camera(self.width, self.height)
 
-    def on_update(self, delta_time: float):
+    def on_update(self):
         pass
 
     def on_draw(self):
         self.camera.use()
-        self.draw_stamina_bar()
-        self.draw_hp_bar()
-        self.draw_move_status_bar()
+        if not self.player.faded:
+            self.draw_stamina_bar()
+            self.draw_hp_bar()
+            self.draw_move_status_bar()
 
         self.view.game_section.camera.use()
         self.view.game_section.player_sprite.draw()
@@ -288,9 +292,9 @@ class GameView(arcade.View):
 
         self.handle_endgame_messages()
 
-    def on_update(self, delta_time: float):
-        self.game_section.on_update(delta_time)
-        self.ui_section.on_update(delta_time)
+    def on_update(self, delta_time=DELTA_TIME):
+        self.game_section.on_update()
+        self.ui_section.on_update()
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.APOSTROPHE:
@@ -320,7 +324,7 @@ class GameView(arcade.View):
         arcade.draw_text("Congrats, you snuggled all the kitties <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
 
     def draw_defeat_message(self):
-        arcade.draw_text("You have been defeated by cuteness", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
+        arcade.draw_text("You have been defeated by cuteness", self.window.width//2, self.window.height//2, arcade.color.PURPLE, 24, anchor_x="center", anchor_y="center")
 
     def handle_endgame_messages(self):
         if len(self.game_section.scene.get_sprite_list("Kitty")) == 0:

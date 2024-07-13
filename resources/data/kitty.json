@@ -1,10 +1,10 @@
 {
     "0" : {
         "name": "Rue",
-        "hp": 2,
+        "hp": 1,
         "follow radius": 500,
         "speed": 5,
-        "follow speed bonus": 1.4,
+        "follow speed bonus": 2.2,
         "change direction time": 3,
         "fade color": "orange",
         "spritesheet": {

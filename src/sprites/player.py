@@ -3,6 +3,7 @@ from src.sprites.moving_sprite import MovingSprite
 import json
 from pyglet.math import Vec2
 from src.utils.move import Move
+from src.data.constants import DELTA_TIME
 
 class Player(MovingSprite):
 
@@ -33,6 +34,13 @@ class Player(MovingSprite):
         self.stamina = self.max_stamina
         self.sprinting = False
 
+        self.fading = False
+        self.faded = False
+        self.fade_timer = 0
+        self.fade_time = 1
+        self.fade_color_key = self.player_data["fade color"]
+        self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
+
     def setup(self):
         super().setup()
 
@@ -56,10 +64,22 @@ class Player(MovingSprite):
         # Ensure stamina does not exceed max stamina or drop below 0
         self.stamina = max(0, min(self.stamina, self.max_stamina))
 
-    def take_damage(self, damage):
-        self.hp -= damage
-        if self.hp <= 0:
+    def update_fade(self):
+        self.fade_timer += DELTA_TIME
+        opacity_decrease = 255 * (self.fade_timer / 2)
+        self.alpha = max(255 - opacity_decrease, 0)
+        if self.fade_timer >= self.fade_time:
+            self.fading = False
+            self.faded = True
             self.kill()
+
+    def take_damage(self, amount: int):
+        self.hp -= amount
+        self.hp = max(0, self.hp)
+        if self.hp <= 0:
+            self.stop_moving()
+            self.color = self.fade_color
+            self.fading = True
 
     def increase_score(self, points):
         self.score += points
@@ -72,7 +92,7 @@ class Player(MovingSprite):
 
     def do_move(self, move_name: str):
         for move in self.move_set:
-            if move.name == move_name and move.executable:
+            if move.name == move_name and move.executable and self.stamina >= move.cost:
                 move.execute()
 
     def debug_draw(self):
