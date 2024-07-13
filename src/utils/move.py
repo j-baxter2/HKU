@@ -18,12 +18,17 @@ class Move:
         self.active_time = move_data["active time"]
         self.range = move_data["range"]
         self.affects = move_data["affects"]
+        self.charge_time = move_data["charge time"]
         self.color_key = move_data["color"]
         self.draw_lines = move_data["draw lines"]
         self.draw_circle = move_data["draw circle"]
 
         self.active = False
         self.active_for = 0
+
+        self.charging = False
+        self.charge_timer = 0
+        self.charged = False
 
         self.color = getattr(arcade.color, self.color_key.upper())
 
@@ -33,6 +38,9 @@ class Move:
         self.active_for = 0
         self.origin_sprite.stamina -= self.cost
         self.origin_sprite.color = self.color
+
+    def charge(self):
+        self.charging = True
 
     def on_update(self, delta_time: float):
         if self.active:
@@ -46,8 +54,8 @@ class Move:
         self.active_for = 0
 
     def execute(self):
+        self.start()
         if self.executable:
-            self.start()
             self.damage_affectees()
 
     def get_affectees(self):
@@ -81,7 +89,7 @@ class Move:
 
     @property
     def executable(self):
-        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded)
+        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded) and not self.origin_sprite.just_been_hit
 
     @property
     def progress_fraction(self):
