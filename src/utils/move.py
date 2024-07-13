@@ -15,7 +15,7 @@ class Move:
         self.name = move_data["name"]
         self.damage = move_data["damage"]
         self.cost = move_data["cost"]
-        self.refresh_time = move_data["refresh time"]
+        self.active_time = move_data["active time"]
         self.range = move_data["range"]
         self.affects = move_data["affects"]
         self.color_key = move_data["color"]
@@ -37,7 +37,7 @@ class Move:
     def on_update(self, delta_time: float):
         if self.active:
             self.active_for += delta_time
-            if self.active_for > self.refresh_time:
+            if self.active_for > self.active_time:
                 self.stop()
 
     def stop(self):
@@ -77,7 +77,7 @@ class Move:
                 arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, affectee.center_x, affectee.center_y, arcade.color.RED, 5)
 
     def debug_draw(self):
-        arcade.draw_text(f"{self.name}: {self.active}\n{round(self.active_for, 1)}/{self.refresh_time}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 100, arcade.color.BLACK, 12)
+        arcade.draw_text(f"{self.name}: {self.active}\n{round(self.active_for, 1)}/{self.active_time}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 100, arcade.color.BLACK, 12)
 
     @property
     def executable(self):
@@ -85,4 +85,4 @@ class Move:
 
     @property
     def progress_fraction(self):
-        return self.active_for / self.refresh_time
+        return self.active_for / self.active_time
