@@ -83,6 +83,16 @@ class Player(MovingSprite):
             if move.name == move_name and move.executable:
                 move.execute()
 
+    def start_charging_move(self, move_name: str):
+        for move in self.move_set:
+            if move.name == move_name:
+                move.start_charge()
+
+    def stop_charging_move(self, move_name: str):
+        for move in self.move_set:
+            if move.name == move_name:
+                move.stop_charge()
+
     def debug_draw(self):
         self.draw_hit_box()
         for move in self.move_set:
@@ -100,5 +110,18 @@ class Player(MovingSprite):
     def get_active_move(self):
         for move in self.move_set:
             if move.active:
+                return move
+        return None
+
+    @property
+    def charging_move(self):
+        for move in self.move_set:
+            if move.charging:
+                return True
+        return False
+
+    def get_charging_move(self):
+        for move in self.move_set:
+            if move.charging:
                 return move
         return None

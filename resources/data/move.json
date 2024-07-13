@@ -18,7 +18,7 @@
         "active time": 15,
         "range": null,
         "affects": "Player",
-        "charge time": 5,
+        "charge time": 2,
         "color": "ufo_green",
         "draw lines": false,
         "draw circle": false

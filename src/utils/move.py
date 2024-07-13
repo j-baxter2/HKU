@@ -28,10 +28,29 @@ class Move:
 
         self.charging = False
         self.charge_timer = 0
-        self.charged = False
+        self.charged = True if self.charge_time==0 else False
 
         self.color = getattr(arcade.color, self.color_key.upper())
 
+    def on_update(self, delta_time: float):
+        self.update_activity()
+        self.update_charge()
+
+    def start_charge(self):
+        self.charging = True
+        self.charge_timer = 0
+
+    def update_charge(self):
+        if self.charging:
+            self.charge_timer += DELTA_TIME
+            if self.charge_timer > self.charge_time:
+                self.stop_charge()
+                self.charged = True
+                self.execute()
+
+    def stop_charge(self):
+        self.charging = False
+        self.charge_timer = 0
 
     def start(self):
         self.active = True
@@ -39,17 +58,15 @@ class Move:
         self.origin_sprite.stamina -= self.cost
         self.origin_sprite.color = self.color
 
-    def charge(self):
-        self.charging = True
-
-    def on_update(self, delta_time: float):
+    def update_activity(self):
         if self.active:
-            self.active_for += delta_time
+            self.active_for += DELTA_TIME
             if self.active_for > self.active_time:
                 self.stop()
 
     def stop(self):
         self.active = False
+        self.charged = True if self.charge_time==0 else False
         self.origin_sprite.color = arcade.color.WHITE
         self.active_for = 0
 
@@ -72,7 +89,10 @@ class Move:
         affectees = self.get_affectees()
         for affectee in affectees:
             affectee.take_damage(self.damage)
-            affectee.just_been_hit = True
+            if self.damage < 0:
+                affectee.just_healed = True
+            elif self.damage > 0:
+                affectee.just_been_hit = True
 
     def draw(self):
         if self.draw_circle:
@@ -86,11 +106,17 @@ class Move:
 
     def debug_draw(self):
         arcade.draw_text(f"{self.name}: {self.active}\n{round(self.active_for, 1)}/{self.active_time}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 100, arcade.color.BLACK, 12)
+        if self.charging:
+            arcade.draw_text(f"Charging {self.name}: {round(self.charge_fraction, 1)}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 150, arcade.color.BLACK, 12)
 
     @property
     def executable(self):
-        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded)
+        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded) and self.charged
 
     @property
     def progress_fraction(self):
         return self.active_for / self.active_time
+
+    @property
+    def charge_fraction(self):
+        return self.charge_timer / self.charge_time

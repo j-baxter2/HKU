@@ -63,6 +63,10 @@ class MovingSprite(arcade.Sprite):
         self.just_been_hit_timer = 0
         self.just_been_hit_time = 0.5
 
+        self.just_been_healed = False
+        self.just_been_healed_timer = 0
+        self.just_been_healed_time = 0.5
+
     def walk_cycle(self, starting_frame: int, ending_frame: int):
         # Loop through the walk cycle frames
         if self.textures:
@@ -94,6 +98,7 @@ class MovingSprite(arcade.Sprite):
 
     def update(self):
         self.update_just_been_hit()
+        self.update_just_been_healed()
         super().update()
 
     def update_just_been_hit(self):
@@ -106,6 +111,18 @@ class MovingSprite(arcade.Sprite):
     def stop_just_been_hit(self):
         self.just_been_hit = False
         self.just_been_hit_timer = 0
+        self.color = arcade.color.WHITE
+
+    def update_just_been_healed(self):
+        if self.just_been_healed:
+            self.color = arcade.color.GREEN
+            self.just_been_healed_timer += DELTA_TIME
+            if self.just_been_healed_timer >= self.just_been_healed_time:
+                self.stop_just_been_healed()
+
+    def stop_just_been_healed(self):
+        self.just_been_healed = False
+        self.just_been_healed_timer = 0
         self.color = arcade.color.WHITE
 
     @property

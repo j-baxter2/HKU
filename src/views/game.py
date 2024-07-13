@@ -93,7 +93,7 @@ class GameSection(arcade.Section):
         elif key == controls.ATTACK:
             self.player_sprite.do_move("basic pat")
         elif key == controls.HEAL:
-            self.player_sprite.do_move("basic heal")
+            self.player_sprite.start_charging_move("basic heal")
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
@@ -106,6 +106,8 @@ class GameSection(arcade.Section):
             self.right_pressed = False
         elif key == controls.SPRINT:
             self.sprint_pressed = False
+        elif key == controls.HEAL:
+            self.player_sprite.stop_charging_move("basic heal")
 
     def update_player(self):
         self.update_player_movement()
@@ -204,7 +206,8 @@ class UISection(arcade.Section):
         if not self.player.faded:
             self.draw_stamina_bar()
             self.draw_hp_bar()
-            self.draw_move_status_bar()
+            self.draw_move_activity_bar()
+            self.draw_move_charge_bar()
 
         self.view.game_section.camera.use()
         self.view.game_section.player_sprite.draw()
@@ -243,20 +246,38 @@ class UISection(arcade.Section):
                                          height=10,
                                          color=arcade.color.RED)
 
-    def draw_move_status_bar(self):
+    def draw_move_activity_bar(self):
         if self.player.doing_move:
             move = self.player.get_active_move()
             # Calculate the width of the filled portion of the move status bar
             filled_width = (move.progress_fraction) * 100
             # Draw the background of the move status bar
             arcade.draw_rectangle_filled(center_x=self.left + 100,
-                                         center_y=self.bottom + 140,
+                                         center_y=self.bottom + 220,
                                          width=100,
                                          height=10,
                                          color=arcade.color.BLACK)
             # Draw the filled portion of the move status bar
             arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
-                                         center_y=self.bottom + 140,
+                                         center_y=self.bottom + 220,
+                                         width=filled_width,
+                                         height=10,
+                                         color=move.color)
+
+    def draw_move_charge_bar(self):
+        if self.player.charging_move:
+            move = self.player.get_charging_move()
+            # Calculate the width of the filled portion of the move status bar
+            filled_width = (move.charge_fraction) * 100
+            # Draw the background of the move status bar
+            arcade.draw_rectangle_filled(center_x=self.left + 100,
+                                         center_y=self.bottom + 270,
+                                         width=100,
+                                         height=10,
+                                         color=arcade.color.BLACK)
+            # Draw the filled portion of the move status bar
+            arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
+                                         center_y=self.bottom + 270,
                                          width=filled_width,
                                          height=10,
                                          color=move.color)

@@ -3,7 +3,7 @@
  <editorsettings>
   <export target="map.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" name="HKU_Tileset" tilewidth="128" tileheight="128" tilecount="33" columns="0">
+ <tileset firstgid="1" name="HKU_Tileset" tilewidth="128" tileheight="128" tilecount="34" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0">
    <image source="../textures/map_tiles/default_bookshelf.png" width="128" height="128"/>
@@ -104,10 +104,13 @@
   <tile id="33">
    <image source="../textures/map_tiles/farming_flour.png" width="64" height="64"/>
   </tile>
+  <tile id="34">
+   <image source="../textures/map_tiles/default_gravel.png" width="128" height="128"/>
+  </tile>
  </tileset>
  <layer id="1" name="Floor" width="48" height="32">
   <data encoding="base64" compression="zlib">
-   eJzd1kELwjAMBeCCg3rZYOBl//+POg+BENqlLOnyYiFQ9OD3HnFaSv5znPM5Zxf3es4mZgEaOtJN9yoyRHt7/ozdc39vf1Y20Vatf74zR8HdHd4pnZ3Zt4K7O2tp+1t9I/mlW/p59yhmzb4wv7RHmzU/vUcHsfc7fq/PfClj3Rvp9+7sZ3w33PSah32239J/z/9k/9n3x+rnGeQ9i/8qD/fXCX7L9xfB793/1fPf2z9jND9yBu3391/8iBlGnv+14Ga440fKYfEj5PDwR2YY+f+ZxW/pPyqDpz8ixwz/kzlG9j/z+QIA5R3q
+   eJzV1sEKwjAMBuCAg3rZYOBlZ9//Ha2HQAjt0jVJmxYCQ0G//18cAqx/rjyfPCe7TnkONlugwcPdeJ1Yhtnemn/F7qm/tj87mdlWqX+6MxfE3R3aKZ6T2A+Iuzs7lP2lviP5uZv7afdRzJJ9I35un22W/Pgenoi99/itvvMljHZvuN+6s7/xXXDjaxZ2b7+m/5p/ZP+r74/WTzPw61X8d3moPzn4Nb/fCH7r/u+e/9Z+nC8bzWdJfu8MVvZZfk2GVn/EPWp5/icYm8Hb75Gj9x5o/J45RvotMzy9By3/P0f6n+aw6t8zwyj/jF3y8Hvl6N3/lc8PN5YiJw==
   </data>
  </layer>
  <layer id="3" name="Wall" width="48" height="32">
@@ -117,7 +120,7 @@
  </layer>
  <layer id="6" name="Floor Decorations" width="48" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt1VEKgCAMBmBfza6QrPtfspegGpo211T4PwhXxBgyp3Mwg713AfAQFHKst3hhq5WQiUfx1vet9d732ie+SX05qxp7btkza/mXIfvIii//kiSZ7xr979k7AIAl6cwsiT/ltRBZXHPvgo3Z+or3EowhsrVWbhbQ+VhAH13I2Z0xjdyUybsp5JaS3m9bIqa2Urqi3gUI8J7EbJjHAZCHBFE=
+   eJzt11EKgCAMBmBfLa+QrO5/yF56qKFlc06F/4NoSawhU8k5mMHeuwB4WBVyhFu8sLuVNROP4q3va+u9z7VPjEn9Wasac/6n5qPyW+H7lSH7yIpPjJXMuWR/1+h/z54BACyl9kwNsVFeC5HFJecu2Jitr3gvwRgiu5fK7QV0XRYs+6j2n6U1cnZrTCM3ZfJuCrmlpOfbloiprpSuqHcBArwnccbM4wTh4gS3
   </data>
  </layer>
 </map>
