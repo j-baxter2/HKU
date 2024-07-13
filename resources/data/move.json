@@ -6,6 +6,8 @@
         "refresh time": 0.5,
         "range": 200,
         "affects": "Kitty",
+        "requires charge": false,
+        "charge time": null,
         "color": "PURPLE",
         "draw lines": true,
         "draw circle": true
@@ -14,9 +16,11 @@
         "name": "basic heal",
         "damage": -5,
         "cost": 50,
-        "refresh time": 30,
+        "refresh time": 15,
         "range": null,
         "affects": "Player",
+        "requires charge": true,
+        "charge time": 5,
         "color": "ufo_green",
         "draw lines": false,
         "draw circle": false
