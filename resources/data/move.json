@@ -6,8 +6,7 @@
         "refresh time": 0.5,
         "range": 200,
         "affects": "Kitty",
-        "requires charge": false,
-        "charge time": null,
+        "charge time": 0,
         "color": "PURPLE",
         "draw lines": true,
         "draw circle": true
@@ -19,7 +18,6 @@
         "refresh time": 15,
         "range": null,
         "affects": "Player",
-        "requires charge": true,
         "charge time": 5,
         "color": "ufo_green",
         "draw lines": false,
