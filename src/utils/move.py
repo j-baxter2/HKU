@@ -81,7 +81,7 @@ class Move:
 
     @property
     def executable(self):
-        return not self.active
+        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded)
 
     @property
     def progress_fraction(self):
