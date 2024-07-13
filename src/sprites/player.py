@@ -41,7 +41,6 @@ class Player(MovingSprite):
 
     def draw(self):
         super().draw()
-        arcade.draw_text(f"HP: {self.hp}/{self.max_hp}", self.center_x - 50, self.center_y + 50, arcade.color.BLACK, 12)
 
     def update_stamina(self, delta_time):
         # Subtract stamina when sprinting
@@ -71,13 +70,26 @@ class Player(MovingSprite):
     def add_move(self, move):
         self.move_set.append(move)
 
-    def do_move(self, move_name: Move, scene: arcade.Scene):
+    def do_move(self, move_name: str):
         for move in self.move_set:
             if move.name == move_name and move.executable:
-                move.execute(self)
+                move.execute()
 
     def debug_draw(self):
         self.draw_hit_box()
         for move in self.move_set:
-            move.debug_draw(self)
+            move.debug_draw()
         super().debug_draw()
+
+    @property
+    def doing_move(self):
+        for move in self.move_set:
+            if move.active:
+                return True
+        return False
+
+    def get_active_move(self):
+        for move in self.move_set:
+            if move.active:
+                return move
+        return None

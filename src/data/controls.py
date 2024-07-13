@@ -5,3 +5,4 @@ DOWN = arcade.key.S
 LEFT = arcade.key.A
 RIGHT = arcade.key.D
 SPRINT = arcade.key.LSHIFT
+ATTACK = arcade.key.SPACE

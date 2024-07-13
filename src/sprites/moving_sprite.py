@@ -98,20 +98,12 @@ class MovingSprite(arcade.Sprite):
         elif isinstance(self.velocity, Vec2):
             self.velocity = Vec2(random.uniform(-1, 1), random.uniform(-1,1))
 
+    def stop_moving(self):
+        if isinstance(self.velocity, list):
+            self.velocity = [0,0]
+        elif isinstance(self.velocity, Vec2):
+            self.velocity = Vec2(0,0)
+
     @property
     def is_alive(self):
         return self.hp > 0
-
-    def kill(self):
-        # Freeze the sprite in place
-        self.velocity = [0, 0] if isinstance(self.velocity, list) else Vec2(0, 0)
-        # Change the sprite's color to purple
-        self.color = arcade.color.PURPLE
-        # Schedule the actual removal of the sprite after 2 seconds
-        arcade.schedule(self._delayed_kill, 2)
-
-    def _delayed_kill(self, delta_time):
-        # Call the original kill method
-        super().kill()
-        # Unschedules the _delayed_kill method to prevent it from being called again
-        arcade.unschedule(self._delayed_kill)

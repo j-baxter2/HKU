@@ -26,7 +26,6 @@ class GameSection(arcade.Section):
 
         self.tile_map = None
 
-        # Physics engine
         self.physics_engine = None
 
         self.camera = None
@@ -55,14 +54,13 @@ class GameSection(arcade.Section):
             kitty.setup()
 
         # Set up player moves
-        basic_attack = Move("basic attack", self.scene)
+        basic_attack = Move(0, self.scene, self.player_sprite)
         self.player_sprite.add_move(basic_attack)
 
         self.camera = HKUCamera(self.width, self.height)
 
 
     def on_update(self, delta_time: float):
-
         self.update_movement()
         self.update_animation()
         self.scene.update()
@@ -82,7 +80,7 @@ class GameSection(arcade.Section):
         self.scene.draw()
         for move in self.player_sprite.move_set:
             if move.active:
-                move.draw(self.player_sprite)
+                move.draw()
 
     def on_key_press(self, key, modifiers):
         if key == controls.UP:
@@ -95,8 +93,8 @@ class GameSection(arcade.Section):
             self.right_pressed = True
         elif key == controls.SPRINT:
             self.sprint_pressed = True
-        elif key == arcade.key.H:
-            self.player_sprite.do_move("basic attack", self.scene)
+        elif key == controls.ATTACK:
+            self.player_sprite.do_move("basic pat")
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
@@ -159,7 +157,7 @@ class GameSection(arcade.Section):
             player_position_for_cam = Vec2(self.player_sprite.center_x-(self.width//2), self.player_sprite.center_y-(self.height//2))
             self.camera.move_to(player_position_for_cam)
         else:
-            arcade.set_viewport(0, self.width, 0, self.height)
+            arcade.set_viewport(0, self.view.window.width, 0, self.view.window.height)
         self.camera.use()
 
     def load_map(self, map_path):
@@ -194,6 +192,8 @@ class UISection(arcade.Section):
     def on_draw(self):
         self.camera.use()
         self.draw_stamina_bar()
+        self.draw_hp_bar()
+        self.draw_move_status_bar()
 
         self.view.game_section.camera.use()
         self.view.game_section.player_sprite.draw()
@@ -214,6 +214,41 @@ class UISection(arcade.Section):
                                          width=filled_width,
                                          height=10,
                                          color=arcade.color.GREEN)
+
+    def draw_hp_bar(self):
+        if self.player:
+            # Calculate the width of the filled portion of the hp bar
+            filled_width = (self.player.hp / self.player.max_hp) * 100
+            # Draw the background of the hp bar
+            arcade.draw_rectangle_filled(center_x=self.left + 100,
+                                         center_y=self.bottom + 120,
+                                         width=100,
+                                         height=10,
+                                         color=arcade.color.BLACK)
+            # Draw the filled portion of the hp bar
+            arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
+                                         center_y=self.bottom + 120,
+                                         width=filled_width,
+                                         height=10,
+                                         color=arcade.color.RED)
+
+    def draw_move_status_bar(self):
+        if self.player.doing_move:
+            move = self.player.get_active_move()
+            # Calculate the width of the filled portion of the move status bar
+            filled_width = (move.progress_fraction) * 100
+            # Draw the background of the move status bar
+            arcade.draw_rectangle_filled(center_x=self.left + 100,
+                                         center_y=self.bottom + 140,
+                                         width=100,
+                                         height=10,
+                                         color=arcade.color.BLACK)
+            # Draw the filled portion of the move status bar
+            arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
+                                         center_y=self.bottom + 140,
+                                         width=filled_width,
+                                         height=10,
+                                         color=move.color)
 
     def get_player(self):
         return self.view.game_section.player_sprite
@@ -236,7 +271,6 @@ class GameView(arcade.View):
         self.debug = False
 
     def setup(self):
-
         self.game_section.setup()
         self.ui_section.setup()
 
@@ -251,10 +285,8 @@ class GameView(arcade.View):
 
         if self.debug:
             self.debug_draw()
-        elif len(self.game_section.scene.get_sprite_list("Kitty")) == 0:
-            self.draw_victory_message()
-        elif self.game_section.player_sprite.hp <= 0:
-            self.draw_defeat_message()
+
+        self.handle_endgame_messages()
 
     def on_update(self, delta_time: float):
         self.game_section.on_update(delta_time)
@@ -271,6 +303,7 @@ class GameView(arcade.View):
 
     def debug_draw(self):
         self.ui_section.camera.use()
+
         arcade.draw_text("Debug Mode", self.window.width - 100, self.window.height - 20, arcade.color.RED, 12)
         kitty_count = len(self.game_section.scene.get_sprite_list("Kitty"))
         arcade.draw_text(f"Kitties: {kitty_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
@@ -288,3 +321,9 @@ class GameView(arcade.View):
 
     def draw_defeat_message(self):
         arcade.draw_text("You have been defeated by cuteness", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
+
+    def handle_endgame_messages(self):
+        if len(self.game_section.scene.get_sprite_list("Kitty")) == 0:
+            self.draw_victory_message()
+        elif self.game_section.player_sprite.hp <= 0:
+            self.draw_defeat_message()

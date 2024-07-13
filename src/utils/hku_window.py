@@ -1,6 +1,6 @@
 import arcade
 import arcade.key
-from src.data.constants import WINDOW_TITLE
+from src.data.constants import WINDOW_TITLE, DELTA_TIME
 
 class MyWindow(arcade.Window):
     def __init__(self):
@@ -17,4 +17,4 @@ class MyWindow(arcade.Window):
     def setup(self):
         super().setup()
         self.setup_cursor()
-        self.set_update_rate(1/60)
+        self.set_update_rate(DELTA_TIME)

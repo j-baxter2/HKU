@@ -6,6 +6,7 @@
         "speed": 5,
         "follow speed bonus": 1.4,
         "change direction time": 3,
+        "fade color": "orange",
         "spritesheet": {
             "path": "resources/spritesheets/cat.png",
             "columns": 4,

@@ -1,9 +1,11 @@
+import json
+
 WINDOW_TITLE = "( Hungry Kitty Uprising | A BestKitty Game )"
 
-SPRITE_SIZE = 16
-PLAYER_SCALING = 2
+with open("resources/maps/map.json", "r") as file:
+            map_dict = json.load(file)
 
-MOVEMENT_SPEED = 1
+MAP_WIDTH = map_dict['width'] * map_dict['tilewidth']
+MAP_HEIGHT = map_dict['height'] * map_dict['tileheight']
 
-MAP_WIDTH = 32 * 128
-MAP_HEIGHT = 32 * 128
+DELTA_TIME = 1/60

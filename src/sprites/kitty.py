@@ -5,7 +5,7 @@ from pyglet.math import Vec2
 import random
 import math
 import json
-from src.utils.constants import MAP_WIDTH, MAP_HEIGHT
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
 class FollowingKitty(MovingSprite):
     def __init__(self, id : int, player : Player):
@@ -16,7 +16,8 @@ class FollowingKitty(MovingSprite):
 
         self.player = player
 
-        self.hp = self.kitty_data["hp"]
+        self.max_hp = self.kitty_data["hp"]
+        self.hp = self.max_hp
 
         self.follow_distance = self.kitty_data["follow radius"]
         self.follow_speed_bonus = self.kitty_data["follow speed bonus"]
@@ -29,22 +30,51 @@ class FollowingKitty(MovingSprite):
         self.just_attacked = False
         self.attack_refresh_time = 0
 
+        self.fading = False
+        self.fade_timer = 0
+        self.fade_time = 1
+        self.fade_color_key = self.kitty_data["fade color"]
+
+        self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
+
         super().__init__(self.kitty_data)
 
     def setup(self):
         self.randomize_velocity()
 
     def update(self):
-        self.update_movement()
-        self.random_movement_timer += 1/60
+        if self.fading:
+            self.update_fade()
+        else:
+            self.update_movement()
+            self.random_movement_timer += DELTA_TIME
+            self.update_animation(delta_time = DELTA_TIME)
+            self.handle_player_collision()
+            self.update_attack_refresh()
+            self.update_player_color()
+            super().update()
+
+    def update_player_color(self):
         if self.just_attacked:
-            self.attack_refresh_time += 1/60
+            self.player.color = arcade.color.PINK
+
+    def update_fade(self):
+        self.fade_timer += DELTA_TIME
+        opacity_decrease = 255 * (self.fade_timer / 2)
+        self.alpha = max(255 - opacity_decrease, 0)
+        if self.fade_timer >= self.fade_time:
+            self.kill()
+
+    def update_attack_refresh(self):
+        if self.just_attacked:
+            self.attack_refresh_time += DELTA_TIME
             if self.attack_refresh_time >= 1:
-                self.just_attacked = False
-                self.attack_refresh_time = 0
-        self.update_animation(delta_time = 1/60)
-        self.handle_player_collision()
-        super().update()
+                self.reset_attack_timer()
+
+    def reset_attack_timer(self):
+        self.just_attacked = False
+        self.attack_refresh_time = 0
+        self.player.color = arcade.color.WHITE
 
     def update_movement_direction(self):
         #todo: implement treats taking priority over player
@@ -117,7 +147,9 @@ class FollowingKitty(MovingSprite):
     def take_damage(self, amount: int):
         self.hp -= amount
         if self.hp <= 0:
-            self.kill()
+            self.stop_moving()
+            self.color = self.fade_color
+            self.fading = True
 
     @property
     def in_range(self):
