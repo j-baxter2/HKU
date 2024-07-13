@@ -54,8 +54,8 @@ class Move:
         self.active_for = 0
 
     def execute(self):
-        self.start()
         if self.executable:
+            self.start()
             self.damage_affectees()
 
     def get_affectees(self):
@@ -89,7 +89,7 @@ class Move:
 
     @property
     def executable(self):
-        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded) and not self.origin_sprite.just_been_hit
+        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded)
 
     @property
     def progress_fraction(self):

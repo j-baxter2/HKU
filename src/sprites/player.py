@@ -35,7 +35,7 @@ class Player(MovingSprite):
 
         self.fading = False
         self.fade_timer = 0
-        self.fade_time = 1
+        self.fade_time = 3
 
     def setup(self):
         super().setup()
