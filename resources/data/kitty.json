@@ -52,5 +52,32 @@
                 "right": [6, 11]
             }
         }
+    },
+    "2" : {
+        "name": "Noodi",
+        "hp": 1,
+        "attack": 2,
+        "follow radius": 750,
+        "speed": 10,
+        "follow speed bonus": 0.5,
+        "change direction time": 1,
+        "fade color": "brown",
+        "spritesheet": {
+            "path": "resources/spritesheets/noodi.png",
+            "columns": 4,
+            "count": 16,
+            "width": 16,
+            "height": 16,
+            "scale": 4
+            },
+        "animation": {
+            "fps": 30,
+            "walk": {
+                "up": [5, 8],
+                "down": [0, 3],
+                "left": [12, 15],
+                "right": [8, 11]
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@ class Move:
         self.damage = move_data["damage"]
         self.cost = move_data["cost"]
         self.active_time = move_data["active time"]
+        self.refresh_time = move_data["refresh time"]
         self.range = move_data["range"]
         self.affects = move_data["affects"]
         self.charge_time = move_data["charge time"]
@@ -24,7 +25,10 @@ class Move:
         self.draw_circle = move_data["draw circle"]
 
         self.active = False
-        self.active_for = 0
+        self.active_timer = 0
+
+        self.refreshing = False
+        self.refresh_timer = 0
 
         self.charging = False
         self.charge_timer = 0
@@ -35,6 +39,18 @@ class Move:
     def on_update(self, delta_time: float):
         self.update_activity()
         self.update_charge()
+        self.update_refresh()
+
+    def start_refresh(self):
+        self.refreshing = True
+        self.refresh_timer = 0
+
+    def update_refresh(self):
+        if self.refreshing:
+            self.refresh_timer += DELTA_TIME
+            if self.refresh_timer > self.refresh_time:
+                self.refreshing = False
+                self.refresh_timer = 0
 
     def start_charge(self):
         self.charging = True
@@ -54,21 +70,22 @@ class Move:
 
     def start(self):
         self.active = True
-        self.active_for = 0
+        self.active_timer = 0
         self.origin_sprite.stamina -= self.cost
         self.origin_sprite.color = self.color
 
     def update_activity(self):
         if self.active:
-            self.active_for += DELTA_TIME
-            if self.active_for > self.active_time:
+            self.active_timer += DELTA_TIME
+            if self.active_timer > self.active_time:
                 self.stop()
 
     def stop(self):
         self.active = False
+        self.refreshing = True
         self.charged = True if self.charge_time==0 else False
         self.origin_sprite.color = arcade.color.WHITE
-        self.active_for = 0
+        self.active_timer = 0
 
     def execute(self):
         if self.executable:
@@ -105,17 +122,21 @@ class Move:
                 arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, affectee.center_x, affectee.center_y, arcade.color.RED, 5)
 
     def debug_draw(self):
-        arcade.draw_text(f"{self.name}: {self.active}\n{round(self.active_for, 1)}/{self.active_time}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 100, arcade.color.BLACK, 12)
+        arcade.draw_text(f"{self.name}: {self.active}\n{round(self.active_timer, 1)}/{self.active_time}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 100, arcade.color.BLACK, 12)
         if self.charging:
             arcade.draw_text(f"Charging {self.name}: {round(self.charge_fraction, 1)}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 150, arcade.color.BLACK, 12)
 
     @property
     def executable(self):
-        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded) and self.charged
+        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded) and self.charged and not self.refreshing
+
+    @property
+    def refresh_fraction(self):
+        return self.refresh_timer / self.refresh_time
 
     @property
     def progress_fraction(self):
-        return self.active_for / self.active_time
+        return self.active_timer / self.active_time
 
     @property
     def charge_fraction(self):

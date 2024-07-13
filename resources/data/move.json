@@ -4,6 +4,7 @@
         "damage": 1,
         "cost": 10,
         "active time": 0.5,
+        "refresh time": 0.25,
         "range": 200,
         "affects": "Kitty",
         "charge time": 0,
@@ -16,11 +17,25 @@
         "damage": -20,
         "cost": 50,
         "active time": 15,
+        "refresh time": 60,
         "range": null,
         "affects": "Player",
         "charge time": 2,
         "color": "ufo_green",
         "draw lines": false,
+        "draw circle": false
+    },
+    "2": {
+        "name": "shock",
+        "damage": 20,
+        "cost": 75,
+        "active time": 10,
+        "refresh time": 60,
+        "range": 1000,
+        "affects": "Kitty",
+        "charge time": 5,
+        "color": "electric_blue",
+        "draw lines": true,
         "draw circle": false
     }
 }

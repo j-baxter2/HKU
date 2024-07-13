@@ -125,3 +125,16 @@ class Player(MovingSprite):
             if move.charging:
                 return move
         return None
+
+    @property
+    def refreshing_move(self):
+        for move in self.move_set:
+            if move.refreshing:
+                return True
+        return False
+
+    def get_refreshing_move(self):
+        for move in self.move_set:
+            if move.refreshing:
+                return move
+        return None
