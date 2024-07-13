@@ -45,14 +45,13 @@ class MovingSprite(arcade.Sprite):
 
         # Set up animation variables
         self.animation_timer = 0
-        self.frame_time = animation_data["frametime"]
+        self.fps = animation_data["fps"]
+        self.frame_time = 1 / self.fps
         self.walk_cycle_frames = animation_data["walk"]
 
         # Load movement data from JSON
         self.base_speed = data["speed"]
         self.speed = 0
-
-        self.hp=0
 
         self.faded = False
         self.fade_color_key = data["fade color"]
@@ -78,7 +77,7 @@ class MovingSprite(arcade.Sprite):
         # Reset the animation timer
         self.animation_timer = 0
 
-    def advance_walk_cycle(self, delta_time=0.25):
+    def advance_walk_cycle(self, delta_time=DELTA_TIME):
         # Advance the walk cycle
         self.animation_timer += delta_time
         # Check if it's time to advance the walk cycle

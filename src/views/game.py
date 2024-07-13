@@ -17,6 +17,7 @@ class GameSection(arcade.Section):
         self.current_level = None
 
         self.player_sprite = None
+        self.player_sprite_list = arcade.SpriteList()
 
         self.up_pressed = False
         self.down_pressed = False
@@ -33,6 +34,8 @@ class GameSection(arcade.Section):
 
     def setup(self):
         self.player_sprite = Player(id=1)
+        self.player_sprite_list.append(self.player_sprite)
+
 
         self.load_map("resources/maps/map.json")
 
@@ -40,8 +43,8 @@ class GameSection(arcade.Section):
         self.current_level.load_kitties()
         self.current_level.spawn_player()
 
-        self.scene.add_sprite("Player", self.player_sprite)
-        self.scene.add_sprite_list(name = "Kitty", use_spatial_hash=True, sprite_list=self.current_level.kitties)
+        self.scene.add_sprite_list(name = "Kitty", sprite_list=self.current_level.kitties, use_spatial_hash=True)
+        self.scene.add_sprite_list(name="Player",sprite_list=self.player_sprite_list, use_spatial_hash=True)
 
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player_sprite,
@@ -56,6 +59,8 @@ class GameSection(arcade.Section):
         # Set up player moves
         basic_attack = Move(0, self.scene, self.player_sprite)
         self.player_sprite.add_move(basic_attack)
+        basic_heal = Move(1, self.scene, self.player_sprite)
+        self.player_sprite.add_move(basic_heal)
 
         self.camera = HKUCamera(self.width, self.height)
 
@@ -88,6 +93,8 @@ class GameSection(arcade.Section):
             self.sprint_pressed = True
         elif key == controls.ATTACK:
             self.player_sprite.do_move("basic pat")
+        elif key == controls.HEAL:
+            self.player_sprite.do_move("basic heal")
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:

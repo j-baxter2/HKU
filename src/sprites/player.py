@@ -81,7 +81,7 @@ class Player(MovingSprite):
 
     def do_move(self, move_name: str):
         for move in self.move_set:
-            if move.name == move_name and move.executable and self.stamina >= move.cost:
+            if move.name == move_name and move.executable and self.stamina >= move.cost and not (self.fading or self.faded):
                 move.execute()
 
     def debug_draw(self):

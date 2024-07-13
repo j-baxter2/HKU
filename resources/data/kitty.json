@@ -16,7 +16,7 @@
             "scale": 4
             },
         "animation": {
-            "frametime": 1,
+            "fps": 30,
             "walk": {
                 "up": [12, 15],
                 "down": [8, 11],

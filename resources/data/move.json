@@ -7,5 +7,12 @@
         "range": 200,
         "affects": "Kitty",
         "color": "PURPLE"
+    },
+    "1": {
+        "name": "basic heal",
+        "damage": -5,
+        "cost": 50,
+        "active time": 0.5,
+        "range": null
     }
 }
