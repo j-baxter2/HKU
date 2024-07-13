@@ -53,6 +53,8 @@ class MovingSprite(arcade.Sprite):
 
         self.hp=0
 
+        self.faded = False
+
     def walk_cycle(self, starting_frame: int, ending_frame: int):
         # Loop through the walk cycle frames
         if self.textures:
@@ -106,4 +108,4 @@ class MovingSprite(arcade.Sprite):
 
     @property
     def is_alive(self):
-        return self.hp > 0
+        return not self.faded

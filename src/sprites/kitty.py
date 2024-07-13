@@ -62,6 +62,7 @@ class FollowingKitty(MovingSprite):
         opacity_decrease = 255 * (self.fade_timer / 2)
         self.alpha = max(255 - opacity_decrease, 0)
         if self.fade_timer >= self.fade_time:
+            self.fading = False
             self.kill()
 
     def update_attack_refresh(self):
