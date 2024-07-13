@@ -53,6 +53,8 @@ class MovingSprite(arcade.Sprite):
         self.base_speed = data["speed"]
         self.speed = 0
 
+        self.max_hp = data["hp"]
+
         self.faded = False
         self.fade_color_key = data["fade color"]
         self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
@@ -124,7 +126,7 @@ class MovingSprite(arcade.Sprite):
 
     def take_damage(self, amount: int):
         self.hp -= amount
-        self.hp = max(0, self.hp)
+        self.hp = min(max(0, self.hp), self.max_hp)
         if self.hp <= 0:
             self.stop_moving()
             self.color = self.fade_color

@@ -3,16 +3,22 @@
         "name": "basic pat",
         "damage": 1,
         "cost": 10,
-        "active time": 0.5,
+        "refresh time": 0.5,
         "range": 200,
         "affects": "Kitty",
-        "color": "PURPLE"
+        "color": "PURPLE",
+        "draw lines": true,
+        "draw circle": true
     },
     "1": {
         "name": "basic heal",
         "damage": -5,
         "cost": 50,
-        "active time": 0.5,
-        "range": null
+        "refresh time": 30,
+        "range": null,
+        "affects": "Player",
+        "color": "ufo_green",
+        "draw lines": false,
+        "draw circle": false
     }
 }

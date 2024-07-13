@@ -29,8 +29,22 @@
          "width":48,
          "x":0,
          "y":0
+        }, 
+        {
+         "compression":"zlib",
+         "data":"eJzt1VEKgCAMBmBfza6QrPtfspegGpo211T4PwhXxBgyp3Mwg713AfAQFHKst3hhq5WQiUfx1vet9d732ie+SX05qxp7btkza\/mXIfvIii\/\/kiSZ7xr979k7AIAl6cwsiT\/ltRBZXHPvgo3Z+or3EowhsrVWbhbQ+VhAH13I2Z0xjdyUybsp5JaS3m9bIqa2Urqi3gUI8J7EbJjHAZCHBFE=",
+         "encoding":"base64",
+         "height":32,
+         "id":6,
+         "name":"Floor Decorations",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":48,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":6,
+ "nextlayerid":7,
  "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
@@ -49,7 +63,7 @@
          "margin":0,
          "name":"HKU_Tileset",
          "spacing":0,
-         "tilecount":27,
+         "tilecount":33,
          "tileheight":128,
          "tiles":[
                 {
@@ -213,6 +227,42 @@
                  "image":"..\/textures\/map_tiles\/wool_yellow.png",
                  "imageheight":128,
                  "imagewidth":128
+                }, 
+                {
+                 "id":28,
+                 "image":"..\/textures\/map_tiles\/flowers_dandelion_white.png",
+                 "imageheight":64,
+                 "imagewidth":64
+                }, 
+                {
+                 "id":29,
+                 "image":"..\/textures\/map_tiles\/flowers_dandelion_yellow.png",
+                 "imageheight":64,
+                 "imagewidth":64
+                }, 
+                {
+                 "id":30,
+                 "image":"..\/textures\/map_tiles\/flowers_geranium.png",
+                 "imageheight":64,
+                 "imagewidth":64
+                }, 
+                {
+                 "id":31,
+                 "image":"..\/textures\/map_tiles\/flowers_rose.png",
+                 "imageheight":128,
+                 "imagewidth":128
+                }, 
+                {
+                 "id":32,
+                 "image":"..\/textures\/map_tiles\/flowers_waterlily.png",
+                 "imageheight":128,
+                 "imagewidth":128
+                }, 
+                {
+                 "id":33,
+                 "image":"..\/textures\/map_tiles\/farming_flour.png",
+                 "imageheight":64,
+                 "imagewidth":64
                 }],
          "tilewidth":128
         }],

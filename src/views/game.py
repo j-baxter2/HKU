@@ -64,7 +64,6 @@ class GameSection(arcade.Section):
 
         self.camera = HKUCamera(self.width, self.height)
 
-
     def on_update(self):
         if self.player_sprite.fading:
             self.player_sprite.update_fade()

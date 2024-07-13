@@ -28,7 +28,6 @@ class Player(MovingSprite):
         self.move_set = []
 
         # Set up player variables
-        self.max_hp = self.player_data["hp"]
         self.hp = self.max_hp
         self.score = 0
         self.stamina = self.max_stamina
