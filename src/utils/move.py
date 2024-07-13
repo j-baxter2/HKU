@@ -59,6 +59,7 @@ class Move:
         affectees = self.get_affectees()
         for affectee in affectees:
             affectee.take_damage(self.damage)
+            affectee.just_been_hit = True
 
     def draw(self):
         arcade.draw_circle_outline(self.origin_sprite.center_x, self.origin_sprite.center_y, self.range, [255,0,255,32], 5)

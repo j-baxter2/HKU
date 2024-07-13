@@ -35,11 +35,8 @@ class Player(MovingSprite):
         self.sprinting = False
 
         self.fading = False
-        self.faded = False
         self.fade_timer = 0
         self.fade_time = 1
-        self.fade_color_key = self.player_data["fade color"]
-        self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
 
     def setup(self):
         super().setup()
@@ -73,14 +70,6 @@ class Player(MovingSprite):
             self.faded = True
             self.kill()
 
-    def take_damage(self, amount: int):
-        self.hp -= amount
-        self.hp = max(0, self.hp)
-        if self.hp <= 0:
-            self.stop_moving()
-            self.color = self.fade_color
-            self.fading = True
-
     def increase_score(self, points):
         self.score += points
 
@@ -99,6 +88,7 @@ class Player(MovingSprite):
         self.draw_hit_box()
         for move in self.move_set:
             move.debug_draw()
+        arcade.draw_text(f"JBH: {self.just_been_hit}", self.center_x, self.center_y+100, arcade.color.WHITE, 20)
         super().debug_draw()
 
     @property

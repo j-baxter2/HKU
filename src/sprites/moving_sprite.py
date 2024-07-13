@@ -1,6 +1,7 @@
 import arcade
 import random
 from pyglet.math import Vec2
+from src.data.constants import DELTA_TIME
 
 class MovingSprite(arcade.Sprite):
     def __init__(self, data: dict):
@@ -54,6 +55,12 @@ class MovingSprite(arcade.Sprite):
         self.hp=0
 
         self.faded = False
+        self.fade_color_key = data["fade color"]
+        self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
+
+        self.just_been_hit = False
+        self.just_been_hit_timer = 0
+        self.just_been_hit_time = 0.5
 
     def walk_cycle(self, starting_frame: int, ending_frame: int):
         # Loop through the walk cycle frames
@@ -84,6 +91,22 @@ class MovingSprite(arcade.Sprite):
                 except StopIteration:
                     self.current_walk_cycle = None  # Reset the cycle if it's finished
 
+    def update(self):
+        self.update_just_been_hit()
+        super().update()
+
+    def update_just_been_hit(self):
+        if self.just_been_hit:
+            self.color = arcade.color.RED
+            self.just_been_hit_timer += DELTA_TIME
+            if self.just_been_hit_timer >= self.just_been_hit_time:
+                self.stop_just_been_hit()
+
+    def stop_just_been_hit(self):
+        self.just_been_hit = False
+        self.just_been_hit_timer = 0
+        self.color = arcade.color.WHITE
+
     @property
     def stationary(self):
         if self.velocity == [0, 0]:
@@ -99,6 +122,14 @@ class MovingSprite(arcade.Sprite):
             self.velocity = [random.uniform(-1, 1), random.uniform(-1,1)]
         elif isinstance(self.velocity, Vec2):
             self.velocity = Vec2(random.uniform(-1, 1), random.uniform(-1,1))
+
+    def take_damage(self, amount: int):
+        self.hp -= amount
+        self.hp = max(0, self.hp)
+        if self.hp <= 0:
+            self.stop_moving()
+            self.color = self.fade_color
+            self.fading = True
 
     def stop_moving(self):
         if isinstance(self.velocity, list):

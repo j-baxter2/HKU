@@ -33,8 +33,6 @@ class FollowingKitty(MovingSprite):
         self.fading = False
         self.fade_timer = 0
         self.fade_time = 1
-        self.fade_color_key = self.kitty_data["fade color"]
-        self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
 
         super().__init__(self.kitty_data)
 
@@ -50,12 +48,7 @@ class FollowingKitty(MovingSprite):
             self.update_animation(delta_time = DELTA_TIME)
             self.handle_player_collision()
             self.update_attack_refresh()
-            self.update_player_color()
             super().update()
-
-    def update_player_color(self):
-        if self.just_attacked:
-            self.player.color = arcade.color.PINK
 
     def update_fade(self):
         self.fade_timer += DELTA_TIME
@@ -74,7 +67,6 @@ class FollowingKitty(MovingSprite):
     def reset_attack_timer(self):
         self.just_attacked = False
         self.attack_refresh_time = 0
-        self.player.color = arcade.color.WHITE
 
     def update_movement_direction(self):
         #todo: implement treats taking priority over player
@@ -140,16 +132,10 @@ class FollowingKitty(MovingSprite):
        if self.can_attack and arcade.check_for_collision(self, self.player):
            self.player.take_damage(1)
            self.just_attacked = True
+           self.player.just_been_hit = True
 
     def face_player(self):
         self.velocity = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
-
-    def take_damage(self, amount: int):
-        self.hp -= amount
-        if self.hp <= 0:
-            self.stop_moving()
-            self.color = self.fade_color
-            self.fading = True
 
     @property
     def in_range(self):
@@ -164,7 +150,8 @@ class FollowingKitty(MovingSprite):
         self.draw_follow_radius()
         self.draw_hit_box()
         arcade.draw_text(f"RMT: {round(self.random_movement_timer,1)}", self.center_x, self.top + 60, arcade.color.RED, 12)
-        arcade.draw_text(f"HP: {round(self.hp)}", self.center_x, self.top + 120, arcade.color.RED, 12)
+        arcade.draw_text(f"HP: {self.hp}", self.center_x, self.top + 120, arcade.color.RED, 12)
+        arcade.draw_text(f"JBH: {self.just_been_hit}", self.center_x, self.center_y+100, arcade.color.WHITE, 20)
 
     @property
     def can_attack(self):

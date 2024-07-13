@@ -104,6 +104,7 @@ class GameSection(arcade.Section):
     def update_player(self):
         self.update_player_movement()
         self.update_player_animation()
+        self.player_sprite.update()
         self.update_sprinting_flag()
         self.player_sprite.update_stamina(DELTA_TIME)
         self.update_moves()
