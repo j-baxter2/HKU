@@ -1,6 +1,6 @@
 import json
 import arcade
-from src.sprites.kitty import FollowingKitty
+from src.sprites.enemy import FollowingEnemy
 from src.sprites.player import Player
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT
 
@@ -9,24 +9,24 @@ class Level:
         self.level_id = level_id
         self.player = player
         self.game_section = game_section
-        self.kitty_data = self.load_level_data(level_id)["kitties"]
-        self.kitties = arcade.SpriteList()
+        self.enemy_data = self.load_level_data(level_id)["enemies"]
+        self.enemies = arcade.SpriteList()
 
     def load_level_data(self, level_id):
         with open("resources/data/level.json", "r") as file:
             level_data = json.load(file)
         return level_data[str(level_id)]
 
-    def load_kitties(self):
-        kitty_amount = self.kitty_data["kitty amount"]
-        kitty_ratio = self.kitty_data["kitty ratio"]
+    def load_enemies(self):
+        enemy_amount = self.enemy_data["enemy amount"]
+        enemy_ratio = self.enemy_data["enemy ratio"]
         map_bounds = [MAP_WIDTH, MAP_HEIGHT]
 
-        for kitty_id, ratio in kitty_ratio.items():
-            for _ in range(int(ratio * kitty_amount)):
-                kitty = FollowingKitty(id=int(kitty_id), player=self.player)
-                kitty.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
-                self.kitties.append(kitty)
+        for enemy_id, ratio in enemy_ratio.items():
+            for _ in range(int(ratio * enemy_amount)):
+                enemy = FollowingEnemy(id=int(enemy_id), player=self.player)
+                enemy.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
+                self.enemies.append(enemy)
 
     def spawn_player(self):
         self.player.center_x, self.player.center_y = 300, 300

@@ -113,13 +113,18 @@ class Move:
 
     def draw(self):
         if self.draw_circle:
-            arcade.draw_circle_outline(self.origin_sprite.center_x, self.origin_sprite.center_y, self.range, [255,0,255,32], 5)
+            # Circle with constant opacity
+            constant_opacity_color = self.color[:3] + (32,)  # Take RGB from self.color and add constant opacity
+            arcade.draw_circle_outline(self.origin_sprite.center_x, self.origin_sprite.center_y, self.range, constant_opacity_color, 5)
 
-            arcade.draw_circle_outline(self.origin_sprite.center_x, self.origin_sprite.center_y, self.range*max(0.5, self.progress_fraction), [255, 0, 0, 255*(self.progress_fraction)], 5)
+            # Circle with variable opacity based on progress_fraction
+            variable_opacity = int(255 * self.progress_fraction)  # Calculate opacity
+            variable_opacity_color = self.color[:3] + (variable_opacity,)  # Take RGB from self.color and add calculated opacity
+            arcade.draw_circle_outline(self.origin_sprite.center_x, self.origin_sprite.center_y, self.range * max(0.5, self.progress_fraction), variable_opacity_color, 5)
 
         if self.draw_lines:
             for affectee in self.get_affectees():
-                arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, affectee.center_x, affectee.center_y, arcade.color.RED, 5)
+                arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, affectee.center_x, affectee.center_y, self.color, 5)
 
     def debug_draw(self):
         arcade.draw_text(f"{self.name}: {self.active}\n{round(self.active_timer, 1)}/{self.active_time}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 100, arcade.color.BLACK, 12)

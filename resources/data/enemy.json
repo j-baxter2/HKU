@@ -1,37 +1,10 @@
 {
     "0" : {
-        "name": "Rue",
-        "hp": 1,
-        "attack": 1,
-        "follow radius": 500,
-        "speed": 5,
-        "follow speed bonus": 2.2,
-        "change direction time": 3,
-        "fade color": "orange",
-        "spritesheet": {
-            "path": "resources/spritesheets/cat.png",
-            "columns": 4,
-            "count": 16,
-            "width": 32,
-            "height": 32,
-            "scale": 4
-            },
-        "animation": {
-            "fps": 30,
-            "walk": {
-                "up": [12, 15],
-                "down": [8, 11],
-                "left": [4, 7],
-                "right": [0, 3]
-            }
-        }
-    },
-    "1" : {
         "name": "Gobu",
         "hp": 2,
         "attack": 2,
         "follow radius": 500,
-        "speed": 2.5,
+        "speed": 3,
         "follow speed bonus": 5,
         "change direction time": 3,
         "fade color": "brown",
@@ -53,13 +26,13 @@
             }
         }
     },
-    "2" : {
+    "1" : {
         "name": "Noodi",
         "hp": 1,
         "attack": 2,
         "follow radius": 750,
         "speed": 10,
-        "follow speed bonus": 0.5,
+        "follow speed bonus": 1.25,
         "change direction time": 1,
         "fade color": "brown",
         "spritesheet": {

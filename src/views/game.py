@@ -4,7 +4,7 @@ from src.sprites.player import Player
 from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
-from src.sprites.kitty import FollowingKitty
+from src.sprites.enemy import FollowingEnemy
 from src.utils.move import Move
 from src.utils.level import Level
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
@@ -38,10 +38,10 @@ class GameSection(arcade.Section):
         self.load_map("resources/maps/map.json")
 
         self.current_level = Level(level_id=1, player=self.player_sprite, game_section=self)
-        self.current_level.load_kitties()
+        self.current_level.load_enemies()
         self.current_level.spawn_player()
 
-        self.scene.add_sprite_list(name = "Kitty", sprite_list=self.current_level.kitties, use_spatial_hash=True)
+        self.scene.add_sprite_list(name = "Enemy", sprite_list=self.current_level.enemies, use_spatial_hash=True)
         self.scene.add_sprite_list(name="Player",sprite_list=self.player_sprite_list, use_spatial_hash=True)
 
         self.physics_engine = arcade.PhysicsEngineSimple(
@@ -51,8 +51,8 @@ class GameSection(arcade.Section):
             ]
         )
 
-        for kitty in self.scene.get_sprite_list("Kitty"):
-            kitty.setup()
+        for enemy in self.scene.get_sprite_list("Enemy"):
+            enemy.setup()
 
         # Set up player moves
         basic_attack = Move(0, self.scene, self.player_sprite)
@@ -69,7 +69,7 @@ class GameSection(arcade.Section):
             self.player_sprite.update_fade()
         else:
             self.update_player()
-        self.scene.update(["Kitty"])
+        self.scene.update(["Enemy"])
         self.update_camera()
         self.physics_engine.update()
 
@@ -360,25 +360,25 @@ class GameView(arcade.View):
         self.ui_section.camera.use()
 
         arcade.draw_text("Debug Mode", self.window.width - 100, self.window.height - 20, arcade.color.RED, 12)
-        kitty_count = len(self.game_section.scene.get_sprite_list("Kitty"))
-        arcade.draw_text(f"Kitties: {kitty_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
+        enemy_count = len(self.game_section.scene.get_sprite_list("Enemy"))
+        arcade.draw_text(f"Enemies: {enemy_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
         player_pos = self.game_section.player_sprite.get_integer_position()
         arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 60, arcade.color.RED, 12)
 
         self.game_section.camera.use()
         self.game_section.player_sprite.debug_draw()
-        kitties = self.game_section.scene.get_sprite_list("Kitty")
-        for kitty in kitties:
-            kitty.debug_draw()
+        enemies = self.game_section.scene.get_sprite_list("Enemy")
+        for enemy in enemies:
+            enemy.debug_draw()
 
     def draw_victory_message(self):
-        arcade.draw_text("Congrats, you snuggled all the kitties <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
+        arcade.draw_text("Congrats, you snuggled all the enemies <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
 
     def draw_defeat_message(self):
         arcade.draw_text("You have been defeated by cuteness", self.window.width//2, self.window.height//2, arcade.color.PURPLE, 24, anchor_x="center", anchor_y="center")
 
     def handle_endgame_messages(self):
-        if len(self.game_section.scene.get_sprite_list("Kitty")) == 0:
+        if len(self.game_section.scene.get_sprite_list("Enemy")) == 0:
             self.draw_victory_message()
         elif self.game_section.player_sprite.hp <= 0:
             self.draw_defeat_message()

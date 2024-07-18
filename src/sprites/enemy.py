@@ -7,23 +7,23 @@ import math
 import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
-class FollowingKitty(MovingSprite):
+class FollowingEnemy(MovingSprite):
     def __init__(self, id : int, player : Player):
         # Load player data from JSON
-        with open("resources/data/kitty.json", "r") as file:
-            kitty_dict = json.load(file)
-        self.kitty_data = kitty_dict[str(id)]
+        with open("resources/data/enemy.json", "r") as file:
+            enemy_dict = json.load(file)
+        self.enemy_data = enemy_dict[str(id)]
 
         self.player = player
 
-        self.max_hp = self.kitty_data["hp"]
+        self.max_hp = self.enemy_data["hp"]
         self.hp = self.max_hp
-        self.attack = self.kitty_data["attack"]
+        self.attack = self.enemy_data["attack"]
 
-        self.follow_distance = self.kitty_data["follow radius"]
-        self.follow_speed_bonus = self.kitty_data["follow speed bonus"]
+        self.follow_distance = self.enemy_data["follow radius"]
+        self.follow_speed_bonus = self.enemy_data["follow speed bonus"]
 
-        self.change_direction_time = self.kitty_data["change direction time"]
+        self.change_direction_time = self.enemy_data["change direction time"]
         self.random_movement_timer = 0
 
         self.velocity = Vec2(0, 0)
@@ -35,7 +35,7 @@ class FollowingKitty(MovingSprite):
         self.fade_timer = 0
         self.fade_time = 1
 
-        super().__init__(self.kitty_data)
+        super().__init__(self.enemy_data)
 
     def setup(self):
         self.randomize_velocity()
