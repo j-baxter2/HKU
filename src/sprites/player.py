@@ -27,6 +27,10 @@ class Player(MovingSprite):
         # Initialise moveset
         self.move_set = []
 
+        self.active_moves = []
+        self.charging_moves = []
+        self.refreshing_moves = []
+
         # Set up player variables
         self.hp = self.max_hp
         self.score = 0
@@ -107,24 +111,12 @@ class Player(MovingSprite):
                 return True
         return False
 
-    def get_active_move(self):
-        for move in self.move_set:
-            if move.active:
-                return move
-        return None
-
     @property
     def charging_move(self):
         for move in self.move_set:
             if move.charging:
                 return True
         return False
-
-    def get_charging_move(self):
-        for move in self.move_set:
-            if move.charging:
-                return move
-        return None
 
     @property
     def refreshing_move(self):
@@ -133,8 +125,23 @@ class Player(MovingSprite):
                 return True
         return False
 
-    def get_refreshing_move(self):
+    def get_refreshing_moves(self):
+        refreshing_moves = []
         for move in self.move_set:
             if move.refreshing:
-                return move
-        return None
+                refreshing_moves.append(move)
+        return refreshing_moves
+
+    def get_active_moves(self):
+        active_moves = []
+        for move in self.move_set:
+            if move.active:
+                active_moves.append(move)
+        return active_moves
+
+    def get_charging_moves(self):
+        charging_moves = []
+        for move in self.move_set:
+            if move.charging:
+                charging_moves.append(move)
+        return charging_moves

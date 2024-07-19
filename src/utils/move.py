@@ -14,6 +14,7 @@ class Move:
 
         self.name = move_data["name"]
         self.damage = move_data["damage"]
+        self.damage_resist = move_data["damage resist"]
         self.cost = move_data["cost"]
         self.active_time = move_data["active time"]
         self.refresh_time = move_data["refresh time"]
@@ -32,7 +33,7 @@ class Move:
 
         self.charging = False
         self.charge_timer = 0
-        self.charged = True if self.charge_time==0 else False
+        self.charged = False if self.charge_time else True
 
         self.color = getattr(arcade.color, self.color_key.upper())
 
@@ -72,6 +73,7 @@ class Move:
         self.active = True
         self.active_timer = 0
         self.origin_sprite.stamina -= self.cost
+        self.origin_sprite.damage_resist += self.damage_resist
         self.origin_sprite.color = self.color
 
     def update_activity(self):
@@ -83,14 +85,15 @@ class Move:
     def stop(self):
         self.active = False
         self.refreshing = True
-        self.charged = True if self.charge_time==0 else False
+        self.charged = False if self.charge_time else True
+        self.origin_sprite.damage_resist -= self.damage_resist
         self.origin_sprite.color = arcade.color.WHITE
         self.active_timer = 0
 
     def execute(self):
         if self.executable:
             self.start()
-            self.damage_affectees()
+            self.apply_effects()
 
     def get_affectees(self):
         affectees = []
@@ -102,7 +105,7 @@ class Move:
                 affectees.append(potential_affectee)
         return affectees
 
-    def damage_affectees(self):
+    def apply_effects(self):
         affectees = self.get_affectees()
         for affectee in affectees:
             affectee.take_damage(self.damage)

@@ -2,12 +2,13 @@
     "0": {
         "name": "basic pat",
         "damage": 1,
+        "damage_resist": null,
         "cost": 10,
         "active time": 0.5,
         "refresh time": 0.25,
         "range": 200,
         "affects": "Enemy",
-        "charge time": 0,
+        "charge time": null,
         "color": "PURPLE",
         "draw lines": true,
         "draw circle": true
@@ -15,6 +16,7 @@
     "1": {
         "name": "basic heal",
         "damage": -20,
+        "damage_resist": 0.2,
         "cost": 50,
         "active time": 15,
         "refresh time": 60,
@@ -28,6 +30,7 @@
     "2": {
         "name": "shock",
         "damage": 20,
+        "damage_resist": null,
         "cost": 75,
         "active time": 10,
         "refresh time": 60,
