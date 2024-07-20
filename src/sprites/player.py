@@ -3,6 +3,7 @@ from src.sprites.moving_sprite import MovingSprite
 import json
 from pyglet.math import Vec2
 from src.utils.move import Move
+from src.utils.sound import load_sound, play_sound
 from src.data.constants import DELTA_TIME
 
 class Player(MovingSprite):
@@ -23,7 +24,7 @@ class Player(MovingSprite):
         self.max_stamina = self.player_data["stamina"]
         self.stamina_regen = self.player_data["stamina regen"]
         self.stamina_regen_bonus_stationary = self.player_data["stationary stamina bonus"]
-        self.footstep_filename = self.player_data["footstep filename"]
+        self.footstep_name = self.player_data["footstep name"]
 
         # Initialise moveset
         self.move_set = []
@@ -41,8 +42,7 @@ class Player(MovingSprite):
         self.fade_timer = 0
         self.fade_time = 3
 
-        self.footstep_sound_path = f":resources:sounds/{self.footstep_filename}.wav"
-        self.footstep_sound = arcade.load_sound(self.footstep_sound_path)
+        self.footstep_sound = load_sound(self.footstep_name)
         self.sound_update_timer = 0
         self.sound_update_time = self.footstep_sound.get_length()
 
@@ -88,7 +88,7 @@ class Player(MovingSprite):
             self.sound_update_timer += DELTA_TIME
 
         if self.sound_update_timer >= self.sound_update_time:
-            arcade.play_sound(self.footstep_sound)
+            play_sound(self.footstep_sound)
             self.sound_update_timer = 0
 
     def get_integer_position(self):

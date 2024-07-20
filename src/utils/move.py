@@ -2,6 +2,7 @@ import arcade
 from src.sprites.moving_sprite import MovingSprite
 import json
 from src.data.constants import DELTA_TIME
+from src.utils.sound import load_sound, play_sound
 
 class Move:
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: MovingSprite):
@@ -39,17 +40,10 @@ class Move:
 
         self.color = getattr(arcade.color, self.color_key.upper())
 
-        self.start_sound_path = f":resources:sounds/{self.start_sound_name}.wav"
-        if self.start_sound_name:
-            self.start_sound = arcade.load_sound(self.start_sound_path)
-        else:
-            self.start_sound = None
 
-        self.stop_sound_path = f":resources:sounds/{self.stop_sound_name}.wav"
-        if self.stop_sound_name:
-            self.stop_sound = arcade.load_sound(self.stop_sound_path)
-        else:
-            self.stop_sound = None
+        self.start_sound = load_sound(self.start_sound_name)
+
+        self.stop_sound = load_sound(self.stop_sound_name)
 
     def on_update(self, delta_time: float):
         self.update_activity()
@@ -87,8 +81,7 @@ class Move:
         self.active = True
         self.active_timer = 0
         self.start_damage_resist()
-        if self.start_sound:
-            arcade.play_sound(self.start_sound)
+        play_sound(self.start_sound)
         self.origin_sprite.stamina -= self.cost
 
     def update_activity(self):
@@ -103,8 +96,7 @@ class Move:
         self.refreshing = True
         self.charged = False if self.charge_time else True
         self.stop_damage_resist()
-        if self.stop_sound:
-            arcade.play_sound(self.stop_sound)
+        play_sound(self.stop_sound)
         self.origin_sprite.color = arcade.color.WHITE
         self.active_timer = 0
 
