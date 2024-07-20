@@ -115,6 +115,7 @@ class GameSection(arcade.Section):
 
     def update_player(self):
         self.update_player_movement()
+        self.player_sprite.update_sound()
         self.update_player_animation()
         self.player_sprite.update()
         self.update_sprinting_flag()

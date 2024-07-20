@@ -2,7 +2,7 @@
     "0": {
         "name": "basic pat",
         "damage": 1,
-        "damage_resist": null,
+        "damage resist": null,
         "cost": 10,
         "active time": 0.5,
         "refresh time": 0.25,
@@ -11,12 +11,14 @@
         "charge time": null,
         "color": "PURPLE",
         "draw lines": true,
-        "draw circle": true
+        "draw circle": true,
+        "start sound": "laser1",
+        "stop sound": null
     },
     "1": {
         "name": "basic heal",
         "damage": -20,
-        "damage_resist": 0.2,
+        "damage resist": 1,
         "cost": 50,
         "active time": 15,
         "refresh time": 60,
@@ -25,12 +27,14 @@
         "charge time": 2,
         "color": "ufo_green",
         "draw lines": false,
-        "draw circle": false
+        "draw circle": false,
+        "start sound": "upgrade4",
+        "stop sound": "lose1"
     },
     "2": {
         "name": "shock",
         "damage": 20,
-        "damage_resist": null,
+        "damage resist": null,
         "cost": 75,
         "active time": 10,
         "refresh time": 60,
@@ -39,6 +43,8 @@
         "charge time": 5,
         "color": "electric_blue",
         "draw lines": true,
-        "draw circle": false
+        "draw circle": false,
+        "start sound": "explosion2",
+        "stop sound": null
     }
 }

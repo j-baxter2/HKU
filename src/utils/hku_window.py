@@ -7,7 +7,6 @@ class MyWindow(arcade.Window):
         super().__init__(fullscreen=True, title=WINDOW_TITLE)
         self.center_window()
         self.set_mouse_visible(True)
-        self.resources_path = "resources/"
 
     def setup_cursor(self):
         cursor_texture = arcade.load_texture("resources/textures/cursor_image.png")

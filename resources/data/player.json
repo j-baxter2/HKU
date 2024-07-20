@@ -34,6 +34,7 @@
         "speed": 10,
         "sprint multiplier": 1.5,
         "fade color": "purple",
+        "footstep filename": "hit2",
         "spritesheet": {
             "path": "resources/spritesheets/lyra.png",
             "columns": 4,

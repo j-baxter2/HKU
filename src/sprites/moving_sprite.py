@@ -68,6 +68,8 @@ class MovingSprite(arcade.Sprite):
         self.just_been_healed_timer = 0
         self.just_been_healed_time = 0.5
 
+        self.hurt_sound = arcade.load_sound(":resources:sounds/hurt1.wav")
+
     def walk_cycle(self, starting_frame: int, ending_frame: int):
         # Loop through the walk cycle frames
         if self.textures:
@@ -105,6 +107,7 @@ class MovingSprite(arcade.Sprite):
     def update_just_been_hit(self):
         if self.just_been_hit:
             self.color = arcade.color.RED
+            arcade.play_sound(self.hurt_sound)
             self.just_been_hit_timer += DELTA_TIME
             if self.just_been_hit_timer >= self.just_been_hit_time:
                 self.stop_just_been_hit()
@@ -128,7 +131,7 @@ class MovingSprite(arcade.Sprite):
 
     @property
     def stationary(self):
-        if self.velocity == [0, 0]:
+        if self.velocity == [0, 0] or self.velocity == Vec2(0, 0):
             return True
         else:
             return False

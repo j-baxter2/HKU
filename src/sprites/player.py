@@ -23,6 +23,7 @@ class Player(MovingSprite):
         self.max_stamina = self.player_data["stamina"]
         self.stamina_regen = self.player_data["stamina regen"]
         self.stamina_regen_bonus_stationary = self.player_data["stationary stamina bonus"]
+        self.footstep_filename = self.player_data["footstep filename"]
 
         # Initialise moveset
         self.move_set = []
@@ -33,13 +34,17 @@ class Player(MovingSprite):
 
         # Set up player variables
         self.hp = self.max_hp
-        self.score = 0
         self.stamina = self.max_stamina
         self.sprinting = False
 
         self.fading = False
         self.fade_timer = 0
         self.fade_time = 3
+
+        self.footstep_sound_path = f":resources:sounds/{self.footstep_filename}.wav"
+        self.footstep_sound = arcade.load_sound(self.footstep_sound_path)
+        self.sound_update_timer = 0
+        self.sound_update_time = self.footstep_sound.get_length()
 
     def setup(self):
         super().setup()
@@ -73,8 +78,18 @@ class Player(MovingSprite):
             self.faded = True
             self.kill()
 
-    def increase_score(self, points):
-        self.score += points
+    def update_sound(self):
+        self.update_walking_sound()
+
+    def update_walking_sound(self):
+        if self.stationary:
+            self.sound_update_timer = 0
+        else:
+            self.sound_update_timer += DELTA_TIME
+
+        if self.sound_update_timer >= self.sound_update_time:
+            arcade.play_sound(self.footstep_sound)
+            self.sound_update_timer = 0
 
     def get_integer_position(self):
         return (int(self.center_x), int(self.center_y))

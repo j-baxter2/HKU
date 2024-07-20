@@ -9,9 +9,9 @@ class MenuView(arcade.View):
         self.v_box = arcade.gui.UIBoxLayout()
 
         # Load textures for buttons
-        new_game_texture = arcade.load_texture(self.window.resources_path + "textures/ui/new_game_button.png")
-        settings_texture = arcade.load_texture(self.window.resources_path + "textures/ui/settings_button.png")
-        quit_texture = arcade.load_texture(self.window.resources_path + "textures/ui/quit_button.png")
+        new_game_texture = arcade.load_texture("resources/textures/ui/new_game_button.png")
+        settings_texture = arcade.load_texture("resources/textures/ui/settings_button.png")
+        quit_texture = arcade.load_texture("resources/textures/ui/quit_button.png")
 
         new_game_button = arcade.gui.UITextureButton(texture=new_game_texture)
         self.v_box.add(new_game_button.with_space_around(bottom=20))

@@ -24,6 +24,8 @@ class Move:
         self.color_key = move_data["color"]
         self.draw_lines = move_data["draw lines"]
         self.draw_circle = move_data["draw circle"]
+        self.start_sound_name = move_data["start sound"]
+        self.stop_sound_name = move_data["stop sound"]
 
         self.active = False
         self.active_timer = 0
@@ -36,6 +38,18 @@ class Move:
         self.charged = False if self.charge_time else True
 
         self.color = getattr(arcade.color, self.color_key.upper())
+
+        self.start_sound_path = f":resources:sounds/{self.start_sound_name}.wav"
+        if self.start_sound_name:
+            self.start_sound = arcade.load_sound(self.start_sound_path)
+        else:
+            self.start_sound = None
+
+        self.stop_sound_path = f":resources:sounds/{self.stop_sound_name}.wav"
+        if self.stop_sound_name:
+            self.stop_sound = arcade.load_sound(self.stop_sound_path)
+        else:
+            self.stop_sound = None
 
     def on_update(self, delta_time: float):
         self.update_activity()
@@ -72,13 +86,15 @@ class Move:
     def start(self):
         self.active = True
         self.active_timer = 0
+        self.start_damage_resist()
+        if self.start_sound:
+            arcade.play_sound(self.start_sound)
         self.origin_sprite.stamina -= self.cost
-        self.origin_sprite.damage_resist += self.damage_resist
-        self.origin_sprite.color = self.color
 
     def update_activity(self):
         if self.active:
             self.active_timer += DELTA_TIME
+            self.origin_sprite.color = self.color
             if self.active_timer > self.active_time:
                 self.stop()
 
@@ -86,7 +102,9 @@ class Move:
         self.active = False
         self.refreshing = True
         self.charged = False if self.charge_time else True
-        self.origin_sprite.damage_resist -= self.damage_resist
+        self.stop_damage_resist()
+        if self.stop_sound:
+            arcade.play_sound(self.stop_sound)
         self.origin_sprite.color = arcade.color.WHITE
         self.active_timer = 0
 
@@ -113,6 +131,17 @@ class Move:
                 affectee.just_healed = True
             elif self.damage > 0:
                 affectee.just_been_hit = True
+
+    def start_damage_resist(self):
+        if self.damage_resist:
+            self.origin_sprite.damage_resist += self.damage_resist
+
+    def stop_damage_resist(self):
+        if self.damage_resist:
+            if self.origin_sprite.damage_resist > 0:
+                self.origin_sprite.damage_resist -= self.damage_resist
+            else:
+                self.origin_sprite.damage_resist = 0
 
     def draw(self):
         if self.draw_circle:
