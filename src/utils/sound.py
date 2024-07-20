@@ -3,6 +3,8 @@ import arcade
 def load_sound(name:str, source = "builtin"):
     if source == "builtin":
         path = f":resources:sounds/{name}.wav"
+    elif source == "hku":
+        path = f"resources/sounds/{name}.wav"
     else:
         path = name
 
