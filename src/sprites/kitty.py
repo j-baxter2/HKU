@@ -49,7 +49,8 @@ class Kitty(MovingSprite):
             if self.able_to_move:
                 self.update_movement()
             self.random_movement_timer += DELTA_TIME
-            self.locate_treat()
+            if not self.eating:
+                self.locate_treat()
             self.update_animation(delta_time = DELTA_TIME)
             self.handle_treat_collision()
             self.update_eating()
@@ -69,15 +70,21 @@ class Kitty(MovingSprite):
     def update_eating(self):
         if self.eating:
             self.eating_timer += DELTA_TIME
+            self.target_treat.being_eaten = True
             if self.eating_timer >= self.eating_time:
                 self.stop_eating()
+            elif self.target_treat.picked_up:
+                self.stop_eating(success=False)
 
-    def stop_eating(self):
+    def stop_eating(self, success = True):
         self.eating = False
         self.eating_timer = 0
-        self.target_treat.kill()
+        if self.target_treat:
+            self.target_treat.being_eaten = False
+            self.target_treat.kill()
         self.target_treat = None
-        self.treats_eaten += 1
+        if success:
+            self.treats_eaten += 1
         if self.treats_eaten >= self.hunger:
             self.fading = True
 
@@ -151,7 +158,7 @@ class Kitty(MovingSprite):
 
     def locate_treat(self):
         for treat in self.treats:
-            if arcade.get_distance_between_sprites(self, treat) < self.follow_distance:
+            if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and not treat.being_eaten:
                 self.target_treat = treat
             else:
                 self.target_treat = None

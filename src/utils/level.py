@@ -47,5 +47,10 @@ class Level:
     def spawn_player(self):
         self.player.center_x, self.player.center_y = 300, 300
 
+    def give_player_treats(self):
+        self.player.treat_amount = 0
+        for kitty in self.kitties:
+            self.player.treat_amount += kitty.hunger
+
     def get_level_list(self):
         return self.level_list

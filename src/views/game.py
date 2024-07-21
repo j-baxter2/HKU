@@ -203,6 +203,7 @@ class GameSection(arcade.Section):
             treats = arcade.check_for_collision_with_list(self.player_sprite, self.treat_sprite_list)
             for treat in treats:
                 self.player_sprite.treat_amount += 1
+                treat.picked_up = True
                 treat.kill()
 
     def update_camera(self):
@@ -235,6 +236,8 @@ class GameSection(arcade.Section):
         self.scene.add_sprite_list(name = "Kitty", sprite_list=self.current_level.kitties, use_spatial_hash=True)
         for kitty in self.scene.get_sprite_list("Kitty"):
             kitty.setup()
+
+        self.current_level.give_player_treats()
 
     @property
     def more_levels(self):
