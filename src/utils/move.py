@@ -31,6 +31,8 @@ class Move:
         self.start_sound_name = move_data["start sound"]
         self.stop_sound_name = move_data["stop sound"]
 
+        self.affectees = []
+
         self.active = False
         self.active_timer = 0
 
@@ -116,11 +118,10 @@ class Move:
                 affectees.append(potential_affectee)
             elif arcade.get_distance_between_sprites(self.origin_sprite, potential_affectee) < self.range:
                 affectees.append(potential_affectee)
-        return affectees
+        self.affectees = affectees
 
     def apply_effects(self):
-        affectees = self.get_affectees()
-        for affectee in affectees:
+        for affectee in self.affectees:
             affectee.take_damage(self.damage)
             if self.damage < 0:
                 affectee.just_healed = True
@@ -148,7 +149,7 @@ class Move:
             arcade.draw_circle_outline(self.origin_sprite.center_x, self.origin_sprite.center_y, self.range * max(0.5, self.progress_fraction), variable_opacity_color, 5)
 
         if self.draw_lines:
-            for affectee in self.get_affectees():
+            for affectee in self.affectees:
                 arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, affectee.center_x, affectee.center_y, self.color, 5)
 
     def debug_draw(self):
