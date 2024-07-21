@@ -51,6 +51,7 @@ class Move:
         self.stop_sound = load_sound(self.stop_sound_name)
 
     def on_update(self, delta_time: float):
+        self.update_affectees()
         self.update_activity()
         self.update_charge()
         self.update_refresh()
@@ -87,6 +88,7 @@ class Move:
     def start(self):
         self.active = True
         self.active_timer = 0
+        self.get_affectees()
         self.start_damage_resist()
         play_sound(self.start_sound)
         self.origin_sprite.stamina -= self.cost
@@ -123,6 +125,11 @@ class Move:
             elif arcade.get_distance_between_sprites(self.origin_sprite, potential_affectee) < self.range:
                 affectees.append(potential_affectee)
         self.affectees = affectees
+
+    def update_affectees(self):
+        for affectee in self.affectees:
+            if affectee.is_dead:
+                self.affectees.remove(affectee)
 
     def apply_effects(self):
         for affectee in self.affectees:
