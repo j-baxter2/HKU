@@ -65,7 +65,6 @@ class MovingSprite(arcade.Sprite):
         self.hurt_sound = arcade.load_sound(":resources:sounds/hurt1.wav")
 
     def walk_cycle(self, starting_frame: int, ending_frame: int):
-
         if self.textures:
             self.set_texture(starting_frame)
         for i in range(starting_frame, ending_frame + 1):
@@ -75,9 +74,7 @@ class MovingSprite(arcade.Sprite):
     def start_walk_cycle(self, direction: str):
 
         starting_frame, ending_frame = self.walk_cycle_frames[direction]
-
         self.current_walk_cycle = self.walk_cycle(starting_frame, ending_frame)
-
         self.animation_timer = 0
 
     def advance_walk_cycle(self, delta_time=DELTA_TIME):
@@ -155,6 +152,10 @@ class MovingSprite(arcade.Sprite):
             self.velocity = [0,0]
         elif isinstance(self.velocity, Vec2):
             self.velocity = Vec2(0,0)
+        self.able_to_move = False
+
+    def paralyze(self):
+        self.stop_moving()
         self.able_to_move = False
 
     @property
