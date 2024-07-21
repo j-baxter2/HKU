@@ -422,7 +422,6 @@ class GameView(arcade.View):
     def draw_victory_message(self):
         self.game_section.camera.use()
         arcade.draw_text("Congrats, you snuggled all the enemies <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
-        print("executed draw_victory_message")
 
     def draw_defeat_message(self):
         self.game_section.camera.use()
