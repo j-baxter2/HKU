@@ -2,9 +2,9 @@
     "0" : {
         "name": "Gobu",
         "hp": 2,
-        "attack": 10,
+        "attack": 1,
         "follow radius": 500,
-        "speed": 4,
+        "speed": 2.5,
         "follow speed bonus": 5,
         "change direction time": 3,
         "fade color": "brown",

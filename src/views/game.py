@@ -178,7 +178,7 @@ class GameSection(arcade.Section):
         self.player_sprite.advance_walk_cycle()
 
     def player_drop_treat(self):
-        treat = Treat("resources/textures/map_tiles/default_dry_shrub.png", 1)
+        treat = Treat("resources/textures/map_tiles/default_apple.png", 1)
         treat.center_x = self.player_sprite.center_x
         treat.center_y = self.player_sprite.center_y
         self.treat_sprite_list.append(treat)
