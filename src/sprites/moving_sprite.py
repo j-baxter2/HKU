@@ -36,16 +36,14 @@ class MovingSprite(arcade.Sprite):
 
         animation_data = data["animation"]
 
-
         self.current_walk_cycle = None
-
 
         self.animation_timer = 0
         self.fps = animation_data["fps"]
         self.frame_time = 1 / self.fps
         self.walk_cycle_frames = animation_data["walk"]
 
-
+        self.able_to_move = True
         self.base_speed = data["speed"]
         self.speed = 0
 
@@ -149,12 +147,20 @@ class MovingSprite(arcade.Sprite):
             self.color = self.fade_color
             self.fading = True
 
+    def start_moving(self):
+        self.able_to_move = True
+
     def stop_moving(self):
         if isinstance(self.velocity, list):
             self.velocity = [0,0]
         elif isinstance(self.velocity, Vec2):
             self.velocity = Vec2(0,0)
+        self.able_to_move = False
 
     @property
     def is_alive(self):
         return not self.faded
+
+    @property
+    def is_dead(self):
+        return self.hp <= 0

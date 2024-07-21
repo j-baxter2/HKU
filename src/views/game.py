@@ -111,7 +111,8 @@ class GameSection(arcade.Section):
             self.player_sprite.stop_charging_move("shock")
 
     def update_player(self):
-        self.update_player_movement()
+        if self.player_sprite.able_to_move:
+            self.update_player_movement()
         self.player_sprite.update_sound()
         self.update_player_animation()
         self.player_sprite.update()
@@ -199,11 +200,17 @@ class GameSection(arcade.Section):
 
     @property
     def more_levels(self):
-        return len(self.level_list) > self.current_level_id
+        return len(self.level_list) > self.current_level_id + 1
 
     @property
     def any_enemies(self):
         return len(self.scene.get_sprite_list("Enemy")) > 0
+
+    def debug_draw(self):
+        self.camera.use()
+        self.player_sprite.debug_draw()
+        for enemy in self.scene.get_sprite_list("Enemy"):
+                arcade.draw_line(self.player_sprite.center_x, self.player_sprite.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
 
 class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
@@ -227,7 +234,8 @@ class UISection(arcade.Section):
             self.draw_move_activity_bars()
             self.draw_move_charge_bars()
             self.draw_move_refresh_circles()
-            self.draw_level_id()
+            if not self.view.completed:
+                self.draw_level_id()
 
         self.view.game_section.camera.use()
         self.view.game_section.player_sprite.draw()
@@ -340,7 +348,7 @@ class GameView(arcade.View):
 
         self.between_levels = True
         self.between_levels_timer = 0
-        self.between_levels_time = 3
+        self.between_levels_time = 1
 
         self.debug = False
 
@@ -357,6 +365,11 @@ class GameView(arcade.View):
         self.game_section.on_draw()
         self.ui_section.on_draw()
 
+        if self.completed:
+            self.draw_victory_message()
+        elif self.game_section.player_sprite.is_dead:
+            self.draw_defeat_message()
+
         if self.debug:
             self.debug_draw()
 
@@ -370,7 +383,6 @@ class GameView(arcade.View):
     def start_between_levels(self):
         self.between_levels = True
         self.between_levels_timer = 0
-        print("executed start_between_levels")
 
     def update_between_levels(self):
         if self.between_levels:
@@ -379,7 +391,6 @@ class GameView(arcade.View):
                 self.between_levels = False
                 self.handle_level_completion()
                 self.between_levels_timer = 0
-        print("executed update_between_levels")
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.APOSTROPHE:
@@ -399,35 +410,38 @@ class GameView(arcade.View):
         player_pos = self.game_section.player_sprite.get_integer_position()
         arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 60, arcade.color.RED, 12)
         if self.between_levels:
-            arcade.draw_text(f"Between Levels {round((self.between_levels_timer/self.between_levels_time), 2)}", self.window.width//2, self.window.height//2, arcade.color.RED, 12, anchor_x="center", anchor_y="center")
+            arcade.draw_text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", self.window.width - 400, self.window.height - 200, arcade.color.RED, 12)
 
 
         self.game_section.camera.use()
-        self.game_section.player_sprite.debug_draw()
+        self.game_section.debug_draw()
         enemies = self.game_section.scene.get_sprite_list("Enemy")
         for enemy in enemies:
             enemy.debug_draw()
 
     def draw_victory_message(self):
+        self.game_section.camera.use()
         arcade.draw_text("Congrats, you snuggled all the enemies <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
+        print("executed draw_victory_message")
 
     def draw_defeat_message(self):
-        arcade.draw_text("You have been defeated by cuteness", self.window.width//2, self.window.height//2, arcade.color.PURPLE, 24, anchor_x="center", anchor_y="center")
+        self.game_section.camera.use()
+        arcade.draw_text("You have been defeated by cuteness", self.window.width//2, self.window.height//2, arcade.color.PURPLE, 24)
 
     def handle_gamestate(self):
         if self.should_change_level:
             self.start_between_levels()
-        elif self.game_section.player_sprite.hp <= 0:
-            self.draw_defeat_message()
 
     def handle_level_completion(self):
         if not self.between_levels:
             if self.game_section.more_levels:
                 self.game_section.current_level_id += 1
                 self.game_section.load_level()
-            else:
-                self.draw_victory_message()
 
     @property
     def should_change_level(self):
         return not self.game_section.any_enemies and not self.between_levels
+
+    @property
+    def completed(self):
+        return not self.game_section.more_levels and not self.game_section.any_enemies
