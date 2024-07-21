@@ -31,6 +31,7 @@ class Player(MovingSprite):
 
         self.xp = 0
 
+        self.max_hp = self.player_data["hp"]
         self.hp = self.max_hp
         self.stamina = self.max_stamina
         self.sprinting = False
@@ -44,6 +45,11 @@ class Player(MovingSprite):
         self.sound_update_time = self.footstep_sound.get_length()
 
         self.treat_amount = 10
+
+        self.picking_up_treat = False
+
+        self.drop_treat_sound = load_sound("upgrade1")
+        self.no_treat_sound = load_sound("error1")
 
     def setup(self):
         super().setup()
@@ -155,3 +161,7 @@ class Player(MovingSprite):
             if move.charging:
                 charging_moves.append(move)
         return charging_moves
+
+    @property
+    def has_treats(self):
+        return self.treat_amount > 0

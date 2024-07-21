@@ -8,6 +8,7 @@ from src.sprites.enemy import FollowingEnemy
 from src.sprites.treat import Treat
 from src.utils.move import Move
 from src.utils.level import Level
+from src.utils.sound import play_sound
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS
 
 class GameSection(arcade.Section):
@@ -71,6 +72,8 @@ class GameSection(arcade.Section):
         else:
             self.update_player()
         self.scene.update(["Enemy"])
+        self.scene.update(["Kitty"])
+        self.scene.update(["Treat"])
         self.update_camera()
         self.physics_engine.update()
 
@@ -98,7 +101,12 @@ class GameSection(arcade.Section):
         elif key == controls.SPECIAL:
             self.player_sprite.start_charging_move("shock")
         elif key == controls.DROP_TREAT:
-            self.player_drop_treat()
+            if self.player_sprite.has_treats:
+                self.player_drop_treat()
+            else:
+                play_sound(self.player_sprite.no_treat_sound)
+        elif key == controls.PICKUP_TREAT:
+            self.player_sprite.picking_up_treat = True
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
@@ -115,6 +123,8 @@ class GameSection(arcade.Section):
             self.player_sprite.stop_charging_move("basic heal")
         elif key == controls.SPECIAL:
             self.player_sprite.stop_charging_move("shock")
+        elif key == controls.PICKUP_TREAT:
+            self.player_sprite.picking_up_treat = False
 
     def update_player(self):
         if self.player_sprite.able_to_move:
@@ -125,6 +135,7 @@ class GameSection(arcade.Section):
         self.update_sprinting_flag()
         self.player_sprite.update_stamina(DELTA_TIME)
         self.update_moves()
+        self.update_player_treat_pickup()
 
     def update_player_movement(self):
         self.update_player_movement_direction()
@@ -184,6 +195,16 @@ class GameSection(arcade.Section):
         self.treat_sprite_list.append(treat)
         self.scene.add_sprite_list(name="Treat", sprite_list=self.treat_sprite_list)
 
+        play_sound(self.player_sprite.drop_treat_sound)
+        self.player_sprite.treat_amount -= 1
+
+    def update_player_treat_pickup(self):
+        if self.player_sprite.picking_up_treat:
+            treats = arcade.check_for_collision_with_list(self.player_sprite, self.treat_sprite_list)
+            for treat in treats:
+                self.player_sprite.treat_amount += 1
+                treat.kill()
+
     def update_camera(self):
         if self.player_sprite.is_alive:
             player_position_for_cam = Vec2(self.player_sprite.center_x-(self.width//2), self.player_sprite.center_y-(self.height//2))
@@ -206,10 +227,14 @@ class GameSection(arcade.Section):
     def load_level(self):
         self.current_level = Level(level_id=self.current_level_id, player=self.player_sprite, game_section=self)
         self.current_level.load_enemies()
+        self.current_level.load_kitties()
 
         self.scene.add_sprite_list(name = "Enemy", sprite_list=self.current_level.enemies, use_spatial_hash=True)
         for enemy in self.scene.get_sprite_list("Enemy"):
             enemy.setup()
+        self.scene.add_sprite_list(name = "Kitty", sprite_list=self.current_level.kitties, use_spatial_hash=True)
+        for kitty in self.scene.get_sprite_list("Kitty"):
+            kitty.setup()
 
     @property
     def more_levels(self):
@@ -219,11 +244,17 @@ class GameSection(arcade.Section):
     def any_enemies(self):
         return len(self.scene.get_sprite_list("Enemy")) > 0
 
+    @property
+    def any_kitties(self):
+        return len(self.scene.get_sprite_list("Kitty")) > 0
+
     def debug_draw(self):
         self.camera.use()
         self.player_sprite.debug_draw()
         for enemy in self.scene.get_sprite_list("Enemy"):
                 arcade.draw_line(self.player_sprite.center_x, self.player_sprite.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
+        for kitty in self.scene.get_sprite_list("Kitty"):
+                arcade.draw_line(self.player_sprite.center_x, self.player_sprite.center_y, kitty.center_x, kitty.center_y, arcade.color.ORANGE, 5)
 
 class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
@@ -244,6 +275,7 @@ class UISection(arcade.Section):
         if not (self.player.faded or self.player.fading):
             self.draw_stamina_bar()
             self.draw_hp_bar()
+            self.draw_treat_count()
             self.draw_move_activity_bars()
             self.draw_move_charge_bars()
             self.draw_move_refresh_circles()
@@ -255,6 +287,10 @@ class UISection(arcade.Section):
 
     def draw_level_id(self):
         arcade.draw_text(f"Level: {self.view.game_section.current_level_id}", self.right - 10, self.top - 100, arcade.color.BLACK, 24, anchor_x="right")
+
+    def draw_treat_count(self):
+        treat_count = self.player.treat_amount
+        arcade.draw_text(f"Treats: {treat_count}", self.right - 10, self.top - 140, arcade.color.BLACK, 24, anchor_x="right")
 
     def draw_stamina_bar(self):
         if self.player:
@@ -420,8 +456,10 @@ class GameView(arcade.View):
         arcade.draw_text("Debug Mode", self.window.width - 100, self.window.height - 20, arcade.color.RED, 12)
         enemy_count = len(self.game_section.scene.get_sprite_list("Enemy"))
         arcade.draw_text(f"Enemies: {enemy_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
+        kitty_count = len(self.game_section.current_level.kitties)
+        arcade.draw_text(f"Kitties: {kitty_count}", self.window.width - 100, self.window.height - 60, arcade.color.RED, 12)
         player_pos = self.game_section.player_sprite.get_integer_position()
-        arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 60, arcade.color.RED, 12)
+        arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 80, arcade.color.RED, 12)
         if self.between_levels:
             arcade.draw_text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", self.window.width - 400, self.window.height - 200, arcade.color.RED, 12)
 
@@ -452,7 +490,7 @@ class GameView(arcade.View):
 
     @property
     def should_change_level(self):
-        return not self.game_section.any_enemies and not self.between_levels
+        return not self.game_section.any_enemies and not self.between_levels and not self.game_section.any_kitties
 
     @property
     def completed(self):

@@ -48,7 +48,6 @@ class MovingSprite(arcade.Sprite):
         self.base_speed = data["speed"]
         self.speed = 0
 
-        self.max_hp = data["hp"]
         self.damage_resist = 0
 
         self.faded = False
