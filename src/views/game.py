@@ -415,7 +415,7 @@ class GameView(arcade.View):
         arcade.draw_text("You have been defeated by cuteness", self.window.width//2, self.window.height//2, arcade.color.PURPLE, 24, anchor_x="center", anchor_y="center")
 
     def handle_gamestate(self):
-        if not self.game_section.any_enemies and not self.between_levels:
+        if self.should_change_level:
             self.start_between_levels()
         elif self.game_section.player_sprite.hp <= 0:
             self.draw_defeat_message()
@@ -427,3 +427,7 @@ class GameView(arcade.View):
                 self.game_section.load_level()
             else:
                 self.draw_victory_message()
+
+    @property
+    def should_change_level(self):
+        return not self.game_section.any_enemies and not self.between_levels
