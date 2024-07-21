@@ -34,4 +34,4 @@ class FollowingEnemy(FollowingSprite):
         self.fade_timer = 0
         self.fade_time = 1
 
-        super().__init__(self.enemy_data)
+        super().__init__(self.enemy_data, self.player)

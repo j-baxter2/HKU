@@ -8,7 +8,10 @@ import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
 class FollowingSprite(MovingSprite):
-    def __init__(self, data: dict):
+    def __init__(self, data: dict, player: Player):
+        self.player = player
+        self.follow_distance = data["follow radius"]
+        self.follow_speed_bonus = data["follow speed bonus"]
         super().__init__(data)
 
     def setup(self):
