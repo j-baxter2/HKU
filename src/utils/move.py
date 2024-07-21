@@ -75,7 +75,6 @@ class Move:
         if self.charging:
             self.charge_timer += DELTA_TIME
             self.update_charge_mobility()
-            print("reaching update_charge_mobility")
             if self.charge_timer > self.charge_time:
                 self.stop_charge()
                 self.charged = True
@@ -168,8 +167,6 @@ class Move:
     def update_charge_mobility(self):
         if not self.origin_mobile_while_charging:
             self.origin_sprite.paralyze()
-            print("reaching if statement")
-        print("executing update_charge_mobility")
 
     def stop_charge_mobility(self):
         if not self.origin_mobile_while_charging:
