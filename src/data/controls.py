@@ -8,3 +8,4 @@ SPRINT = arcade.key.LSHIFT
 ATTACK = arcade.key.SPACE
 HEAL = arcade.key.H
 SPECIAL = arcade.key.J
+DROP_TREAT = arcade.key.K

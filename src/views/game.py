@@ -5,6 +5,7 @@ from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
 from src.sprites.enemy import FollowingEnemy
+from src.sprites.treat import Treat
 from src.utils.move import Move
 from src.utils.level import Level
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS
@@ -35,6 +36,8 @@ class GameSection(arcade.Section):
         self.player_sprite = Player(id=1)
         self.player_sprite_list.append(self.player_sprite)
 
+        self.treat_sprite_list = arcade.SpriteList()
+
         self.load_map("resources/maps/map.json")
 
         self.current_level_id = 0
@@ -44,6 +47,7 @@ class GameSection(arcade.Section):
 
         self.current_level.spawn_player()
         self.scene.add_sprite_list(name="Player",sprite_list=self.player_sprite_list, use_spatial_hash=True)
+        self.scene.add_sprite_list(name="Treat",sprite_list=self.treat_sprite_list, use_spatial_hash=True)
 
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player_sprite,
@@ -93,6 +97,8 @@ class GameSection(arcade.Section):
             self.player_sprite.start_charging_move("basic heal")
         elif key == controls.SPECIAL:
             self.player_sprite.start_charging_move("shock")
+        elif key == controls.DROP_TREAT:
+            self.player_drop_treat()
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
@@ -170,6 +176,13 @@ class GameSection(arcade.Section):
             elif self.right_pressed:
                 self.player_sprite.start_walk_cycle('right')
         self.player_sprite.advance_walk_cycle()
+
+    def player_drop_treat(self):
+        treat = Treat("resources/textures/map_tiles/default_dry_shrub.png", 1)
+        treat.center_x = self.player_sprite.center_x
+        treat.center_y = self.player_sprite.center_y
+        self.treat_sprite_list.append(treat)
+        self.scene.add_sprite_list(name="Treat", sprite_list=self.treat_sprite_list)
 
     def update_camera(self):
         if self.player_sprite.is_alive:

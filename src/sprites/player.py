@@ -43,6 +43,8 @@ class Player(MovingSprite):
         self.sound_update_timer = 0
         self.sound_update_time = self.footstep_sound.get_length()
 
+        self.treat_amount = 10
+
     def setup(self):
         super().setup()
 
