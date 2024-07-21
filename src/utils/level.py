@@ -15,6 +15,7 @@ class Level:
     def load_level_data(self, level_id):
         with open("resources/data/level.json", "r") as file:
             level_data = json.load(file)
+        self.level_list = [int(level) for level in level_data.keys()]
         return level_data[str(level_id)]
 
     def load_enemies(self):
@@ -30,3 +31,6 @@ class Level:
 
     def spawn_player(self):
         self.player.center_x, self.player.center_y = 300, 300
+
+    def get_level_list(self):
+        return self.level_list

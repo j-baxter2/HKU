@@ -14,7 +14,7 @@ class GameSection(arcade.Section):
                  **kwargs):
         super().__init__(left, bottom, width, height,
                           **kwargs)
-        self.current_level = None
+        self.current_level_id = 0
 
         self.player_sprite = None
         self.player_sprite_list = arcade.SpriteList()
@@ -37,11 +37,12 @@ class GameSection(arcade.Section):
 
         self.load_map("resources/maps/map.json")
 
-        self.current_level = Level(level_id=1, player=self.player_sprite, game_section=self)
-        self.current_level.load_enemies()
-        self.current_level.spawn_player()
+        self.current_level_id = 0
+        self.load_level()
 
-        self.scene.add_sprite_list(name = "Enemy", sprite_list=self.current_level.enemies, use_spatial_hash=True)
+        self.level_list = self.current_level.get_level_list()
+
+        self.current_level.spawn_player()
         self.scene.add_sprite_list(name="Player",sprite_list=self.player_sprite_list, use_spatial_hash=True)
 
         self.physics_engine = arcade.PhysicsEngineSimple(
@@ -50,9 +51,6 @@ class GameSection(arcade.Section):
                 self.scene["Wall"]
             ]
         )
-
-        for enemy in self.scene.get_sprite_list("Enemy"):
-            enemy.setup()
 
         basic_attack = Move(0, self.scene, self.player_sprite)
         self.player_sprite.add_move(basic_attack)
@@ -74,9 +72,9 @@ class GameSection(arcade.Section):
 
     def on_draw(self):
         self.scene.draw()
-        for move in self.player_sprite.move_set:
-            if move.active:
-                move.draw()
+        active_moves = self.player_sprite.get_active_moves()
+        for move in active_moves:
+            move.draw()
 
     def on_key_press(self, key, modifiers):
         if key == controls.UP:
@@ -191,6 +189,22 @@ class GameSection(arcade.Section):
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
+    def load_level(self):
+        self.current_level = Level(level_id=self.current_level_id, player=self.player_sprite, game_section=self)
+        self.current_level.load_enemies()
+
+        self.scene.add_sprite_list(name = "Enemy", sprite_list=self.current_level.enemies, use_spatial_hash=True)
+        for enemy in self.scene.get_sprite_list("Enemy"):
+            enemy.setup()
+
+    @property
+    def more_levels(self):
+        return len(self.level_list) > self.current_level_id
+
+    @property
+    def any_enemies(self):
+        return len(self.scene.get_sprite_list("Enemy")) > 0
+
 class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
         super().__init__(left, bottom, width, height,
@@ -213,9 +227,13 @@ class UISection(arcade.Section):
             self.draw_move_activity_bars()
             self.draw_move_charge_bars()
             self.draw_move_refresh_circles()
+            self.draw_level_id()
 
         self.view.game_section.camera.use()
         self.view.game_section.player_sprite.draw()
+
+    def draw_level_id(self):
+        arcade.draw_text(f"Level: {self.view.game_section.current_level_id}", self.right - 100, self.top - 100, arcade.color.BLACK, 12)
 
     def draw_stamina_bar(self):
         if self.player:
@@ -320,6 +338,10 @@ class GameView(arcade.View):
 
         self.player_sprite = None
 
+        self.between_levels = True
+        self.between_levels_timer = 0
+        self.between_levels_time = 3
+
         self.debug = False
 
     def setup(self):
@@ -338,11 +360,26 @@ class GameView(arcade.View):
         if self.debug:
             self.debug_draw()
 
-        self.handle_endgame_messages()
-
     def on_update(self, delta_time=DELTA_TIME):
         self.game_section.on_update()
         self.ui_section.on_update()
+
+        self.handle_gamestate()
+        self.update_between_levels()
+
+    def start_between_levels(self):
+        self.between_levels = True
+        self.between_levels_timer = 0
+        print("executed start_between_levels")
+
+    def update_between_levels(self):
+        if self.between_levels:
+            self.between_levels_timer += DELTA_TIME
+            if self.between_levels_timer > self.between_levels_time:
+                self.between_levels = False
+                self.handle_level_completion()
+                self.between_levels_timer = 0
+        print("executed update_between_levels")
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.APOSTROPHE:
@@ -361,6 +398,9 @@ class GameView(arcade.View):
         arcade.draw_text(f"Enemies: {enemy_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
         player_pos = self.game_section.player_sprite.get_integer_position()
         arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 60, arcade.color.RED, 12)
+        if self.between_levels:
+            arcade.draw_text(f"Between Levels {round((self.between_levels_timer/self.between_levels_time), 2)}", self.window.width//2, self.window.height//2, arcade.color.RED, 12, anchor_x="center", anchor_y="center")
+
 
         self.game_section.camera.use()
         self.game_section.player_sprite.debug_draw()
@@ -374,8 +414,16 @@ class GameView(arcade.View):
     def draw_defeat_message(self):
         arcade.draw_text("You have been defeated by cuteness", self.window.width//2, self.window.height//2, arcade.color.PURPLE, 24, anchor_x="center", anchor_y="center")
 
-    def handle_endgame_messages(self):
-        if len(self.game_section.scene.get_sprite_list("Enemy")) == 0:
-            self.draw_victory_message()
+    def handle_gamestate(self):
+        if not self.game_section.any_enemies and not self.between_levels:
+            self.start_between_levels()
         elif self.game_section.player_sprite.hp <= 0:
             self.draw_defeat_message()
+
+    def handle_level_completion(self):
+        if not self.between_levels:
+            if self.game_section.more_levels:
+                self.game_section.current_level_id += 1
+                self.game_section.load_level()
+            else:
+                self.draw_victory_message()

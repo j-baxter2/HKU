@@ -29,6 +29,8 @@ class Player(MovingSprite):
         self.charging_moves = []
         self.refreshing_moves = []
 
+        self.xp = 0
+
         self.hp = self.max_hp
         self.stamina = self.max_stamina
         self.sprinting = False
