@@ -54,7 +54,6 @@ class GameSection(arcade.Section):
         for enemy in self.scene.get_sprite_list("Enemy"):
             enemy.setup()
 
-        # Set up player moves
         basic_attack = Move(0, self.scene, self.player_sprite)
         self.player_sprite.add_move(basic_attack)
         basic_heal = Move(1, self.scene, self.player_sprite)
@@ -220,15 +219,15 @@ class UISection(arcade.Section):
 
     def draw_stamina_bar(self):
         if self.player:
-            # Calculate the width of the filled portion of the stamina bar
+
             filled_width = (self.player.stamina / self.player.max_stamina) * 100
-            # Draw the background of the stamina bar
+
             arcade.draw_rectangle_filled(center_x=self.left + 100,
                                          center_y=self.bottom + 70,
                                          width=100,
                                          height=10,
                                          color=arcade.color.BLACK)
-            # Draw the filled portion of the stamina bar
+
             arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
                                          center_y=self.bottom + 70,
                                          width=filled_width,
@@ -237,15 +236,15 @@ class UISection(arcade.Section):
 
     def draw_hp_bar(self):
         if self.player:
-            # Calculate the width of the filled portion of the hp bar
+
             filled_width = (self.player.hp / self.player.max_hp) * 100
-            # Draw the background of the hp bar
+
             arcade.draw_rectangle_filled(center_x=self.left + 100,
                                          center_y=self.bottom + 120,
                                          width=100,
                                          height=10,
                                          color=arcade.color.BLACK)
-            # Draw the filled portion of the hp bar
+
             arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
                                          center_y=self.bottom + 120,
                                          width=filled_width,
@@ -256,15 +255,14 @@ class UISection(arcade.Section):
         if self.player.doing_move:
             moves = self.player.get_active_moves()
             for move_index, move in enumerate(moves):
-                # Calculate the width of the filled portion of the move status bar
                 filled_width = (move.progress_fraction) * 100
-                # Draw the background of the move status bar
+
                 arcade.draw_rectangle_filled(center_x=self.left + 100,
                                             center_y=self.bottom + 220 + (move_index * BAR_SPACING),
                                             width=100,
                                             height=10,
                                             color=arcade.color.BLACK)
-                # Draw the filled portion of the move status bar
+
                 arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
                                             center_y=self.bottom + 220 + (move_index * BAR_SPACING),
                                             width=filled_width,
@@ -275,15 +273,14 @@ class UISection(arcade.Section):
         if self.player.charging_move:
             moves = self.player.get_charging_moves()
             for move_index, move in enumerate(moves):
-                # Calculate the width of the filled portion of the move status bar
                 filled_width = (move.charge_fraction) * 100
-                # Draw the background of the move status bar
+
                 arcade.draw_rectangle_filled(center_x=self.left + 100,
                                             center_y=self.bottom + 270 + (move_index * BAR_SPACING),
                                             width=100,
                                             height=10,
                                             color=arcade.color.BLACK)
-                # Draw the filled portion of the move status bar
+
                 arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
                                             center_y=self.bottom + 270 + (move_index * BAR_SPACING),
                                             width=filled_width,

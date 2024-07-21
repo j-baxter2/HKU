@@ -137,13 +137,11 @@ class Move:
 
     def draw(self):
         if self.draw_circle:
-            # Circle with constant opacity
-            constant_opacity_color = self.color[:3] + (32,)  # Take RGB from self.color and add constant opacity
+            constant_opacity_color = self.color[:3] + (32,)
             arcade.draw_circle_outline(self.origin_sprite.center_x, self.origin_sprite.center_y, self.range, constant_opacity_color, 5)
 
-            # Circle with variable opacity based on progress_fraction
-            variable_opacity = int(255 * self.progress_fraction)  # Calculate opacity
-            variable_opacity_color = self.color[:3] + (variable_opacity,)  # Take RGB from self.color and add calculated opacity
+            variable_opacity = int(255 * self.progress_fraction)
+            variable_opacity_color = self.color[:3] + (variable_opacity,)
             arcade.draw_circle_outline(self.origin_sprite.center_x, self.origin_sprite.center_y, self.range * max(0.5, self.progress_fraction), variable_opacity_color, 5)
 
         if self.draw_lines:

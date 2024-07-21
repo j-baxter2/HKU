@@ -18,7 +18,7 @@
     "1": {
         "name": "basic heal",
         "damage": -20,
-        "damage resist": 1,
+        "damage resist": 0.3,
         "cost": 50,
         "active time": 15,
         "refresh time": 60,

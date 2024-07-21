@@ -9,7 +9,6 @@ from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
 class FollowingEnemy(MovingSprite):
     def __init__(self, id : int, player : Player):
-        # Load player data from JSON
         with open("resources/data/enemy.json", "r") as file:
             enemy_dict = json.load(file)
         self.enemy_data = enemy_dict[str(id)]
@@ -70,11 +69,9 @@ class FollowingEnemy(MovingSprite):
         self.attack_refresh_time = 0
 
     def update_movement_direction(self):
-        #todo: implement treats taking priority over player
         if self.in_range and not self.player.faded:
             self.face_player()
         elif self.should_turn:
-            #set movement direction to random
             self.randomize_velocity()
             self.random_movement_timer = 0
 
@@ -104,10 +101,8 @@ class FollowingEnemy(MovingSprite):
 
     @property
     def animation_direction(self):
-        #get the angle of the velocity vector
         self.velocity = Vec2(self.velocity[0], self.velocity[1])
         angle = self.velocity.heading
-        #convert the angle to degrees
         angle = math.degrees(angle)
         if angle < 135 and angle >= 45:
             return "up"

@@ -10,7 +10,6 @@ class MyWindow(arcade.Window):
 
     def setup_cursor(self):
         cursor_texture = arcade.load_texture("resources/textures/cursor_image.png")
-        # Set the custom cursor
         self.set_mouse_cursor(cursor_texture)
 
     def setup(self):

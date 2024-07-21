@@ -9,31 +9,26 @@ from src.data.constants import DELTA_TIME
 class Player(MovingSprite):
 
     def __init__(self, id: int):
-        # Load player data from JSON
         with open("resources/data/player.json", "r") as file:
             player_dict = json.load(file)
         self.player_data = player_dict[str(id)]
 
-        # Initialise the MovingSprite class
         super().__init__(self.player_data)
 
         self.name = self.player_data["name"]
 
-        # Load movement data from JSON
         self.sprint_multiplier = self.player_data["sprint multiplier"]
         self.max_stamina = self.player_data["stamina"]
         self.stamina_regen = self.player_data["stamina regen"]
         self.stamina_regen_bonus_stationary = self.player_data["stationary stamina bonus"]
         self.footstep_name = self.player_data["footstep name"]
 
-        # Initialise moveset
         self.move_set = []
 
         self.active_moves = []
         self.charging_moves = []
         self.refreshing_moves = []
 
-        # Set up player variables
         self.hp = self.max_hp
         self.stamina = self.max_stamina
         self.sprinting = False
@@ -56,17 +51,13 @@ class Player(MovingSprite):
         super().draw()
 
     def update_stamina(self, delta_time):
-        # Subtract stamina when sprinting
         if self.sprinting:
             self.stamina -= 1
-        # Regenerate quicker when stationary
         elif self.stationary:
             self.stamina += (self.stamina_regen + self.stamina_regen_bonus_stationary) * delta_time
-        # Normal regeneration when walking
         else:
             self.stamina += self.stamina_regen * delta_time
 
-        # Ensure stamina does not exceed max stamina or drop below 0
         self.stamina = max(0, min(self.stamina, self.max_stamina))
 
     def update_fade(self):

@@ -8,7 +8,6 @@ class MenuView(arcade.View):
         self.manager = arcade.gui.UIManager()
         self.v_box = arcade.gui.UIBoxLayout()
 
-        # Load textures for buttons
         new_game_texture = arcade.load_texture("resources/textures/ui/new_game_button.png")
         settings_texture = arcade.load_texture("resources/textures/ui/settings_button.png")
         quit_texture = arcade.load_texture("resources/textures/ui/quit_button.png")
@@ -24,7 +23,6 @@ class MenuView(arcade.View):
         quit_button = arcade.gui.UITextureButton(texture=quit_texture)
         self.v_box.add(quit_button.with_space_around(bottom=20))
         quit_button.on_click = self.on_click_quit
-        # Create a widget to hold the v_box widget, that will center the buttons
         self.manager.add(
             arcade.gui.UIAnchorWidget(
                 anchor_x="center_x", anchor_y="center_y", child=self.v_box
@@ -48,9 +46,7 @@ class MenuView(arcade.View):
         self.window.show_view(game_view)
 
     def on_click_settings(self, event):
-        #go to settings
         pass
 
     def on_click_quit(self, event):
-        #quit
         arcade.close_window()
