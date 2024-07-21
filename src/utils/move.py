@@ -154,9 +154,7 @@ class Move:
         if not self.origin_mobile_while_active:
             self.origin_sprite.paralyze()
         if not self.affectees_mobile_while_active:
-            print("paralyzing affectees 1")
             for affectee in self.affectees:
-                print("paralyzing affectees 2")
                 affectee.paralyze()
 
     def stop_activity_mobility(self):

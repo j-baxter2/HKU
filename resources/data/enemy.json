@@ -2,9 +2,9 @@
     "0" : {
         "name": "Gobu",
         "hp": 2,
-        "attack": 2,
+        "attack": 10,
         "follow radius": 500,
-        "speed": 3,
+        "speed": 4,
         "follow speed bonus": 5,
         "change direction time": 3,
         "fade color": "brown",
@@ -28,11 +28,11 @@
     },
     "1" : {
         "name": "Noodi",
-        "hp": 1,
+        "hp": 3,
         "attack": 2,
         "follow radius": 750,
         "speed": 10,
-        "follow speed bonus": 1.25,
+        "follow speed bonus": 1.5,
         "change direction time": 1,
         "fade color": "brown",
         "spritesheet": {

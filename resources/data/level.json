@@ -12,16 +12,25 @@
         "enemies": {
         "enemy amount": 10,
         "enemy ratio": {
-            "0": 0.5,
-            "1": 0.5
+            "0": 1
             }
         }
     },
     "2": {
         "enemies": {
-        "enemy amount": 5,
+        "enemy amount": 30,
         "enemy ratio": {
-            "0": 1
+            "0": 0.8,
+            "1": 0.2
+            }
+        }
+    },
+    "3": {
+        "enemies": {
+        "enemy amount": 30,
+        "enemy ratio": {
+            "0": 0.3,
+            "1": 0.7
             }
         }
     }

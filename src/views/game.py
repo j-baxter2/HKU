@@ -241,7 +241,7 @@ class UISection(arcade.Section):
         self.view.game_section.player_sprite.draw()
 
     def draw_level_id(self):
-        arcade.draw_text(f"Level: {self.view.game_section.current_level_id}", self.right - 100, self.top - 100, arcade.color.BLACK, 12)
+        arcade.draw_text(f"Level: {self.view.game_section.current_level_id}", self.right - 10, self.top - 100, arcade.color.BLACK, 24, anchor_x="right")
 
     def draw_stamina_bar(self):
         if self.player:
@@ -424,8 +424,8 @@ class GameView(arcade.View):
         arcade.draw_text("Congrats, you snuggled all the enemies <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
 
     def draw_defeat_message(self):
-        self.game_section.camera.use()
-        arcade.draw_text("You have been defeated by cuteness", self.window.width//2, self.window.height//2, arcade.color.PURPLE, 24)
+        self.ui_section.camera.use()
+        arcade.draw_text("You have been defeated by cuteness", self.ui_section.width // 2, self.ui_section.height // 2, arcade.color.PURPLE, 24, anchor_x="center")
 
     def handle_gamestate(self):
         if self.should_change_level:
