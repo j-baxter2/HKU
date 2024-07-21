@@ -73,6 +73,7 @@ class Move:
     def update_charge(self):
         if self.charging:
             self.charge_timer += DELTA_TIME
+            self.update_charge_mobility()
             if self.charge_timer > self.charge_time:
                 self.stop_charge()
                 self.charged = True
@@ -81,6 +82,7 @@ class Move:
     def stop_charge(self):
         self.charging = False
         self.charge_timer = 0
+        self.stop_charge_mobility()
 
     def start(self):
         self.active = True
@@ -92,6 +94,7 @@ class Move:
     def update_activity(self):
         if self.active:
             self.active_timer += DELTA_TIME
+            self.update_activity_mobility()
             self.origin_sprite.color = self.color
             if self.active_timer > self.active_time:
                 self.stop()
@@ -101,6 +104,7 @@ class Move:
         self.refreshing = True
         self.charged = False if self.charge_time else True
         self.stop_damage_resist()
+        self.stop_activity_mobility()
         play_sound(self.stop_sound)
         self.origin_sprite.color = arcade.color.WHITE
         self.active_timer = 0
@@ -138,6 +142,28 @@ class Move:
                 self.origin_sprite.damage_resist -= self.damage_resist
             else:
                 self.origin_sprite.damage_resist = 0
+
+    def update_activity_mobility(self):
+        if not self.origin_mobile_while_active:
+            self.origin_sprite.paralyze()
+        if not self.affectees_mobile_while_active:
+            for affectee in self.affectees:
+                affectee.paralyze()
+
+    def stop_activity_mobility(self):
+        if not self.origin_mobile_while_active:
+            self.origin_sprite.start_moving()
+        if not self.affectees_mobile_while_active:
+            for affectee in self.affectees:
+                affectee.start_moving()
+
+    def update_charge_mobility(self):
+        if not self.origin_mobile_while_charging:
+            self.origin_sprite.paralyze()
+
+    def stop_charge_mobility(self):
+        if not self.origin_mobile_while_charging:
+            self.origin_sprite.start_moving()
 
     def draw(self):
         if self.draw_circle:
