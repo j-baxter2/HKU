@@ -16,6 +16,5 @@ class GameOverView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ENTER:
-            # Assuming there's a MenuView class to return to the main menu
             menu_view = MenuView()
             self.window.show_view(menu_view)
