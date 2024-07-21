@@ -72,13 +72,11 @@ class MovingSprite(arcade.Sprite):
             yield
 
     def start_walk_cycle(self, direction: str):
-
         starting_frame, ending_frame = self.walk_cycle_frames[direction]
         self.current_walk_cycle = self.walk_cycle(starting_frame, ending_frame)
         self.animation_timer = 0
 
     def advance_walk_cycle(self, delta_time=DELTA_TIME):
-
         self.animation_timer += delta_time
 
         if self.animation_timer >= self.frame_time:
@@ -152,7 +150,6 @@ class MovingSprite(arcade.Sprite):
             self.velocity = [0,0]
         elif isinstance(self.velocity, Vec2):
             self.velocity = Vec2(0,0)
-        self.able_to_move = False
 
     def paralyze(self):
         self.stop_moving()
