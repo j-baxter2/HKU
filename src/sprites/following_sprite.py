@@ -18,7 +18,8 @@ class FollowingSprite(MovingSprite):
         if self.fading:
             self.update_fade()
         else:
-            self.update_movement()
+            if self.able_to_move:
+                self.update_movement()
             self.random_movement_timer += DELTA_TIME
             self.update_animation(delta_time = DELTA_TIME)
             self.handle_player_collision()

@@ -2,6 +2,7 @@ import arcade
 import random
 from pyglet.math import Vec2
 from src.data.constants import DELTA_TIME
+from src.utils.sound import load_sound, play_sound
 
 class MovingSprite(arcade.Sprite):
     def __init__(self, data: dict):
@@ -62,7 +63,7 @@ class MovingSprite(arcade.Sprite):
         self.just_been_healed_timer = 0
         self.just_been_healed_time = 0.5
 
-        self.hurt_sound = arcade.load_sound(":resources:sounds/hurt1.wav")
+        self.hurt_sound = load_sound("hurt2")
 
     def walk_cycle(self, starting_frame: int, ending_frame: int):
         if self.textures:
@@ -96,7 +97,7 @@ class MovingSprite(arcade.Sprite):
     def update_just_been_hit(self):
         if self.just_been_hit:
             self.color = arcade.color.RED
-            arcade.play_sound(self.hurt_sound)
+            play_sound(self.hurt_sound)
             self.just_been_hit_timer += DELTA_TIME
             if self.just_been_hit_timer >= self.just_been_hit_time:
                 self.stop_just_been_hit()
