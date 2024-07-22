@@ -31,7 +31,8 @@ class Kitty(MovingSprite):
 
         self.meow_time = self.kitty_data["meow time"]
         self.meow_name = self.kitty_data["meow name"]
-        self.meow_sound = load_sound(self.meow_name)
+        self.meow_sound = load_sound(self.meow_name, source="hku")
+        self.meow_speed = random.uniform(0.75, 1.25)
 
         self.velocity = Vec2(0, 0)
 
@@ -74,7 +75,7 @@ class Kitty(MovingSprite):
     def update_meow(self):
         self.meow_timer += DELTA_TIME
         if self.should_meow:
-            play_sound(self.meow_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
+            play_sound(self.meow_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos(), speed=self.meow_speed)
             self.meow_timer = 0
 
     def update_fade(self):
@@ -195,7 +196,7 @@ class Kitty(MovingSprite):
 
     @property
     def should_meow(self):
-        return self.meow_timer >= (self.meow_time+random.uniform(-0.1, 0.1))
+        return self.meow_timer >= (self.meow_time+random.uniform(-self.meow_time*0.1, self.meow_time))
 
     def face_treat(self):
         self.velocity = Vec2(self.target_treat.center_x - self.center_x, self.target_treat.center_y - self.center_y)
@@ -213,9 +214,9 @@ class Kitty(MovingSprite):
         if distance == 0:
             volume = 1
         else:
-            volume = 1/(distance_in_m)
+            volume = 1/(distance_in_m**2)
         return min(max(volume, 0), 1)
 
     def get_pan_from_player_pos(self):
-        angle = arcade.get_angle_degrees(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
+        angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
         return math.sin(angle)

@@ -6,9 +6,9 @@
         "speed": 2.5,
         "follow speed bonus": 5,
         "change direction time": 3,
-        "meow time": 1,
+        "meow time": 5,
         "fade color": "blue",
-        "meow name": "upgrade1",
+        "meow name": "meow2",
         "spritesheet": {
             "path": "resources/spritesheets/cat.png",
             "columns": 4,
@@ -24,6 +24,34 @@
                 "down": [8, 11],
                 "left": [4, 7],
                 "right": [0, 3]
+            }
+        }
+    },
+    "1" : {
+        "name": "Hattie",
+        "hunger": 2,
+        "follow radius": 500,
+        "speed": 2.5,
+        "follow speed bonus": 5,
+        "change direction time": 3,
+        "meow time": 4,
+        "fade color": "blue",
+        "meow name": "meow1",
+        "spritesheet": {
+            "path": "resources/spritesheets/hatcat.png",
+            "columns": 4,
+            "count": 16,
+            "width": 32,
+            "height": 32,
+            "scale": 3
+            },
+        "animation": {
+            "fps": 30,
+            "walk": {
+                "up": [9, 11],
+                "down": [0, 2],
+                "left": [6, 8],
+                "right": [3, 5]
             }
         }
     }

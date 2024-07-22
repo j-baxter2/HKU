@@ -89,7 +89,7 @@ class Player(MovingSprite):
             self.sound_update_timer += DELTA_TIME
 
         if self.sound_update_timer >= self.sound_update_time:
-            play_sound(self.footstep_sound)
+            play_sound(self.footstep_sound, volume=0.01)
             self.sound_update_timer = 0
 
     def get_integer_position(self):

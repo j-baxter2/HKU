@@ -10,7 +10,7 @@ class Treat(arcade.Sprite):
         self.decayed = False
 
         self.decay_timer = 0
-        self.decay_time = 3
+        self.decay_time = 2
 
     def update(self):
         self.update_decay()
