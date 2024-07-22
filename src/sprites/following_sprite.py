@@ -21,6 +21,20 @@ class FollowingSprite(MovingSprite):
 
     def update(self):
         super().update()
+        if self.fading:
+            self.update_fade()
+        else:
+            if self.able_to_move:
+                self.update_movement()
+            self.random_movement_timer += DELTA_TIME
+            self.update_animation(delta_time = DELTA_TIME)
+            self.update_while_alive()
+
+    def update_fade(self):
+        super().update_fade()
+
+    def update_while_alive(self):
+        pass
 
     def update_movement(self):
         self.update_movement_direction()

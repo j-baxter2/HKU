@@ -137,7 +137,6 @@ class MovingSprite(arcade.Sprite):
         else:
             return False
 
-
     def randomize_velocity(self):
         if isinstance(self.velocity, list):
             self.velocity = [random.uniform(-1, 1), random.uniform(-1,1)]

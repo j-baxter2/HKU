@@ -51,21 +51,16 @@ class Kitty(FollowingSprite):
         self.randomize_velocity()
 
     def update(self):
-        if self.fading:
-            self.update_fade()
-        else:
-            if self.able_to_move:
-                self.update_movement()
-            self.random_movement_timer += DELTA_TIME
-            if not self.eating and not self.fleeing:
-                self.locate_treat()
-            self.update_animation(delta_time = DELTA_TIME)
+        super().update()
+
+    def update_while_alive(self):
+        if not self.eating and not self.fleeing:
+            self.locate_treat()
             self.update_meow()
             self.handle_treat_collision()
             self.update_fleeing()
-            if self.target_treat:
-                self.update_eating()
-            super().update()
+        if self.target_treat:
+            self.update_eating()
 
     def update_meow(self):
         self.meow_timer += DELTA_TIME
@@ -109,6 +104,7 @@ class Kitty(FollowingSprite):
             self.treats_eaten += 1
             #play eating sound
         if self.treats_eaten >= self.hunger:
+            self.paralyze()
             self.fading = True
             #play satisfied sound
         self.target_treat = None

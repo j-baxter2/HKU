@@ -28,20 +28,15 @@ class FollowingEnemy(FollowingSprite):
         super().__init__(self.enemy_data, self.player)
 
     def update(self):
-        if self.fading:
-            self.update_fade()
-        else:
-            if self.able_to_move:
-                self.update_movement()
-            self.random_movement_timer += DELTA_TIME
-            self.update_animation(delta_time = DELTA_TIME)
-            self.look_for_eating_kitty()
-            if self.target_kitty:
-                self.update_target_kitty()
-                self.handle_kitty_collision()
-            self.handle_player_collision()
-            self.update_attack_refresh()
-            super().update()
+        super().update()
+
+    def update_while_alive(self):
+        self.look_for_eating_kitty()
+        if self.target_kitty:
+            self.update_target_kitty()
+            self.handle_kitty_collision()
+        self.handle_player_collision()
+        self.update_attack_refresh()
 
     def update_attack_refresh(self):
         if self.just_attacked:
