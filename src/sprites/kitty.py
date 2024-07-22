@@ -7,6 +7,7 @@ import random
 import math
 import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
+from src.utils.sound import load_sound, play_sound
 
 class Kitty(MovingSprite):
     def __init__(self, id : int, treats: arcade.SpriteList, player: Player):
@@ -28,9 +29,15 @@ class Kitty(MovingSprite):
         self.change_direction_time = self.kitty_data["change direction time"]
         self.random_movement_timer = 0
 
+        self.meow_time = self.kitty_data["meow time"]
+        self.meow_name = self.kitty_data["meow name"]
+        self.meow_sound = load_sound(self.meow_name)
+
         self.velocity = Vec2(0, 0)
 
         self.target_treat = None
+
+        self.meow_timer = 0
 
         self.fading = False
         self.fade_timer = 0
@@ -57,11 +64,18 @@ class Kitty(MovingSprite):
             if not self.eating and not self.fleeing:
                 self.locate_treat()
             self.update_animation(delta_time = DELTA_TIME)
+            self.update_meow()
             self.handle_treat_collision()
             self.update_fleeing()
             if self.target_treat:
                 self.update_eating()
             super().update()
+
+    def update_meow(self):
+        self.meow_timer += DELTA_TIME
+        if self.should_meow:
+            play_sound(self.meow_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
+            self.meow_timer = 0
 
     def update_fade(self):
         self.fade_timer += DELTA_TIME
@@ -179,6 +193,10 @@ class Kitty(MovingSprite):
     def should_turn(self):
         return self.random_movement_timer >= (self.change_direction_time+random.uniform(-0.1, 5))
 
+    @property
+    def should_meow(self):
+        return self.meow_timer >= (self.meow_time+random.uniform(-0.1, 0.1))
+
     def face_treat(self):
         self.velocity = Vec2(self.target_treat.center_x - self.center_x, self.target_treat.center_y - self.center_y)
 
@@ -188,3 +206,16 @@ class Kitty(MovingSprite):
                 self.target_treat = treat
             else:
                 self.target_treat = None
+
+    def get_volume_from_player_pos(self):
+        distance = arcade.get_distance_between_sprites(self, self.player)
+        distance_in_m = distance / 128
+        if distance == 0:
+            volume = 1
+        else:
+            volume = 1/(distance_in_m)
+        return min(max(volume, 0), 1)
+
+    def get_pan_from_player_pos(self):
+        angle = arcade.get_angle_degrees(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
+        return math.sin(angle)

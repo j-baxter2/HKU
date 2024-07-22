@@ -6,7 +6,9 @@
         "speed": 2.5,
         "follow speed bonus": 5,
         "change direction time": 3,
+        "meow time": 1,
         "fade color": "blue",
+        "meow name": "upgrade1",
         "spritesheet": {
             "path": "resources/spritesheets/cat.png",
             "columns": 4,
