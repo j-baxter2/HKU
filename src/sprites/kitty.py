@@ -196,7 +196,7 @@ class Kitty(MovingSprite):
 
     @property
     def should_meow(self):
-        return self.meow_timer >= (self.meow_time+random.uniform(-self.meow_time*0.1, self.meow_time))
+        return self.meow_timer >= (self.meow_time+random.uniform(-self.meow_time*0.5, self.meow_time*3))
 
     def face_treat(self):
         self.velocity = Vec2(self.target_treat.center_x - self.center_x, self.target_treat.center_y - self.center_y)
@@ -214,7 +214,7 @@ class Kitty(MovingSprite):
         if distance == 0:
             volume = 1
         else:
-            volume = 1/(distance_in_m**2)
+            volume = 1/(distance_in_m)
         return min(max(volume, 0), 1)
 
     def get_pan_from_player_pos(self):

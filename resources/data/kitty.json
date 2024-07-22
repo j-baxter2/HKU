@@ -6,7 +6,7 @@
         "speed": 2.5,
         "follow speed bonus": 5,
         "change direction time": 3,
-        "meow time": 5,
+        "meow time": 10,
         "fade color": "blue",
         "meow name": "meow2",
         "spritesheet": {
@@ -34,7 +34,7 @@
         "speed": 2.5,
         "follow speed bonus": 5,
         "change direction time": 3,
-        "meow time": 4,
+        "meow time": 12,
         "fade color": "blue",
         "meow name": "meow1",
         "spritesheet": {
