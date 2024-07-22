@@ -472,6 +472,9 @@ class GameView(arcade.View):
         enemies = self.game_section.scene.get_sprite_list("Enemy")
         for enemy in enemies:
             enemy.debug_draw()
+        kitties = self.game_section.scene.get_sprite_list("Kitty")
+        for kitty in kitties:
+            kitty.debug_draw()
 
     def draw_victory_message(self):
         self.game_section.camera.use()

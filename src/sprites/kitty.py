@@ -88,22 +88,25 @@ class Kitty(MovingSprite):
 
     def start_eating(self):
         self.eating = True
+        self.paralyze()
+        self.eating_timer = 0
 
     def update_eating(self):
         if self.eating:
-            self.eating_timer += DELTA_TIME
-            self.target_treat.being_eaten = True
-            self.paralyze()
-            if self.target_treat.picked_up:
+            if self.target_treat.picked_up or self.target_treat.decayed:
                 self.stop_eating(success=False)
                 #play cry sound
-            elif self.eating_timer >= self.eating_time:
+                return
+            self.eating_timer += DELTA_TIME
+            self.target_treat.being_eaten = True
+            if self.eating_timer >= self.eating_time:
                 self.stop_eating()
 
     def stop_eating(self, success = True):
         self.eating = False
         self.able_to_move = True
         self.eating_timer = 0
+        self.randomize_velocity()
         if self.target_treat:
             self.target_treat.being_eaten = False
         if success:
@@ -118,14 +121,34 @@ class Kitty(MovingSprite):
     def start_fleeing(self):
         self.stop_eating(success=False)
         self.fleeing = True
+        self.fleeing_timer = 0
         #play scared sound
 
     def update_fleeing(self):
         if self.fleeing:
             self.fleeing_timer += DELTA_TIME
-            self.target_treat = None
             if self.fleeing_timer >= self.fleeing_time:
                 self.fleeing = False
+                self.fleeing_timer = 0
+
+
+    def locate_treat(self):
+        for treat in self.treats:
+            if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and treat.edible:
+                self.target_treat = treat
+            else:
+                self.target_treat = None
+
+    def handle_treat_collision(self):
+        if self.target_treat:
+            if arcade.check_for_collision(self, self.target_treat) and not self.eating:
+                self.start_eating()
+
+    def face_treat(self):
+        self.velocity = Vec2(self.target_treat.center_x - self.center_x, self.target_treat.center_y - self.center_y)
+
+    def face_away_from_treat(self):
+        self.velocity = Vec2(self.center_x - self.target_treat.center_x, self.center_y - self.target_treat.center_y)
 
     def update_movement_direction(self):
         if self.target_treat and not self.fleeing:
@@ -145,11 +168,8 @@ class Kitty(MovingSprite):
         self.velocity = Vec2(self.velocity[0], self.velocity[1])
         self.velocity = self.velocity.normalize()
         self.update_movement_speed()
-
         self.velocity = self.velocity.scale(self.speed)
-
         self.velocity = [self.velocity.x, self.velocity.y]
-
         self.handle_out_of_bounds()
 
     def handle_out_of_bounds(self):
@@ -157,11 +177,6 @@ class Kitty(MovingSprite):
             self.velocity = [self.velocity[0] * -1, self.velocity[1]]
         elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
             self.velocity = [self.velocity[0], self.velocity[1] * -1]
-
-    def handle_treat_collision(self):
-        if self.target_treat:
-            if arcade.check_for_collision(self, self.target_treat):
-                self.start_eating()
 
     @property
     def animation_direction(self):
@@ -195,15 +210,6 @@ class Kitty(MovingSprite):
     def should_meow(self):
         return self.meow_timer >= (self.meow_time+random.uniform(-self.meow_time*0.5, self.meow_time*3))
 
-    def face_treat(self):
-        self.velocity = Vec2(self.target_treat.center_x - self.center_x, self.target_treat.center_y - self.center_y)
-
-    def locate_treat(self):
-        for treat in self.treats:
-            if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and treat.edible:
-                self.target_treat = treat
-            else:
-                self.target_treat = None
 
     def get_volume_from_player_pos(self):
         distance = arcade.get_distance_between_sprites(self, self.player)
@@ -217,3 +223,10 @@ class Kitty(MovingSprite):
     def get_pan_from_player_pos(self):
         angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
         return math.sin(angle)
+
+    def debug_draw(self):
+        arcade.draw_text(f"fleeing: {self.fleeing} eating: {self.eating}", self.center_x, self.center_y-100, arcade.color.BLACK, 12)
+        arcade.draw_text(f"eatingprogress: {round(self.eating_timer/self.eating_time,1)}", self.center_x, self.center_y+100, arcade.color.BLACK, 12)
+        arcade.draw_text(f"fleeingprogress: {round(self.fleeing_timer/self.fleeing_time,1)}", self.center_x, self.center_y+200, arcade.color.BLACK, 12)
+        self.draw_follow_radius()
+        return super().debug_draw()
