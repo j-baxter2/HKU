@@ -55,5 +55,24 @@
         "draw circle": false,
         "start sound": "explosion2",
         "stop sound": null
+    },
+    "3": {
+        "name": "scare kitty",
+        "damage": 0,
+        "damage resist": null,
+        "cost": 10,
+        "active time": 0.1,
+        "refresh time": 0.1,
+        "range": 1000,
+        "origin mobile while charging": true,
+        "origin mobile while active": true,
+        "affectees mobile while active": true,
+        "affects": "Kitty",
+        "charge time": 0.5,
+        "color": "yellow",
+        "draw lines": true,
+        "draw circle": false,
+        "start sound": "explosion2",
+        "stop sound": null
     }
 }

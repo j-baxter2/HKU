@@ -63,6 +63,8 @@ class GameSection(arcade.Section):
         self.player_sprite.add_move(basic_heal)
         shock = Move(2, self.scene, self.player_sprite)
         self.player_sprite.add_move(shock)
+        scare = Move(3, self.scene, self.player_sprite)
+        self.player_sprite.add_move(scare)
 
         self.camera = HKUCamera(self.width, self.height)
 
@@ -107,6 +109,8 @@ class GameSection(arcade.Section):
                 play_sound(self.player_sprite.no_treat_sound)
         elif key == controls.PICKUP_TREAT:
             self.player_sprite.picking_up_treat = True
+        elif key == controls.SCARE:
+            self.player_sprite.start_charging_move("scare kitty")
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
@@ -125,6 +129,8 @@ class GameSection(arcade.Section):
             self.player_sprite.stop_charging_move("shock")
         elif key == controls.PICKUP_TREAT:
             self.player_sprite.picking_up_treat = False
+        elif key == controls.SCARE:
+            self.player_sprite.stop_charging_move("scare kitty")
 
     def update_player(self):
         if self.player_sprite.able_to_move:

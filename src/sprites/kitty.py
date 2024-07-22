@@ -52,6 +52,13 @@ class Kitty(MovingSprite):
         self.fleeing_timer = 0
         self.fleeing_time = 3
 
+    def take_damage(self, damage):
+        self.start_fleeing()
+
+    @property
+    def is_dead(self):
+        return
+
     def setup(self):
         self.randomize_velocity()
 

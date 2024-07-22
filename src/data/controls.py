@@ -10,3 +10,4 @@ HEAL = arcade.key.H
 SPECIAL = arcade.key.J
 DROP_TREAT = arcade.key.K
 PICKUP_TREAT = arcade.key.L
+SCARE = arcade.key.I
