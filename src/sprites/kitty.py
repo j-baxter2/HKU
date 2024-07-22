@@ -1,6 +1,6 @@
 import arcade
 import json
-from src.sprites.following_sprite import MovingSprite
+from src.sprites.following_sprite import FollowingSprite
 from src.sprites.player import Player
 from pyglet.math import Vec2
 import random
@@ -9,40 +9,28 @@ import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 from src.utils.sound import load_sound, play_sound
 
-class Kitty(MovingSprite):
+class Kitty(FollowingSprite):
     def __init__(self, id : int, treats: arcade.SpriteList, player: Player):
         with open("resources/data/kitty.json", "r") as file:
             kitty_dict = json.load(file)
         self.kitty_data = kitty_dict[str(id)]
+        self.player = player
 
-        super().__init__(self.kitty_data)
+        super().__init__(self.kitty_data, self.player)
 
         self.treats = treats
-        self.player = player
 
         self.hunger = self.kitty_data["hunger"]
         self.treats_eaten = 0
-
-        self.follow_distance = self.kitty_data["follow radius"]
-        self.follow_speed_bonus = self.kitty_data["follow speed bonus"]
-
-        self.change_direction_time = self.kitty_data["change direction time"]
-        self.random_movement_timer = 0
 
         self.meow_time = self.kitty_data["meow time"]
         self.meow_name = self.kitty_data["meow name"]
         self.meow_sound = load_sound(self.meow_name, source="hku")
         self.meow_speed = random.uniform(0.5, 1.5)
 
-        self.velocity = Vec2(0, 0)
-
         self.target_treat = None
 
         self.meow_timer = 0
-
-        self.fading = False
-        self.fade_timer = 0
-        self.fade_time = 1
 
         self.eating = False
         self.eating_timer = 0
@@ -170,21 +158,6 @@ class Kitty(MovingSprite):
         else:
             self.speed = self.base_speed
 
-    def update_movement(self):
-        self.update_movement_direction()
-        self.velocity = Vec2(self.velocity[0], self.velocity[1])
-        self.velocity = self.velocity.normalize()
-        self.update_movement_speed()
-        self.velocity = self.velocity.scale(self.speed)
-        self.velocity = [self.velocity.x, self.velocity.y]
-        self.handle_out_of_bounds()
-
-    def handle_out_of_bounds(self):
-        if self.center_x < 0 or self.center_x > MAP_WIDTH:
-            self.velocity = [self.velocity[0] * -1, self.velocity[1]]
-        elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
-            self.velocity = [self.velocity[0], self.velocity[1] * -1]
-
     @property
     def animation_direction(self):
         self.velocity = Vec2(self.velocity[0], self.velocity[1])
@@ -200,18 +173,11 @@ class Kitty(MovingSprite):
             return "left"
 
     def update_animation(self, delta_time):
-        if not self.current_walk_cycle:
-            if self.animation_direction:
-                self.start_walk_cycle(self.animation_direction)
-                self.hit_box = self.texture.hit_box_points
-        self.advance_walk_cycle()
-
-    def draw_follow_radius(self):
-        arcade.draw_circle_outline(self.center_x, self.center_y, self.follow_distance, arcade.color.BLUE, 8)
+        super().update_animation(delta_time)
 
     @property
     def should_turn(self):
-        return self.random_movement_timer >= (self.change_direction_time+random.uniform(-0.1, 5))
+        return self.random_movement_timer >= (self.random_movement_time+random.uniform(-0.1, 5))
 
     @property
     def should_meow(self):
@@ -232,8 +198,7 @@ class Kitty(MovingSprite):
         return math.sin(angle)
 
     def debug_draw(self):
+        super().debug_draw()
         arcade.draw_text(f"fleeing: {self.fleeing} eating: {self.eating}", self.center_x, self.center_y-100, arcade.color.BLACK, 12)
         arcade.draw_text(f"eatingprogress: {round(self.eating_timer/self.eating_time,1)}", self.center_x, self.center_y+100, arcade.color.BLACK, 12)
         arcade.draw_text(f"fleeingprogress: {round(self.fleeing_timer/self.fleeing_time,1)}", self.center_x, self.center_y+200, arcade.color.BLACK, 12)
-        self.draw_follow_radius()
-        return super().debug_draw()

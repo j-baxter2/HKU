@@ -6,7 +6,7 @@
         "follow radius": 500,
         "speed": 2.5,
         "follow speed bonus": 5,
-        "change direction time": 3,
+        "random movement time": 3,
         "fade color": "brown",
         "spritesheet": {
             "path": "resources/spritesheets/gobu.png",
@@ -33,7 +33,7 @@
         "follow radius": 750,
         "speed": 10,
         "follow speed bonus": 1.5,
-        "change direction time": 1,
+        "random movement time": 1,
         "fade color": "brown",
         "spritesheet": {
             "path": "resources/spritesheets/noodi.png",

@@ -36,10 +36,6 @@ class Player(MovingSprite):
         self.stamina = self.max_stamina
         self.sprinting = False
 
-        self.fading = False
-        self.fade_timer = 0
-        self.fade_time = 3
-
         self.footstep_sound = load_sound(self.footstep_name)
         self.sound_update_timer = 0
         self.sound_update_time = self.footstep_sound.get_length()
@@ -69,15 +65,6 @@ class Player(MovingSprite):
             self.stamina += self.stamina_regen * delta_time
 
         self.stamina = max(0, min(self.stamina, self.max_stamina))
-
-    def update_fade(self):
-        self.fade_timer += DELTA_TIME
-        opacity_decrease = 255 * (self.fade_timer / 2)
-        self.alpha = max(255 - opacity_decrease, 0)
-        if self.fade_timer >= self.fade_time:
-            self.fading = False
-            self.faded = True
-            self.kill()
 
     def update_sound(self):
         self.update_walking_sound()
@@ -112,13 +99,6 @@ class Player(MovingSprite):
         for move in self.move_set:
             if move.name == move_name:
                 move.stop_charge()
-
-    def debug_draw(self):
-        self.draw_hit_box()
-        for move in self.move_set:
-            move.debug_draw()
-        arcade.draw_text(f"JBH: {self.just_been_hit}", self.center_x, self.center_y+100, arcade.color.WHITE, 20)
-        super().debug_draw()
 
     @property
     def doing_move(self):
@@ -165,3 +145,9 @@ class Player(MovingSprite):
     @property
     def has_treats(self):
         return self.treat_amount > 0
+
+    def debug_draw(self):
+        for move in self.move_set:
+            move.debug_draw()
+        arcade.draw_text(f"JBH: {self.just_been_hit}", self.center_x, self.center_y+100, arcade.color.WHITE, 20)
+        super().debug_draw()

@@ -20,20 +20,8 @@ class FollowingEnemy(FollowingSprite):
         self.hp = self.max_hp
         self.attack = self.enemy_data["attack"]
 
-        self.follow_distance = self.enemy_data["follow radius"]
-        self.follow_speed_bonus = self.enemy_data["follow speed bonus"]
-
-        self.change_direction_time = self.enemy_data["change direction time"]
-        self.random_movement_timer = 0
-
-        self.velocity = Vec2(0, 0)
-
         self.just_attacked = False
         self.attack_refresh_time = 0
-
-        self.fading = False
-        self.fade_timer = 0
-        self.fade_time = 1
 
         self.target_kitty = None
 
@@ -54,6 +42,19 @@ class FollowingEnemy(FollowingSprite):
             self.handle_player_collision()
             self.update_attack_refresh()
             super().update()
+
+    def update_attack_refresh(self):
+        if self.just_attacked:
+            self.attack_refresh_time += DELTA_TIME
+            if self.attack_refresh_time >= 1:
+                self.reset_attack_timer()
+
+    def reset_attack_timer(self):
+        self.just_attacked = False
+        self.attack_refresh_time = 0
+
+    def update_movement(self):
+        super().update_movement()
 
     def update_movement_direction(self):
         if self.target_kitty:

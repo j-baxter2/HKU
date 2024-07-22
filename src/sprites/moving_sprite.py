@@ -50,6 +50,10 @@ class MovingSprite(arcade.Sprite):
 
         self.damage_resist = 0
 
+        self.fading = False
+        self.fade_timer = 0
+        self.fade_time = 3
+
         self.faded = False
         self.fade_color_key = data["fade color"]
         self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
@@ -93,6 +97,14 @@ class MovingSprite(arcade.Sprite):
         self.update_just_been_healed()
         super().update()
 
+    def update_fade(self):
+        self.fade_timer += DELTA_TIME
+        opacity_decrease = 255 * (self.fade_timer / 2)
+        self.alpha = max(255 - opacity_decrease, 0)
+        if self.fade_timer >= self.fade_time:
+            self.fading = False
+            self.kill()
+
     def update_just_been_hit(self):
         if self.just_been_hit:
             self.color = arcade.color.RED
@@ -125,8 +137,6 @@ class MovingSprite(arcade.Sprite):
         else:
             return False
 
-    def debug_draw(self):
-        self.draw_hit_box()
 
     def randomize_velocity(self):
         if isinstance(self.velocity, list):
@@ -162,3 +172,6 @@ class MovingSprite(arcade.Sprite):
     @property
     def is_dead(self):
         return self.hp <= 0
+
+    def debug_draw(self):
+        self.draw_hit_box()
