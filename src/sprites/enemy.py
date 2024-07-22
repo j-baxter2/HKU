@@ -84,8 +84,9 @@ class FollowingEnemy(FollowingSprite):
             self.target_kitty = None
 
     def handle_kitty_collision(self):
-       if self.can_attack and arcade.check_for_collision(self, self.target_kitty):
-           self.target_kitty.start_fleeing()
-           #play roar
-           self.just_attacked = True
-           self.target_kitty.just_been_hit = True
+        if self.target_kitty:
+            if self.can_attack and arcade.check_for_collision(self, self.target_kitty):
+                self.target_kitty.start_fleeing()
+                #play roar
+                self.just_attacked = True
+                self.target_kitty.just_been_hit = True

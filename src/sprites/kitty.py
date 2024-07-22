@@ -9,7 +9,7 @@ import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
 class Kitty(MovingSprite):
-    def __init__(self, id : int, treats: arcade.SpriteList):
+    def __init__(self, id : int, treats: arcade.SpriteList, player: Player):
         with open("resources/data/kitty.json", "r") as file:
             kitty_dict = json.load(file)
         self.kitty_data = kitty_dict[str(id)]
@@ -17,6 +17,7 @@ class Kitty(MovingSprite):
         super().__init__(self.kitty_data)
 
         self.treats = treats
+        self.player = player
 
         self.hunger = self.kitty_data["hunger"]
         self.treats_eaten = 0
@@ -53,7 +54,7 @@ class Kitty(MovingSprite):
             if self.able_to_move:
                 self.update_movement()
             self.random_movement_timer += DELTA_TIME
-            if not self.eating:
+            if not self.eating and not self.fleeing:
                 self.locate_treat()
             self.update_animation(delta_time = DELTA_TIME)
             self.handle_treat_collision()
@@ -102,6 +103,9 @@ class Kitty(MovingSprite):
     def start_fleeing(self):
         self.stop_eating(success=False)
         self.fleeing = True
+        print(f"Eating: {self.eating}")
+        print(f"Fleeing: {self.fleeing}")
+        print(f"Able to move: {self.able_to_move}")
         #play scared sound
 
     def update_fleeing(self):
@@ -180,7 +184,7 @@ class Kitty(MovingSprite):
 
     def locate_treat(self):
         for treat in self.treats:
-            if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and not treat.being_eaten:
+            if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and treat.edible:
                 self.target_treat = treat
             else:
                 self.target_treat = None

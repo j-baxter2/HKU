@@ -40,7 +40,7 @@ class Level:
 
         for kitty_id, ratio in kitty_ratio.items():
             for _ in range(int(ratio * kitty_amount)):
-                kitty = Kitty(id=int(kitty_id), treats=self.treats)
+                kitty = Kitty(id=int(kitty_id), treats=self.treats, player=self.player)
                 kitty.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
                 self.kitties.append(kitty)
 
