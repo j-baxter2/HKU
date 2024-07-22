@@ -39,6 +39,10 @@ class Kitty(MovingSprite):
         self.eating_timer = 0
         self.eating_time = 1
 
+        self.fleeing = False
+        self.fleeing_timer = 0
+        self.fleeing_time = 3
+
     def setup(self):
         self.randomize_velocity()
 
@@ -53,7 +57,9 @@ class Kitty(MovingSprite):
                 self.locate_treat()
             self.update_animation(delta_time = DELTA_TIME)
             self.handle_treat_collision()
-            self.update_eating()
+            self.update_fleeing()
+            if self.target_treat:
+                self.update_eating()
             super().update()
 
     def update_fade(self):
@@ -81,13 +87,23 @@ class Kitty(MovingSprite):
         self.eating_timer = 0
         if self.target_treat:
             self.target_treat.being_eaten = False
-            self.target_treat.kill()
-        self.target_treat = None
         if success:
+            self.target_treat.kill()
             self.treats_eaten += 1
         if self.treats_eaten >= self.hunger:
             self.fading = True
+        self.target_treat = None
 
+    def start_fleeing(self):
+        self.stop_eating(success=False)
+        self.fleeing = True
+
+    def update_fleeing(self):
+        if self.fleeing:
+            self.fleeing_timer += DELTA_TIME
+            self.target_treat = None
+            if self.fleeing_timer >= self.fleeing_time:
+                self.fleeing = False
 
     def update_movement_direction(self):
         if self.target_treat:
@@ -97,7 +113,7 @@ class Kitty(MovingSprite):
             self.random_movement_timer = 0
 
     def update_movement_speed(self):
-        if self.target_treat:
+        if self.target_treat or self.fleeing:
             self.speed = self.follow_speed_bonus * self.base_speed
         else:
             self.speed = self.base_speed

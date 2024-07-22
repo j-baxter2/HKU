@@ -230,12 +230,12 @@ class GameSection(arcade.Section):
         self.current_level.load_enemies()
         self.current_level.load_kitties()
 
-        self.scene.add_sprite_list(name = "Enemy", sprite_list=self.current_level.enemies, use_spatial_hash=True)
-        for enemy in self.scene.get_sprite_list("Enemy"):
-            enemy.setup()
         self.scene.add_sprite_list(name = "Kitty", sprite_list=self.current_level.kitties, use_spatial_hash=True)
         for kitty in self.scene.get_sprite_list("Kitty"):
             kitty.setup()
+        self.scene.add_sprite_list(name = "Enemy", sprite_list=self.current_level.enemies, use_spatial_hash=True)
+        for enemy in self.scene.get_sprite_list("Enemy"):
+            enemy.setup()
 
         self.current_level.give_player_treats()
 

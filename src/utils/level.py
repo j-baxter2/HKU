@@ -29,7 +29,7 @@ class Level:
 
         for enemy_id, ratio in enemy_ratio.items():
             for _ in range(int(ratio * enemy_amount)):
-                enemy = FollowingEnemy(id=int(enemy_id), player=self.player)
+                enemy = FollowingEnemy(id=int(enemy_id), player=self.player, kitties=self.kitties)
                 enemy.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
                 self.enemies.append(enemy)
 
