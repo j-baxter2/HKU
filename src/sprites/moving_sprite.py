@@ -96,7 +96,7 @@ class MovingSprite(arcade.Sprite):
     def update_just_been_hit(self):
         if self.just_been_hit:
             self.color = arcade.color.RED
-            play_sound(self.hurt_sound)
+            #play_sound(self.hurt_sound)
             self.just_been_hit_timer += DELTA_TIME
             if self.just_been_hit_timer >= self.just_been_hit_time:
                 self.stop_just_been_hit()

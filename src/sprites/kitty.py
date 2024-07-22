@@ -32,7 +32,7 @@ class Kitty(MovingSprite):
         self.meow_time = self.kitty_data["meow time"]
         self.meow_name = self.kitty_data["meow name"]
         self.meow_sound = load_sound(self.meow_name, source="hku")
-        self.meow_speed = random.uniform(0.75, 1.25)
+        self.meow_speed = random.uniform(0.5, 1.5)
 
         self.velocity = Vec2(0, 0)
 
@@ -118,9 +118,6 @@ class Kitty(MovingSprite):
     def start_fleeing(self):
         self.stop_eating(success=False)
         self.fleeing = True
-        print(f"Eating: {self.eating}")
-        print(f"Fleeing: {self.fleeing}")
-        print(f"Able to move: {self.able_to_move}")
         #play scared sound
 
     def update_fleeing(self):
@@ -131,7 +128,7 @@ class Kitty(MovingSprite):
                 self.fleeing = False
 
     def update_movement_direction(self):
-        if self.target_treat:
+        if self.target_treat and not self.fleeing:
             self.face_treat()
         elif self.should_turn:
             self.randomize_velocity()
