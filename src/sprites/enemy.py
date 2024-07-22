@@ -27,9 +27,6 @@ class FollowingEnemy(FollowingSprite):
 
         super().__init__(self.enemy_data, self.player)
 
-    def update(self):
-        super().update()
-
     def update_while_alive(self):
         self.look_for_eating_kitty()
         if self.target_kitty:
@@ -48,9 +45,6 @@ class FollowingEnemy(FollowingSprite):
         self.just_attacked = False
         self.attack_refresh_time = 0
 
-    def update_movement(self):
-        super().update_movement()
-
     def update_movement_direction(self):
         if self.target_kitty:
             self.face_kitty()
@@ -59,12 +53,6 @@ class FollowingEnemy(FollowingSprite):
         elif self.should_turn:
             self.randomize_velocity()
             self.random_movement_timer = 0
-
-    def update_movement_speed(self):
-        if self.in_range or self.target_kitty:
-            self.speed = self.follow_speed_bonus * self.base_speed
-        else:
-            self.speed = self.base_speed
 
     def face_kitty(self):
         self.velocity = Vec2(self.target_kitty.center_x - self.center_x, self.target_kitty.center_y - self.center_y)
@@ -86,3 +74,11 @@ class FollowingEnemy(FollowingSprite):
                 #play roar
                 self.just_attacked = True
                 self.target_kitty.just_been_hit = True
+
+    @property
+    def in_range(self):
+        return arcade.get_distance_between_sprites(self, self.player) < self.follow_distance
+
+    @property
+    def should_sprint(self):
+        return self.in_range or self.target_kitty

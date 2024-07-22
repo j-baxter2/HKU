@@ -50,9 +50,6 @@ class Kitty(FollowingSprite):
     def setup(self):
         self.randomize_velocity()
 
-    def update(self):
-        super().update()
-
     def update_while_alive(self):
         if not self.eating and not self.fleeing:
             self.locate_treat()
@@ -122,7 +119,6 @@ class Kitty(FollowingSprite):
                 self.fleeing = False
                 self.fleeing_timer = 0
 
-
     def locate_treat(self):
         for treat in self.treats:
             if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and treat.edible:
@@ -148,12 +144,6 @@ class Kitty(FollowingSprite):
             self.randomize_velocity()
             self.random_movement_timer = 0
 
-    def update_movement_speed(self):
-        if self.target_treat or self.fleeing:
-            self.speed = self.follow_speed_bonus * self.base_speed
-        else:
-            self.speed = self.base_speed
-
     @property
     def animation_direction(self):
         self.velocity = Vec2(self.velocity[0], self.velocity[1])
@@ -174,6 +164,10 @@ class Kitty(FollowingSprite):
     @property
     def should_turn(self):
         return self.random_movement_timer >= (self.random_movement_time+random.uniform(-0.1, 5))
+
+    @property
+    def should_sprint(self):
+        return self.target_treat or self.fleeing
 
     @property
     def should_meow(self):

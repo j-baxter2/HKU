@@ -50,7 +50,10 @@ class FollowingSprite(MovingSprite):
             self.randomize_velocity()
 
     def update_movement_speed(self):
-        self.speed = self.base_speed
+        if self.should_sprint:
+            self.speed = self.follow_speed_bonus * self.base_speed
+        else:
+            self.speed = self.base_speed
 
     def handle_out_of_bounds(self):
         if self.center_x < 0 or self.center_x > MAP_WIDTH:
@@ -95,16 +98,16 @@ class FollowingSprite(MovingSprite):
         self.velocity = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
 
     @property
-    def in_range(self):
-        return arcade.get_distance_between_sprites(self, self.player) < self.follow_distance
-
-    @property
     def should_turn(self):
         return self.random_movement_timer >= (self.random_movement_time+random.uniform(-0.1, 5))
 
     @property
     def can_attack(self):
         return not self.just_attacked
+
+    @property
+    def should_sprint(self):
+        return self.just_been_hit
 
     def debug_draw(self):
         super().debug_draw()
