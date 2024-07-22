@@ -78,6 +78,9 @@ class FollowingSprite(MovingSprite):
         elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
             self.velocity = [self.velocity[0], self.velocity[1] * -1]
 
+        self.center_x = max(0, min(self.center_x, MAP_WIDTH))
+        self.center_y = max(0, min(self.center_y, MAP_HEIGHT))
+
     @property
     def animation_direction(self):
         self.velocity = Vec2(self.velocity[0], self.velocity[1])

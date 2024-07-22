@@ -27,7 +27,7 @@
     },
     "1" : {
         "name": "Lyra",
-        "hp": 50,
+        "hp": 30,
         "stamina": 100,
         "stamina regen": 10,
         "stationary stamina bonus": 20,

@@ -39,7 +39,7 @@
     },
     "2": {
         "name": "shock",
-        "damage": 0,
+        "damage": 2,
         "damage resist": null,
         "cost": 75,
         "active time": 10,

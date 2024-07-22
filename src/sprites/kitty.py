@@ -77,26 +77,32 @@ class Kitty(MovingSprite):
         if self.eating:
             self.eating_timer += DELTA_TIME
             self.target_treat.being_eaten = True
-            if self.eating_timer >= self.eating_time:
-                self.stop_eating()
-            elif self.target_treat.picked_up:
+            self.paralyze()
+            if self.target_treat.picked_up:
                 self.stop_eating(success=False)
+                #play cry sound
+            elif self.eating_timer >= self.eating_time:
+                self.stop_eating()
 
     def stop_eating(self, success = True):
         self.eating = False
+        self.able_to_move = True
         self.eating_timer = 0
         if self.target_treat:
             self.target_treat.being_eaten = False
         if success:
             self.target_treat.kill()
             self.treats_eaten += 1
+            #play eating sound
         if self.treats_eaten >= self.hunger:
             self.fading = True
+            #play satisfied sound
         self.target_treat = None
 
     def start_fleeing(self):
         self.stop_eating(success=False)
         self.fleeing = True
+        #play scared sound
 
     def update_fleeing(self):
         if self.fleeing:
