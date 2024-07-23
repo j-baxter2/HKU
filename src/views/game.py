@@ -197,15 +197,12 @@ class UISection(arcade.Section):
 
     def draw_stamina_bar(self):
         if self.player:
-
             filled_width = (self.player.stamina / self.player.max_stamina) * 100
-
             arcade.draw_rectangle_filled(center_x=self.left + 100,
                                          center_y=self.bottom + 70,
                                          width=100,
                                          height=10,
                                          color=arcade.color.BLACK)
-
             arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
                                          center_y=self.bottom + 70,
                                          width=filled_width,
@@ -234,13 +231,11 @@ class UISection(arcade.Section):
             moves = self.player.get_active_moves()
             for move_index, move in enumerate(moves):
                 filled_width = (move.progress_fraction) * 100
-
                 arcade.draw_rectangle_filled(center_x=self.left + 100,
                                             center_y=self.bottom + 220 + (move_index * BAR_SPACING),
                                             width=100,
                                             height=10,
                                             color=arcade.color.BLACK)
-
                 arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
                                             center_y=self.bottom + 220 + (move_index * BAR_SPACING),
                                             width=filled_width,
@@ -292,6 +287,9 @@ class UISection(arcade.Section):
                                     width=filled_width,
                                     height=20,
                                     color=arcade.color.YELLOW)
+
+        arcade.draw_text(f"{self.player.current_rank}", self.width // 2 - 175, self.top - 70, arcade.color.BLACK, 24, anchor_x="center", anchor_y="center")
+        arcade.draw_text(f"{self.player.current_rank+1}", self.width // 2 + 175, self.top - 70, arcade.color.BLACK, 24, anchor_x="center", anchor_y="center")
 
     def get_player(self):
         return self.view.game_section.player_sprite
