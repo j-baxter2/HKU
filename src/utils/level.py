@@ -14,7 +14,7 @@ class Level:
         self.enemies = arcade.SpriteList()
         self.kitty_data = self.load_level_data(level_id)["kitties"]
         self.kitties = arcade.SpriteList()
-        self.treats = self.game_section.treat_sprite_list
+        self.treats = self.player.treat_sprite_list
 
     def load_level_data(self, level_id):
         with open("resources/data/level.json", "r") as file:

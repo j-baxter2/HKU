@@ -4,8 +4,6 @@ from src.sprites.player import Player
 from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
-from src.sprites.enemy import FollowingEnemy
-from src.sprites.treat import Treat
 from src.utils.move import Move
 from src.utils.level import Level
 from src.utils.sound import play_sound
@@ -17,46 +15,29 @@ class GameSection(arcade.Section):
         super().__init__(left, bottom, width, height,
                           **kwargs)
         self.current_level_id = 0
-
+        self.scene = None
         self.player_sprite = None
         self.player_sprite_list = arcade.SpriteList()
-
-        self.up_pressed = False
-        self.down_pressed = False
-        self.left_pressed = False
-        self.right_pressed = False
-        self.sprint_pressed = False
-
         self.tile_map = None
-
         self.physics_engine = None
-
         self.camera = None
 
     def setup(self):
-        self.player_sprite = Player(id=1)
-        self.player_sprite_list.append(self.player_sprite)
-
-        self.treat_sprite_list = arcade.SpriteList()
-
         self.load_map("resources/maps/map.json")
-
+        self.player_sprite = Player(id=1, scene=self.scene)
+        self.player_sprite_list.append(self.player_sprite)
         self.current_level_id = 0
         self.load_level()
-
         self.level_list = self.current_level.get_level_list()
-
-        self.current_level.spawn_player()
         self.scene.add_sprite_list(name="Player",sprite_list=self.player_sprite_list, use_spatial_hash=True)
-        self.scene.add_sprite_list(name="Treat",sprite_list=self.treat_sprite_list, use_spatial_hash=True)
-
+        self.current_level.spawn_player()
+        self.scene.add_sprite_list(name="Treat",sprite_list=self.player_sprite.treat_sprite_list, use_spatial_hash=True)
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player_sprite,
             walls=[
                 self.scene["Wall"]
             ]
         )
-
         basic_attack = Move(0, self.scene, self.player_sprite)
         self.player_sprite.add_move(basic_attack)
         basic_heal = Move(1, self.scene, self.player_sprite)
@@ -65,19 +46,15 @@ class GameSection(arcade.Section):
         self.player_sprite.add_move(shock)
         scare = Move(3, self.scene, self.player_sprite)
         self.player_sprite.add_move(scare)
-
         self.camera = HKUCamera(self.width, self.height)
 
     def on_update(self):
-        if self.player_sprite.fading:
-            self.player_sprite.update_fade()
-        else:
-            self.update_player()
+        self.physics_engine.update()
+        self.update_camera()
+        self.player_sprite.update()
         self.scene.update(["Enemy"])
         self.scene.update(["Kitty"])
         self.scene.update(["Treat"])
-        self.update_camera()
-        self.physics_engine.update()
 
     def on_draw(self):
         self.scene.draw()
@@ -87,15 +64,15 @@ class GameSection(arcade.Section):
 
     def on_key_press(self, key, modifiers):
         if key == controls.UP:
-            self.up_pressed = True
+            self.player_sprite.up_pressed = True
         elif key == controls.DOWN:
-            self.down_pressed = True
+            self.player_sprite.down_pressed = True
         elif key == controls.LEFT:
-            self.left_pressed = True
+            self.player_sprite.left_pressed = True
         elif key == controls.RIGHT:
-            self.right_pressed = True
+            self.player_sprite.right_pressed = True
         elif key == controls.SPRINT:
-            self.sprint_pressed = True
+            self.player_sprite.sprint_pressed = True
         elif key == controls.ATTACK:
             self.player_sprite.do_move("basic pat")
         elif key == controls.HEAL:
@@ -104,7 +81,7 @@ class GameSection(arcade.Section):
             self.player_sprite.start_charging_move("shock")
         elif key == controls.DROP_TREAT:
             if self.player_sprite.has_treats:
-                self.player_drop_treat()
+                self.player_sprite.drop_treat()
             else:
                 play_sound(self.player_sprite.no_treat_sound)
         elif key == controls.PICKUP_TREAT:
@@ -114,15 +91,15 @@ class GameSection(arcade.Section):
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
-            self.up_pressed = False
+            self.player_sprite.up_pressed = False
         elif key == controls.DOWN:
-            self.down_pressed = False
+            self.player_sprite.down_pressed = False
         elif key == controls.LEFT:
-            self.left_pressed = False
+            self.player_sprite.left_pressed = False
         elif key == controls.RIGHT:
-            self.right_pressed = False
+            self.player_sprite.right_pressed = False
         elif key == controls.SPRINT:
-            self.sprint_pressed = False
+            self.player_sprite.sprint_pressed = False
         elif key == controls.HEAL:
             self.player_sprite.stop_charging_move("basic heal")
         elif key == controls.SPECIAL:
@@ -131,86 +108,6 @@ class GameSection(arcade.Section):
             self.player_sprite.picking_up_treat = False
         elif key == controls.SCARE:
             self.player_sprite.stop_charging_move("scare kitty")
-
-    def update_player(self):
-        if self.player_sprite.able_to_move:
-            self.update_player_movement()
-        self.player_sprite.update_sound()
-        self.update_player_animation()
-        self.player_sprite.update()
-        self.update_sprinting_flag()
-        self.player_sprite.update_stamina(DELTA_TIME)
-        self.update_moves()
-        self.update_player_treat_pickup()
-
-    def update_player_movement(self):
-        self.update_player_movement_direction()
-        self.update_player_movement_speed()
-
-        self.player_sprite.velocity = [self.player_sprite.velocity.x, self.player_sprite.velocity.y]
-
-        self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, MAP_WIDTH))
-        self.player_sprite.center_y = max(0, min(self.player_sprite.center_y, MAP_HEIGHT))
-
-    def update_player_movement_direction(self):
-        self.player_sprite.velocity = Vec2(0, 0)
-        if self.up_pressed:
-            self.player_sprite.velocity += Vec2(0, 1)
-        if self.down_pressed:
-            self.player_sprite.velocity -= Vec2(0, 1)
-        if self.left_pressed:
-            self.player_sprite.velocity -= Vec2(1, 0)
-        if self.right_pressed:
-            self.player_sprite.velocity += Vec2(1, 0)
-
-        self.player_sprite.velocity = self.player_sprite.velocity.normalize()
-
-    def update_player_movement_speed(self):
-        if self.player_sprite.stamina > 0:
-            if self.sprint_pressed:
-                self.player_sprite.speed = self.player_sprite.base_speed * self.player_sprite.sprint_multiplier
-            else:
-                self.player_sprite.speed = self.player_sprite.base_speed
-        else:
-            self.player_sprite.speed = self.player_sprite.base_speed
-        self.player_sprite.velocity = self.player_sprite.velocity.scale(self.player_sprite.speed)
-
-    def update_moves(self):
-        for move in self.player_sprite.move_set:
-                    move.on_update(DELTA_TIME)
-
-    def update_sprinting_flag(self):
-        self.player_sprite.sprinting = (self.sprint_pressed and not self.player_sprite.stationary)
-
-    def update_player_animation(self):
-        if not self.player_sprite.current_walk_cycle:
-            if self.up_pressed:
-                self.player_sprite.start_walk_cycle('up')
-            elif self.down_pressed:
-                self.player_sprite.start_walk_cycle('down')
-            elif self.left_pressed:
-                self.player_sprite.start_walk_cycle('left')
-            elif self.right_pressed:
-                self.player_sprite.start_walk_cycle('right')
-        self.player_sprite.advance_walk_cycle()
-
-    def player_drop_treat(self):
-        treat = Treat("resources/textures/map_tiles/default_apple.png", 1)
-        treat.center_x = self.player_sprite.center_x
-        treat.center_y = self.player_sprite.center_y
-        self.treat_sprite_list.append(treat)
-        self.scene.add_sprite_list(name="Treat", sprite_list=self.treat_sprite_list)
-
-        play_sound(self.player_sprite.drop_treat_sound)
-        self.player_sprite.treat_amount -= 1
-
-    def update_player_treat_pickup(self):
-        if self.player_sprite.picking_up_treat:
-            treats = arcade.check_for_collision_with_list(self.player_sprite, self.treat_sprite_list)
-            for treat in treats:
-                self.player_sprite.treat_amount += 1
-                treat.picked_up = True
-                treat.kill()
 
     def update_camera(self):
         if self.player_sprite.is_alive:
@@ -226,23 +123,19 @@ class GameSection(arcade.Section):
                 "use_spatial_hash": True
             }
         }
-
         self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options)
-
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
     def load_level(self):
         self.current_level = Level(level_id=self.current_level_id, player=self.player_sprite, game_section=self)
         self.current_level.load_enemies()
         self.current_level.load_kitties()
-
         self.scene.add_sprite_list(name = "Kitty", sprite_list=self.current_level.kitties, use_spatial_hash=True)
         for kitty in self.scene.get_sprite_list("Kitty"):
             kitty.setup()
         self.scene.add_sprite_list(name = "Enemy", sprite_list=self.current_level.enemies, use_spatial_hash=True)
         for enemy in self.scene.get_sprite_list("Enemy"):
             enemy.setup()
-
         self.current_level.give_player_treats()
 
     @property

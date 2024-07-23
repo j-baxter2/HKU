@@ -27,6 +27,9 @@ class FollowingEnemy(FollowingSprite):
 
         super().__init__(self.enemy_data, self.player)
 
+    def setup(self):
+        super().setup()
+
     def update_while_alive(self):
         self.look_for_eating_kitty()
         if self.target_kitty:
