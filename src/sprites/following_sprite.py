@@ -11,7 +11,6 @@ class FollowingSprite(MovingSprite):
     def __init__(self, data: dict, player: Player):
         self.player = player
         self.follow_distance = data["follow radius"]
-        self.follow_speed_bonus = data["follow speed bonus"]
         self.random_movement_time = data["random movement time"]
         self.random_movement_timer = 0
         super().__init__(data)
@@ -36,32 +35,9 @@ class FollowingSprite(MovingSprite):
     def update_while_alive(self):
         pass
 
-    def update_movement(self):
-        self.update_movement_direction()
-        self.velocity = Vec2(self.velocity[0], self.velocity[1])
-        self.velocity = self.velocity.normalize()
-        self.update_movement_speed()
-        self.velocity = self.velocity.scale(self.speed)
-        self.velocity = [self.velocity.x, self.velocity.y]
-        self.handle_out_of_bounds()
-
     def update_movement_direction(self):
         if self.should_turn:
             self.randomize_velocity()
-
-    def update_movement_speed(self):
-        if self.should_sprint:
-            self.speed = self.follow_speed_bonus * self.base_speed
-        else:
-            self.speed = self.base_speed
-
-    def handle_out_of_bounds(self):
-        if self.center_x < 0 or self.center_x > MAP_WIDTH:
-            self.velocity = [self.velocity[0] * -1, self.velocity[1]]
-        elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
-            self.velocity = [self.velocity[0], self.velocity[1] * -1]
-        self.center_x = max(0, min(self.center_x, MAP_WIDTH))
-        self.center_y = max(0, min(self.center_y, MAP_HEIGHT))
 
     @property
     def animation_direction(self):

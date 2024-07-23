@@ -1,7 +1,7 @@
 import arcade
 import random
 from pyglet.math import Vec2
-from src.data.constants import DELTA_TIME
+from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
 from src.utils.sound import load_sound, play_sound
 
 class MovingSprite(arcade.Sprite):
@@ -46,6 +46,7 @@ class MovingSprite(arcade.Sprite):
 
         self.able_to_move = True
         self.base_speed = data["speed"]
+        self.sprint_multiplier = data["sprint multiplier"]
         self.speed = 0
 
         self.damage_resist = 0
@@ -101,9 +102,37 @@ class MovingSprite(arcade.Sprite):
         self.fade_timer += DELTA_TIME
         opacity_decrease = 255 * (self.fade_timer / 2)
         self.alpha = max(255 - opacity_decrease, 0)
+        self.center_y += (self.fade_timer/self.fade_time)*100
         if self.fade_timer >= self.fade_time:
             self.fading = False
             self.kill()
+
+    def update_movement(self):
+        self.update_movement_direction()
+        self.velocity = Vec2(self.velocity[0], self.velocity[1])
+        self.velocity = self.velocity.normalize()
+        self.update_movement_speed()
+        self.velocity = self.velocity.scale(self.speed)
+        self.velocity = [self.velocity.x, self.velocity.y]
+        self.handle_out_of_bounds()
+
+    def update_movement_direction(self):
+        if self.should_turn:
+            self.randomize_velocity()
+
+    def update_movement_speed(self):
+        if self.should_sprint:
+            self.speed = self.sprint_multiplier * self.base_speed
+        else:
+            self.speed = self.base_speed
+
+    def handle_out_of_bounds(self):
+        if self.center_x < 0 or self.center_x > MAP_WIDTH:
+            self.velocity = [self.velocity[0] * -1, self.velocity[1]]
+        elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
+            self.velocity = [self.velocity[0], self.velocity[1] * -1]
+        self.center_x = max(0, min(self.center_x, MAP_WIDTH))
+        self.center_y = max(0, min(self.center_y, MAP_HEIGHT))
 
     def update_just_been_hit(self):
         if self.just_been_hit:
@@ -171,6 +200,14 @@ class MovingSprite(arcade.Sprite):
     @property
     def is_dead(self):
         return self.hp <= 0
+
+    @property
+    def should_sprint(self):
+        return self.just_been_hit
+
+    @property
+    def should_turn(self):
+        return False
 
     def debug_draw(self):
         self.draw_hit_box()

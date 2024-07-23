@@ -20,7 +20,6 @@ class Player(MovingSprite):
 
         self.name = self.player_data["name"]
 
-        self.sprint_multiplier = self.player_data["sprint multiplier"]
         self.max_stamina = self.player_data["stamina"]
         self.stamina_regen = self.player_data["stamina regen"]
         self.stamina_regen_bonus_stationary = self.player_data["stationary stamina bonus"]
@@ -86,13 +85,6 @@ class Player(MovingSprite):
 
         self.stamina = max(0, min(self.stamina, self.max_stamina))
 
-    def update_movement(self):
-        self.update_movement_direction()
-        self.update_movement_speed()
-        self.velocity = [self.velocity.x, self.velocity.y]
-        self.center_x = max(0, min(self.center_x, MAP_WIDTH))
-        self.center_y = max(0, min(self.center_y, MAP_HEIGHT))
-
     def update_movement_direction(self):
         self.velocity = Vec2(0, 0)
         if self.up_pressed:
@@ -104,16 +96,6 @@ class Player(MovingSprite):
         if self.right_pressed:
             self.velocity += Vec2(1, 0)
         self.velocity = self.velocity.normalize()
-
-    def update_movement_speed(self):
-        if self.stamina > 0:
-            if self.sprint_pressed:
-                self.speed = self.base_speed * self.sprint_multiplier
-            else:
-                self.speed = self.base_speed
-        else:
-            self.speed = self.base_speed
-        self.velocity = self.velocity.scale(self.speed)
 
     def update_moves(self):
         for move in self.move_set:
@@ -231,6 +213,10 @@ class Player(MovingSprite):
     @property
     def has_treats(self):
         return self.treat_amount > 0
+
+    @property
+    def should_sprint(self):
+        return self.stamina > 0 and self.sprint_pressed
 
     def debug_draw(self):
         for move in self.move_set:

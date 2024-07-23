@@ -5,7 +5,7 @@
         "attack": 1,
         "follow radius": 500,
         "speed": 2.5,
-        "follow speed bonus": 5,
+        "sprint multiplier": 5,
         "random movement time": 3,
         "fade color": "brown",
         "spritesheet": {
@@ -32,7 +32,7 @@
         "attack": 2,
         "follow radius": 750,
         "speed": 10,
-        "follow speed bonus": 1.5,
+        "sprint multiplier": 1.5,
         "random movement time": 1,
         "fade color": "brown",
         "spritesheet": {

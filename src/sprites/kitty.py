@@ -65,14 +65,6 @@ class Kitty(FollowingSprite):
             play_sound(self.meow_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos(), speed=self.meow_speed)
             self.meow_timer = 0
 
-    def update_fade(self):
-        self.fade_timer += DELTA_TIME
-        opacity_decrease = 255 * (self.fade_timer / 2)
-        self.alpha = max(255 - opacity_decrease, 0)
-        if self.fade_timer >= self.fade_time:
-            self.fading = False
-            self.kill()
-
     def start_eating(self):
         self.eating = True
         self.paralyze()
