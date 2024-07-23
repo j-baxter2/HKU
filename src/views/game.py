@@ -392,11 +392,11 @@ class GameView(arcade.View):
 
     def draw_victory_message(self):
         self.game_section.camera.use()
-        arcade.draw_text("Congrats, you snuggled all the enemies <3", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
+        arcade.draw_text("Congrats", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
 
     def draw_defeat_message(self):
         self.ui_section.camera.use()
-        arcade.draw_text("You have been defeated by cuteness", self.ui_section.width // 2, self.ui_section.height // 2, arcade.color.BLACK, 24, anchor_x="center")
+        arcade.draw_text("YOU HAVE DIED", self.ui_section.width // 2, self.ui_section.height // 2, arcade.color.BLACK, 24, anchor_x="center")
 
     def handle_gamestate(self):
         if self.should_change_level:

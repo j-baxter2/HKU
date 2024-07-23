@@ -62,7 +62,7 @@ class FollowingEnemy(FollowingSprite):
 
     def look_for_eating_kitty(self):
         for kitty in self.kitties:
-            if arcade.get_distance_between_sprites(self, kitty) < self.follow_distance and kitty.eating:
+            if arcade.get_distance_between_sprites(self, kitty) < self.follow_distance*3 and kitty.eating:
                 self.target_kitty = kitty
                 break
 
