@@ -83,7 +83,7 @@ class GameSection(arcade.Section):
             if self.player_sprite.has_treats:
                 self.player_sprite.drop_treat()
             else:
-                play_sound(self.player_sprite.no_treat_sound)
+                play_sound(self.player_sprite.no_treat_sound, volume=0.01)
         elif key == controls.PICKUP_TREAT:
             self.player_sprite.picking_up_treat = True
         elif key == controls.SCARE:

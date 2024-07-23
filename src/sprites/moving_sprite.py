@@ -102,7 +102,7 @@ class MovingSprite(arcade.Sprite):
         self.fade_timer += DELTA_TIME
         opacity_decrease = 255 * (self.fade_timer / 2)
         self.alpha = max(255 - opacity_decrease, 0)
-        self.center_y += (self.fade_timer/self.fade_time)*100
+        self.center_y += 1
         if self.fade_timer >= self.fade_time:
             self.fading = False
             self.kill()
@@ -137,7 +137,7 @@ class MovingSprite(arcade.Sprite):
     def update_just_been_hit(self):
         if self.just_been_hit:
             self.color = arcade.color.RED
-            #play_sound(self.hurt_sound)
+            play_sound(self.hurt_sound, volume=0.1)
             self.just_been_hit_timer += DELTA_TIME
             if self.just_been_hit_timer >= self.just_been_hit_time:
                 self.stop_just_been_hit()

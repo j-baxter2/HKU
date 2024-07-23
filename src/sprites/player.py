@@ -123,7 +123,7 @@ class Player(MovingSprite):
         self.treat_sprite_list.append(treat)
         self.scene.add_sprite_list(name="Treat", sprite_list=self.treat_sprite_list)
 
-        play_sound(self.drop_treat_sound)
+        play_sound(self.drop_treat_sound, volume=0.01)
         self.treat_amount -= 1
 
     def update_treat_pickup(self):
