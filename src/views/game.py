@@ -275,21 +275,24 @@ class UISection(arcade.Section):
                                         color=move.color)
 
     def draw_xp_bar(self):
-        filled_width = (self.player.get_xp_fraction()) * 300
-        arcade.draw_rectangle_filled(center_x=self.width // 2,
-                                            center_y=self.top - 70,
-                                            width=300,
-                                            height=20,
-                                            color=arcade.color.BLACK)
+        if self.player.at_max_rank:
+            arcade.draw_text(f"MAX RANK", self.width // 2, self.top - 70, arcade.color.BLACK, 36, anchor_x="center", anchor_y="center")
+        else:
+            filled_width = (self.player.get_xp_fraction()) * 300
+            arcade.draw_rectangle_filled(center_x=self.width // 2,
+                                                center_y=self.top - 70,
+                                                width=300,
+                                                height=20,
+                                                color=arcade.color.BLACK)
 
-        arcade.draw_rectangle_filled(center_x=self.width // 2 - 150 + filled_width / 2,
-                                    center_y=self.top - 70,
-                                    width=filled_width,
-                                    height=20,
-                                    color=arcade.color.YELLOW)
+            arcade.draw_rectangle_filled(center_x=self.width // 2 - 150 + filled_width / 2,
+                                        center_y=self.top - 70,
+                                        width=filled_width,
+                                        height=20,
+                                        color=arcade.color.YELLOW)
 
-        arcade.draw_text(f"{self.player.current_rank}", self.width // 2 - 175, self.top - 70, arcade.color.BLACK, 24, anchor_x="center", anchor_y="center")
-        arcade.draw_text(f"{self.player.current_rank+1}", self.width // 2 + 175, self.top - 70, arcade.color.BLACK, 24, anchor_x="center", anchor_y="center")
+            arcade.draw_text(f"{self.player.current_rank}", self.width // 2 - 175, self.top - 70, arcade.color.BLACK, 24, anchor_x="center", anchor_y="center")
+            arcade.draw_text(f"{self.player.current_rank+1}", self.width // 2 + 175, self.top - 70, arcade.color.BLACK, 24, anchor_x="center", anchor_y="center")
 
     def get_player(self):
         return self.view.game_section.player_sprite

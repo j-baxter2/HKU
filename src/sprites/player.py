@@ -68,7 +68,8 @@ class Player(MovingSprite):
             self.update_fade()
         elif self.able_to_move:
             self.update_movement()
-        self.update_level_up()
+        if not self.at_max_rank:
+            self.update_level_up()
         self.update_sound()
         self.update_animation()
         self.update_sprinting_flag()
@@ -250,6 +251,10 @@ class Player(MovingSprite):
     @property
     def should_sprint(self):
         return self.stamina > 0 and self.sprint_pressed
+
+    @property
+    def at_max_rank(self):
+        return self.current_rank >= len(self.ranking_data) - 1
 
     def debug_draw(self):
         for move in self.move_set:
