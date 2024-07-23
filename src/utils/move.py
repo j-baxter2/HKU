@@ -122,7 +122,7 @@ class Move:
         for potential_affectee in potential_affectees:
             if self.origin_sprite == potential_affectee:
                 affectees.append(potential_affectee)
-            elif arcade.get_distance_between_sprites(self.origin_sprite, potential_affectee) < self.range:
+            elif arcade.get_distance_between_sprites(self.origin_sprite, potential_affectee) < self.range and not (potential_affectee.fading or potential_affectee.faded):
                 affectees.append(potential_affectee)
         self.affectees = affectees
 

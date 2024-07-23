@@ -1,9 +1,10 @@
 {
     "0": {
         "xp": 0,
-        "hp": 10,
-        "strength": 1,
-        "speed": 0.25
+        "hp": 0,
+        "strength": 0,
+        "speed": 0,
+        "stamina": 0
     },
     "1": {
         "xp": 10,
@@ -13,7 +14,7 @@
         "stamina": 10
     },
     "2": {
-        "xp": 20,
+        "xp": 200,
         "hp": 20,
         "strength": 2,
         "speed": 0.5,

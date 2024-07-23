@@ -280,17 +280,17 @@ class UISection(arcade.Section):
                                         color=move.color)
 
     def draw_xp_bar(self):
-        filled_width = (self.player.get_xp_fraction()) * 100
+        filled_width = (self.player.get_xp_fraction()) * 300
         arcade.draw_rectangle_filled(center_x=self.width // 2,
                                             center_y=self.top - 70,
-                                            width=100,
-                                            height=10,
+                                            width=300,
+                                            height=20,
                                             color=arcade.color.BLACK)
 
-        arcade.draw_rectangle_filled(center_x=self.width // 2 + (50 - filled_width / 2),
+        arcade.draw_rectangle_filled(center_x=self.width // 2 - 150 + filled_width / 2,
                                     center_y=self.top - 70,
                                     width=filled_width,
-                                    height=10,
+                                    height=20,
                                     color=arcade.color.YELLOW)
 
     def get_player(self):
