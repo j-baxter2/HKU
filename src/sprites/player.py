@@ -86,7 +86,7 @@ class Player(MovingSprite):
         self.ranking_data = ranking_data
 
     def update_level_up(self):
-        if self.xp >= self.ranking_data[str(self.current_rank+1)]["xp"]:
+        if self.xp > self.ranking_data[str(self.current_rank+1)]["xp"]:
             self.current_rank += 1
             self.max_hp += self.ranking_data[str(self.current_rank)]["hp"]
             self.hp = self.max_hp

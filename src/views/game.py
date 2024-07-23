@@ -405,6 +405,7 @@ class GameView(arcade.View):
     def handle_level_completion(self):
         if not self.between_levels:
             if self.game_section.more_levels:
+                self.game_section.player_sprite.give_xp(10*self.game_section.current_level_id)
                 self.game_section.current_level_id += 1
                 self.game_section.load_level()
 

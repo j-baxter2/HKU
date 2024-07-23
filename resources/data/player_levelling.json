@@ -8,16 +8,23 @@
     },
     "1": {
         "xp": 10,
-        "hp": 15,
+        "hp": 5,
         "strength": 1,
         "speed": 0.25,
         "stamina": 10
     },
     "2": {
-        "xp": 11,
-        "hp": 20,
-        "strength": 2,
-        "speed": 0.5,
+        "xp": 30,
+        "hp": 5,
+        "strength": 1,
+        "speed": 0.25,
         "stamina": 10
+    },
+    "3": {
+        "xp": 50,
+        "hp": 10,
+        "strength": 1,
+        "speed": 0.5,
+        "stamina": 5
     }
 }
