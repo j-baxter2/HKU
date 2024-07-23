@@ -68,13 +68,13 @@ class Player(MovingSprite):
             self.update_fade()
         elif self.able_to_move:
             self.update_movement()
+        self.update_level_up()
         self.update_sound()
         self.update_animation()
         self.update_sprinting_flag()
         self.update_stamina(DELTA_TIME)
         self.update_moves()
         self.update_treat_pickup()
-        self.update_level_up()
 
     def draw(self):
         super().draw()
@@ -100,7 +100,10 @@ class Player(MovingSprite):
         return self.xp - self.ranking_data[str(self.current_rank)]["xp"]
 
     def get_xp_fraction(self):
-        return self.get_xp_from_previous_level() / self.get_xp_to_next_level()
+        if self.get_xp_to_next_level() == 0:
+            return 1
+        else:
+            return min(self.get_xp_from_previous_level() / self.get_xp_to_next_level(), 1)
 
     def update_stamina(self, delta_time):
         if self.sprinting:

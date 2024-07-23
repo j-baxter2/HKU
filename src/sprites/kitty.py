@@ -97,6 +97,7 @@ class Kitty(FollowingSprite):
         if self.treats_eaten >= self.hunger:
             self.paralyze()
             self.start_fade()
+            self.player.give_xp(self.hunger)
             #play satisfied sound
         self.target_treat = None
 
