@@ -32,9 +32,12 @@ class Player(MovingSprite):
         self.refreshing_moves = []
 
         self.xp = 0
+        self.ranking_data = None
+        self.current_rank = 0
 
         self.max_hp = self.player_data["hp"]
         self.hp = self.max_hp
+        self.strength = self.player_data["strength"]
         self.stamina = self.max_stamina
         self.sprinting = False
 
@@ -57,7 +60,7 @@ class Player(MovingSprite):
         self.sprint_pressed = False
 
     def setup(self):
-        super().setup()
+        self.load_ranking_data()
 
     def update(self):
         super().update()
@@ -71,9 +74,33 @@ class Player(MovingSprite):
         self.update_stamina(DELTA_TIME)
         self.update_moves()
         self.update_treat_pickup()
+        self.update_level_up()
 
     def draw(self):
         super().draw()
+
+    def load_ranking_data(self):
+        with open("resources/data/player_levelling.json", "r") as file:
+            ranking_data = json.load(file)
+        self.ranking_data = ranking_data
+
+    def update_level_up(self):
+        if self.xp >= self.ranking_data[str(self.current_rank+1)]["xp"]:
+            self.current_rank += 1
+            self.max_hp += self.ranking_data[str(self.current_rank)]["hp"]
+            self.hp = self.max_hp
+            self.strength += self.ranking_data[str(self.current_rank)]["strength"]
+            self.max_stamina += self.ranking_data[str(self.current_rank)]["stamina"]
+            self.stamina = self.max_stamina
+
+    def get_xp_to_next_level(self):
+        return self.ranking_data[str(self.current_rank+1)]["xp"] - self.xp
+
+    def get_xp_from_previous_level(self):
+        return self.xp - self.ranking_data[str(self.current_rank)]["xp"]
+
+    def get_xp_fraction(self):
+        return self.get_xp_from_previous_level() / self.get_xp_to_next_level()
 
     def update_stamina(self, delta_time):
         if self.sprinting:
@@ -146,6 +173,9 @@ class Player(MovingSprite):
         if self.sound_update_timer >= self.sound_update_time:
             play_sound(self.footstep_sound, volume=0.01)
             self.sound_update_timer = 0
+
+    def give_xp(self, amount: int):
+        self.xp += amount
 
     def get_integer_position(self):
         return (int(self.center_x), int(self.center_y))
@@ -221,5 +251,5 @@ class Player(MovingSprite):
     def debug_draw(self):
         for move in self.move_set:
             move.debug_draw()
-        arcade.draw_text(f"JBH: {self.just_been_hit}", self.center_x, self.center_y+100, arcade.color.WHITE, 20)
+        arcade.draw_text(f"xp: {self.xp}", self.center_x, self.center_y+100, arcade.color.WHITE, 20)
         super().debug_draw()

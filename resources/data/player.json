@@ -2,6 +2,7 @@
     "0" : {
         "name": "Meepo",
         "hp": 10,
+        "strength": 1,
         "stamina": 100,
         "stamina regen": 10,
         "stationary stamina bonus": 20,
@@ -27,7 +28,8 @@
     },
     "1" : {
         "name": "Lyra",
-        "hp": 30,
+        "hp": 20,
+        "strength": 2,
         "stamina": 100,
         "stamina regen": 10,
         "stationary stamina bonus": 20,

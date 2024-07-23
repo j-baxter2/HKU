@@ -15,7 +15,8 @@
             "count": 20,
             "width": 32,
             "height": 32,
-            "scale": 3
+            "scale": 3,
+            "fade texture": 8
             },
         "animation": {
             "fps": 30,
@@ -43,7 +44,8 @@
             "count": 16,
             "width": 32,
             "height": 32,
-            "scale": 3
+            "scale": 3,
+            "fade texture": 15
             },
         "animation": {
             "fps": 10,

@@ -38,6 +38,7 @@ class GameSection(arcade.Section):
                 self.scene["Wall"]
             ]
         )
+        self.player_sprite.setup()
         basic_attack = Move(0, self.scene, self.player_sprite)
         self.player_sprite.add_move(basic_attack)
         basic_heal = Move(1, self.scene, self.player_sprite)
@@ -175,6 +176,7 @@ class UISection(arcade.Section):
     def on_draw(self):
         self.camera.use()
         if not (self.player.faded or self.player.fading):
+            self.draw_xp_bar()
             self.draw_stamina_bar()
             self.draw_hp_bar()
             self.draw_treat_count()
@@ -183,7 +185,6 @@ class UISection(arcade.Section):
             self.draw_move_refresh_circles()
             if not self.view.completed:
                 self.draw_level_id()
-
         self.view.game_section.camera.use()
         self.view.game_section.player_sprite.draw()
 
@@ -251,7 +252,6 @@ class UISection(arcade.Section):
             moves = self.player.get_charging_moves()
             for move_index, move in enumerate(moves):
                 filled_width = (move.charge_fraction) * 100
-
                 arcade.draw_rectangle_filled(center_x=self.left + 100,
                                             center_y=self.bottom + 270 + (move_index * BAR_SPACING),
                                             width=100,
@@ -278,6 +278,20 @@ class UISection(arcade.Section):
                                         center_y=self.bottom + 320 + (move_index * BAR_SPACING) + CIRCLE_RADIUS,
                                         radius=filled_radius,
                                         color=move.color)
+
+    def draw_xp_bar(self):
+        filled_width = (self.player.get_xp_fraction()) * 100
+        arcade.draw_rectangle_filled(center_x=self.width // 2,
+                                            center_y=self.top - 70,
+                                            width=100,
+                                            height=10,
+                                            color=arcade.color.BLACK)
+
+        arcade.draw_rectangle_filled(center_x=self.width // 2 + (50 - filled_width / 2),
+                                    center_y=self.top - 70,
+                                    width=filled_width,
+                                    height=10,
+                                    color=arcade.color.YELLOW)
 
     def get_player(self):
         return self.view.game_section.player_sprite
@@ -381,7 +395,7 @@ class GameView(arcade.View):
 
     def draw_defeat_message(self):
         self.ui_section.camera.use()
-        arcade.draw_text("You have been defeated by cuteness", self.ui_section.width // 2, self.ui_section.height // 2, arcade.color.PURPLE, 24, anchor_x="center")
+        arcade.draw_text("You have been defeated by cuteness", self.ui_section.width // 2, self.ui_section.height // 2, arcade.color.BLACK, 24, anchor_x="center")
 
     def handle_gamestate(self):
         if self.should_change_level:

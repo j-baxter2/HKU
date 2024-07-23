@@ -27,13 +27,14 @@ class MovingSprite(arcade.Sprite):
             count=count,
         )
 
+        self.fade_texture_index = None
+
         if self.textures:
             self.set_texture(0)
 
 
         self._hit_box_algorithm = 'Simple'
         self.set_hit_box(self.texture.hit_box_points)
-
 
         animation_data = data["animation"]
 
@@ -98,6 +99,11 @@ class MovingSprite(arcade.Sprite):
         self.update_just_been_healed()
         super().update()
 
+    def start_fade(self):
+        if self.fade_texture_index:
+            self.set_texture(self.fade_texture_index)
+        self.fading = True
+
     def update_fade(self):
         self.fade_timer += DELTA_TIME
         opacity_decrease = 255 * (self.fade_timer / 2)
@@ -105,6 +111,7 @@ class MovingSprite(arcade.Sprite):
         self.center_y += 1
         if self.fade_timer >= self.fade_time:
             self.fading = False
+            self.faded = True
             self.kill()
 
     def update_movement(self):
@@ -178,7 +185,7 @@ class MovingSprite(arcade.Sprite):
         if self.hp <= 0:
             self.stop_moving()
             self.color = self.fade_color
-            self.fading = True
+            self.start_fade()
 
     def start_moving(self):
         self.able_to_move = True

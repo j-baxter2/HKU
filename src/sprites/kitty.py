@@ -40,6 +40,8 @@ class Kitty(FollowingSprite):
         self.fleeing_timer = 0
         self.fleeing_time = 3
 
+        self.fade_texture_index = self.kitty_data["spritesheet"]["fade texture"]
+
     def take_damage(self, damage):
         self.start_fleeing()
 
@@ -94,7 +96,7 @@ class Kitty(FollowingSprite):
             #play eating sound
         if self.treats_eaten >= self.hunger:
             self.paralyze()
-            self.fading = True
+            self.start_fade()
             #play satisfied sound
         self.target_treat = None
 

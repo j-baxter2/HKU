@@ -133,11 +133,14 @@ class Move:
 
     def apply_effects(self):
         for affectee in self.affectees:
-            affectee.take_damage(self.damage)
             if self.damage < 0:
+                affectee.take_damage(self.damage)
                 affectee.just_healed = True
             elif self.damage > 0:
+                affectee.take_damage(self.damage * self.origin_sprite.strength)
                 affectee.just_been_hit = True
+                if affectee.is_dead:
+                    self.origin_sprite.give_xp(affectee.max_hp * affectee.attack)
 
     def start_damage_resist(self):
         if self.damage_resist:
