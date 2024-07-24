@@ -11,10 +11,11 @@ class Level:
         self.scene = scene
         self.player = self.scene.get_sprite_list("Player")[0]
         self.enemy_data = self.load_level_data(level_id)["enemies"]
-        self.enemies = arcade.SpriteList()
         self.kitty_data = self.load_level_data(level_id)["kitties"]
-        self.kitties = arcade.SpriteList()
-        self.treats = self.player.treat_sprite_list
+        self.treats = self.scene.get_sprite_list("Treat")
+
+        self.kitty_amount = self.kitty_data["kitty amount"]
+        self.kitty_ratio = self.kitty_data["kitty ratio"]
 
     def load_level_data(self, level_id):
         with open("resources/data/level.json", "r") as file:
@@ -31,26 +32,24 @@ class Level:
             for _ in range(int(ratio * enemy_amount)):
                 enemy = FollowingEnemy(id=int(enemy_id), scene=self.scene)
                 enemy.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
-                self.enemies.append(enemy)
+                self.scene.add_sprite("Enemy", enemy)
 
     def load_kitties(self):
-        kitty_amount = self.kitty_data["kitty amount"]
-        kitty_ratio = self.kitty_data["kitty ratio"]
         map_bounds = [MAP_WIDTH, MAP_HEIGHT]
 
-        for kitty_id, ratio in kitty_ratio.items():
-            for _ in range(int(ratio * kitty_amount)):
+        for kitty_id, ratio in self.kitty_ratio.items():
+            for _ in range(int(ratio * self.kitty_amount)):
                 kitty = Kitty(id=int(kitty_id), scene=self.scene)
                 kitty.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
-                self.kitties.append(kitty)
+                self.scene.add_sprite("Kitty", kitty)
 
     def spawn_player(self):
         self.player.center_x, self.player.center_y = 300, 300
 
     def give_player_treats(self):
         self.player.treat_amount = 0
-        for kitty in self.kitties:
-            self.player.treat_amount += kitty.hunger
+        for kitty in self.scene.get_sprite_list("Kitty"):
+            self.player.treat_amount += kitty.hunger*5
 
     def get_level_list(self):
         return self.level_list

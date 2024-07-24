@@ -7,7 +7,6 @@ from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
 class TargetArrowKey(Move):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: MovingSprite):
         super().__init__(id, scene, origin_sprite)
-        self.type = self.move_data["type"]
         self.choosing_target = False
         self.target = None
         self.potential_target = None

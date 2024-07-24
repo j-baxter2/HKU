@@ -1,24 +1,25 @@
 import arcade.gui
 from views.game import GameView
+from src.data.constants import UI_FONT, UI_FONT_PATH
 
 class MenuView(arcade.View):
     def __init__(self):
         super().__init__()
 
+        arcade.load_font(UI_FONT_PATH)
+
         self.manager = arcade.gui.UIManager()
         self.v_box = arcade.gui.UIBoxLayout()
 
-        new_game_texture = arcade.load_texture("resources/textures/ui/new_game_button.png")
-        settings_texture = arcade.load_texture("resources/textures/ui/settings_button.png")
-        quit_texture = arcade.load_texture("resources/textures/ui/quit_button.png")
+        style = {"font_name": UI_FONT, "font_size": 20}
 
-        new_game_button = arcade.gui.UITextureButton(texture=new_game_texture)
+        new_game_button = arcade.gui.UIFlatButton(text="play game", style=style, width=200)
         self.v_box.add(new_game_button.with_space_around(bottom=20))
 
-        settings_button = arcade.gui.UITextureButton(texture=settings_texture)
+        settings_button = arcade.gui.UIFlatButton(text="settings", style=style, width=200)
         self.v_box.add(settings_button.with_space_around(bottom=20))
 
-        quit_button = arcade.gui.UITextureButton(texture=quit_texture)
+        quit_button = arcade.gui.UIFlatButton(text="quit", style=style, width=200)
         self.v_box.add(quit_button.with_space_around(bottom=20))
 
         self.manager.add(
@@ -38,7 +39,7 @@ class MenuView(arcade.View):
         def on_click_settings(self, event):
             pass
 
-        @settings_button.event("on_click")
+        @quit_button.event("on_click")
         def on_click_quit(self, event):
             arcade.close_window()
 

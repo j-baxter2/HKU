@@ -16,3 +16,4 @@ TARGET_UP = arcade.key.UP
 TARGET_DOWN = arcade.key.DOWN
 TARGET_LEFT = arcade.key.LEFT
 TARGET_RIGHT = arcade.key.RIGHT
+PAUSE = arcade.key.ESCAPE

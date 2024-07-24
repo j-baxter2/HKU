@@ -14,7 +14,7 @@ class Move:
         self.origin_sprite = origin_sprite
 
         self.name = self.move_data["name"]
-        self.type = "basic"
+        self.type = self.move_data["type"]
         self.damage = self.move_data["damage"]
         self.damage_resist = self.move_data["damage resist"]
         self.cost = self.move_data["cost"]

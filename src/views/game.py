@@ -1,5 +1,6 @@
 import arcade
 import arcade.color
+from src.views.pause import PauseView
 from src.sprites.player import Player
 from utils.camera import HKUCamera
 from src.data import controls
@@ -18,123 +19,134 @@ class GameSection(arcade.Section):
                           **kwargs)
         self.current_level_id = 0
         self.scene = None
-        self.player_sprite = None
-        self.player_sprite_list = arcade.SpriteList()
+        self.player = None
         self.tile_map = None
         self.physics_engine = None
         self.camera = None
 
     def setup(self):
         self.load_map("resources/maps/map.json")
-        self.player_sprite = Player(id=1, scene=self.scene)
-        self.player_sprite_list.append(self.player_sprite)
-        self.scene.add_sprite_list(name="Player",sprite_list=self.player_sprite_list, use_spatial_hash=True)
-        self.scene.add_sprite_list(name="Treat",sprite_list=self.player_sprite.treat_sprite_list)
+        self.player = Player(id=1, scene=self.scene)
+        self.scene.add_sprite_list(name="Player", use_spatial_hash=True)
+        self.scene.add_sprite("Player", self.player)
+        self.scene.add_sprite_list(name = "Kitty")
+        self.scene.add_sprite_list(name = "Enemy")
+        self.scene.add_sprite_list(name="Treat")
+
         self.current_level_id = 0
         self.load_level()
         self.level_list = self.current_level.get_level_list()
         self.current_level.spawn_player()
         self.physics_engine = arcade.PhysicsEngineSimple(
-            self.player_sprite,
+            self.player,
             walls=[
                 self.scene["Wall"]
             ]
         )
-        self.player_sprite.setup()
-        basic_attack = AffectAllMove(0, self.scene, self.player_sprite)
-        self.player_sprite.add_move(basic_attack)
-        basic_heal = AffectAllMove(1, self.scene, self.player_sprite)
-        self.player_sprite.add_move(basic_heal)
-        shock = AffectAllMove(2, self.scene, self.player_sprite)
-        #self.player_sprite.add_move(shock)
-        scare = AffectAllMove(3, self.scene, self.player_sprite)
-        self.player_sprite.add_move(scare)
         self.camera = HKUCamera(self.width, self.height)
-        ranged = TargetArrowKey(4, self.scene, self.player_sprite)
-        self.player_sprite.add_move(ranged)
+        self.player.setup()
 
     def on_update(self):
         self.physics_engine.update()
         self.update_camera()
         self.scene.update()
 
-
     def on_draw(self):
         self.scene.draw()
-        active_moves = self.player_sprite.get_active_moves()
+        active_moves = self.player.get_active_moves()
         for move in active_moves:
             move.draw()
-        charging_moves = self.player_sprite.get_charge_moves()
+        charging_moves = self.player.get_charge_moves()
         for move in charging_moves:
             move.draw()
 
     def on_key_press(self, key, modifiers):
         if key == controls.UP:
-            self.player_sprite.up_pressed = True
+            self.player.up_pressed = True
         elif key == controls.DOWN:
-            self.player_sprite.down_pressed = True
+            self.player.down_pressed = True
         elif key == controls.LEFT:
-            self.player_sprite.left_pressed = True
+            self.player.left_pressed = True
         elif key == controls.RIGHT:
-            self.player_sprite.right_pressed = True
+            self.player.right_pressed = True
         elif key == controls.SPRINT:
-            self.player_sprite.sprint_pressed = True
+            self.player.sprint_pressed = True
         elif key == controls.ATTACK:
-            self.player_sprite.do_move("basic pat")
-        elif key == controls.ATTACK and modifiers == controls.ALT_MODIFIER:
-            #do alt attack
-            pass
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["quick attack 2"]:
+                self.player.do_move(self.player.equipped_moves["quick attack 2"])
+            elif self.player.equipped_moves["quick attack"]:
+                self.player.do_move(self.player.equipped_moves["quick attack"])
         elif key == controls.HEAL:
-            self.player_sprite.start_charging_move("basic heal")
-        elif key == controls.HEAL and modifiers == controls.ALT_MODIFIER:
-            #do alt heal
-            pass
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["heal 2"]:
+                self.player.do_move(self.player.equipped_moves["heal 2"])
+            elif self.player.equipped_moves["heal"]:
+                self.player.do_move(self.player.equipped_moves["heal"])
         elif key == controls.SPECIAL:
-            self.player_sprite.start_charging_move("ranged")
-        elif key == controls.SPECIAL and modifiers == controls.ALT_MODIFIER:
-            #do alt special
-            pass
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["special 2"]:
+                self.player.do_move(self.player.equipped_moves["special 2"])
+            elif self.player.equipped_moves["special"]:
+                self.player.do_move(self.player.equipped_moves["special"])
         elif key == controls.DROP_TREAT:
-            if self.player_sprite.has_treats:
-                self.player_sprite.drop_treat()
+            if self.player.has_treats:
+                self.player.drop_treat()
             else:
-                play_sound(self.player_sprite.no_treat_sound, volume=SOUND_EFFECT_VOL)
+                play_sound(self.player.no_treat_sound, volume=SOUND_EFFECT_VOL)
         elif key == controls.PICKUP_TREAT:
-            self.player_sprite.picking_up_treat = True
+            self.player.picking_up_treat = True
         elif key == controls.SCARE:
-            self.player_sprite.start_charging_move("scare kitty")
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["scare 2"]:
+                self.player.do_move(self.player.equipped_moves["scare 2"])
+            elif self.player.equipped_moves["scare"]:
+                self.player.do_move(self.player.equipped_moves["scare"])
         elif key == controls.TARGET_UP:
-            self.player_sprite.change_target("up")
+            self.player.change_target("up")
         elif key == controls.TARGET_DOWN:
-            self.player_sprite.change_target("down")
+            self.player.change_target("down")
         elif key == controls.TARGET_LEFT:
-            self.player_sprite.change_target("left")
+            self.player.change_target("left")
         elif key == controls.TARGET_RIGHT:
-            self.player_sprite.change_target("right")
+            self.player.change_target("right")
+        elif key == controls.PAUSE:
+            pause_view = PauseView(self.view)
+            self.window.show_view(pause_view)
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
-            self.player_sprite.up_pressed = False
+            self.player.up_pressed = False
         elif key == controls.DOWN:
-            self.player_sprite.down_pressed = False
+            self.player.down_pressed = False
         elif key == controls.LEFT:
-            self.player_sprite.left_pressed = False
+            self.player.left_pressed = False
         elif key == controls.RIGHT:
-            self.player_sprite.right_pressed = False
+            self.player.right_pressed = False
         elif key == controls.SPRINT:
-            self.player_sprite.sprint_pressed = False
+            self.player.sprint_pressed = False
+        elif key == controls.ATTACK:
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["quick attack 2"]:
+                self.player.stop_move(self.player.equipped_moves["quick attack 2"])
+            elif self.player.equipped_moves["quick attack"]:
+                self.player.stop_move(self.player.equipped_moves["quick attack"])
         elif key == controls.HEAL:
-            self.player_sprite.stop_charging_move("basic heal")
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["heal 2"]:
+                self.player.stop_move(self.player.equipped_moves["heal 2"])
+            elif self.player.equipped_moves["heal"]:
+                self.player.stop_move(self.player.equipped_moves["heal"])
         elif key == controls.SPECIAL:
-            self.player_sprite.fire_move("ranged")
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["special 2"]:
+                self.player.stop_move(self.player.equipped_moves["special 2"])
+            elif self.player.equipped_moves["special"]:
+                self.player.stop_move(self.player.equipped_moves["special"])
         elif key == controls.PICKUP_TREAT:
-            self.player_sprite.picking_up_treat = False
+            self.player.picking_up_treat = False
         elif key == controls.SCARE:
-            self.player_sprite.stop_charging_move("scare kitty")
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["scare 2"]:
+                self.player.stop_move(self.player.equipped_moves["scare 2"])
+            elif self.player.equipped_moves["scare"]:
+                self.player.stop_move(self.player.equipped_moves["scare"])
 
     def update_camera(self):
-        if self.player_sprite.is_alive:
-            player_position_for_cam = Vec2(self.player_sprite.center_x-(self.width//2), self.player_sprite.center_y-(self.height//2))
+        if self.player.is_alive:
+            player_position_for_cam = Vec2(self.player.center_x-(self.width//2), self.player.center_y-(self.height//2))
             self.camera.move_to(player_position_for_cam)
         else:
             arcade.set_viewport(0, self.view.window.width, 0, self.view.window.height)
@@ -153,10 +165,8 @@ class GameSection(arcade.Section):
         self.current_level = Level(level_id=self.current_level_id, scene=self.scene)
         self.current_level.load_enemies()
         self.current_level.load_kitties()
-        self.scene.add_sprite_list(name = "Kitty", sprite_list=self.current_level.kitties, use_spatial_hash=True)
         for kitty in self.scene.get_sprite_list("Kitty"):
             kitty.setup()
-        self.scene.add_sprite_list(name = "Enemy", sprite_list=self.current_level.enemies, use_spatial_hash=True)
         for enemy in self.scene.get_sprite_list("Enemy"):
             enemy.setup()
         self.current_level.give_player_treats()
@@ -175,11 +185,14 @@ class GameSection(arcade.Section):
 
     def draw_debug(self):
         self.camera.use()
-        self.player_sprite.draw_debug()
+        self.player.draw_debug()
         for enemy in self.scene.get_sprite_list("Enemy"):
-                arcade.draw_line(self.player_sprite.center_x, self.player_sprite.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
+            arcade.draw_line(self.player.center_x, self.player.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
         for kitty in self.scene.get_sprite_list("Kitty"):
-                arcade.draw_line(self.player_sprite.center_x, self.player_sprite.center_y, kitty.center_x, kitty.center_y, arcade.color.ORANGE, 5)
+            arcade.draw_line(self.player.center_x, self.player.center_y, kitty.center_x, kitty.center_y, arcade.color.ORANGE, 5)
+        for treat in self.scene.get_sprite_list("Treat"):
+            treat.draw_debug()
+
 
 class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
@@ -209,7 +222,7 @@ class UISection(arcade.Section):
             if not self.view.completed:
                 self.draw_level_id()
         self.view.game_section.camera.use()
-        self.view.game_section.player_sprite.draw()
+        self.view.game_section.player.draw()
 
     def draw_level_id(self):
         level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.PINK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
@@ -323,7 +336,7 @@ class UISection(arcade.Section):
             next_rank_text.draw()
 
     def get_player(self):
-        return self.view.game_section.player_sprite
+        return self.view.game_section.player
 
 class GameView(arcade.View):
     def __init__(self):
@@ -338,7 +351,7 @@ class GameView(arcade.View):
         self.sectionManager.add_section(self.game_section)
         self.sectionManager.add_section(self.ui_section)
 
-        self.player_sprite = None
+        self.player = None
 
         self.between_levels = True
         self.between_levels_timer = 0
@@ -361,7 +374,7 @@ class GameView(arcade.View):
 
         if self.completed:
             self.draw_victory_message()
-        elif self.game_section.player_sprite.is_dead:
+        elif self.game_section.player.is_dead:
             self.draw_defeat_message()
 
         if self.debug:
@@ -370,7 +383,6 @@ class GameView(arcade.View):
     def on_update(self, delta_time=DELTA_TIME):
         self.game_section.on_update()
         self.ui_section.on_update()
-
         self.handle_gamestate()
         self.update_between_levels()
 
@@ -400,9 +412,9 @@ class GameView(arcade.View):
 
         enemy_count = len(self.game_section.scene.get_sprite_list("Enemy"))
         kitty_count = len(self.game_section.scene.get_sprite_list("Kitty"))
-        kitty_count_max = len(self.game_section.current_level.kitties)
+        kitty_count_max = self.game_section.current_level.kitty_amount
         treat_count = len(self.game_section.scene.get_sprite_list("Treat"))
-        player_pos = self.game_section.player_sprite.get_integer_position()
+        player_pos = self.game_section.player.get_integer_position()
 
         debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
         debug_text.draw()
@@ -422,7 +434,7 @@ class GameView(arcade.View):
 
     def draw_victory_message(self):
         self.game_section.camera.use()
-        victory_message_text = arcade.Text(f"VICTORY", start_x=self.game_section.player_sprite.center_x, start_y=self.game_section.player_sprite.center_y+100, color=arcade.color.BLACK, font_size=24, anchor_x="center")
+        victory_message_text = arcade.Text(f"VICTORY", start_x=self.game_section.player.center_x, start_y=self.game_section.player.center_y+100, color=arcade.color.BLACK, font_size=24, anchor_x="center")
         victory_message_text.draw()
 
     def draw_defeat_message(self):
@@ -437,7 +449,7 @@ class GameView(arcade.View):
     def handle_level_completion(self):
         if not self.between_levels:
             if self.game_section.more_levels:
-                self.game_section.player_sprite.give_xp(10*self.game_section.current_level_id)
+                self.game_section.player.give_xp(10*self.game_section.current_level_id)
                 self.game_section.current_level_id += 1
                 self.game_section.load_level()
 

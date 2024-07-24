@@ -1,6 +1,8 @@
 {
     "0": {
         "name": "basic pat",
+        "type": "basic",
+        "slot": "quick attack",
         "damage": 1,
         "damage resist": null,
         "cost": 10,
@@ -20,6 +22,8 @@
     },
     "1": {
         "name": "basic heal",
+        "type": "charge",
+        "slot": "heal",
         "damage": -20,
         "damage resist": 0.3,
         "cost": 50,
@@ -39,6 +43,8 @@
     },
     "2": {
         "name": "shock",
+        "type": "charge",
+        "slot": "special",
         "damage": 2,
         "damage resist": null,
         "cost": 75,
@@ -58,6 +64,8 @@
     },
     "3": {
         "name": "scare kitty",
+        "type": "charge",
+        "slot": "scare",
         "damage": 0,
         "damage resist": null,
         "cost": 10,
@@ -78,6 +86,7 @@
     "4": {
         "name": "ranged",
         "type": "charge and release",
+        "slot": "special",
         "damage": 5,
         "damage resist": null,
         "cost": 10,

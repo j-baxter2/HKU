@@ -4,6 +4,8 @@ from src.sprites.treat import Treat
 import json
 from pyglet.math import Vec2
 from src.utils.move import Move
+from src.utils.move_affect_all_in_range import AffectAllMove
+from src.utils.move_target_arrowkey import TargetArrowKey
 from src.utils.sound import load_sound, play_sound
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
@@ -29,7 +31,22 @@ class Player(MovingSprite):
         self.stamina = self.max_stamina
         self.sprinting = False
 
-        self.move_set = []
+        self.unlocked_moves = []
+
+        self.equipped_moves = {
+            "quick attack": None,
+            "quick attack 2": None,
+            "special": None,
+            "special 2": None,
+            "heal": None,
+            "heal 2": None,
+            "drop treat": None,
+            "drop treat 2": None,
+            "pickup treat": None,
+            "pickup treat 2": None,
+            "scare": None,
+            "scare 2": None
+        }
 
         self.active_moves = []
         self.charging_moves = []
@@ -45,7 +62,7 @@ class Player(MovingSprite):
         self.sound_update_time = self.footstep_sound.get_length()
 
         self.treat_amount = 0
-        self.treat_sprite_list = arcade.SpriteList()
+        self.treat_sprite_list = None
 
         self.picking_up_treat = False
 
@@ -59,7 +76,20 @@ class Player(MovingSprite):
         self.sprint_pressed = False
 
     def setup(self):
+        self.treat_sprite_list = self.scene.get_sprite_list("Treat")
         self.load_ranking_data()
+        basic_attack = AffectAllMove(0, self.scene, self)
+        self.unlock_moves(basic_attack)
+        basic_heal = AffectAllMove(1, self.scene, self)
+        self.unlock_moves(basic_heal)
+        shock = AffectAllMove(2, self.scene, self)
+        #self.unlock_moves(shock)
+        scare = AffectAllMove(3, self.scene, self)
+        self.unlock_moves(scare)
+        ranged = TargetArrowKey(4, self.scene, self)
+        self.unlock_moves(ranged)
+        self.equip_move("quick attack", basic_attack)
+        self.equip_move("special", ranged)
 
     def update(self):
         super().update()
@@ -74,6 +104,7 @@ class Player(MovingSprite):
         self.update_sprinting_flag()
         self.update_stamina(DELTA_TIME)
         self.update_moves()
+        self.update_treat_list()
         self.update_treat_pickup()
 
     def draw(self):
@@ -128,7 +159,7 @@ class Player(MovingSprite):
         self.velocity = self.velocity.normalize()
 
     def update_moves(self):
-        for move in self.move_set:
+        for move in self.unlocked_moves:
             move.on_update(DELTA_TIME)
 
     def update_sprinting_flag(self):
@@ -148,13 +179,14 @@ class Player(MovingSprite):
 
     def drop_treat(self):
         treat = Treat("resources/textures/map_tiles/default_apple.png", 1)
-        treat.center_x = self.center_x
+        treat.center_x = self.left
         treat.center_y = self.center_y
-        self.treat_sprite_list.append(treat)
-        self.scene.add_sprite_list(name="Treat", sprite_list=self.treat_sprite_list)
-
+        self.scene.add_sprite("Treat", treat)
         play_sound(self.drop_treat_sound, volume=SOUND_EFFECT_VOL)
         self.treat_amount -= 1
+
+    def update_treat_list(self):
+        self.treat_sprite_list = self.scene.get_sprite_list("Treat")
 
     def update_treat_pickup(self):
         if self.picking_up_treat:
@@ -183,79 +215,81 @@ class Player(MovingSprite):
     def get_integer_position(self):
         return (int(self.center_x), int(self.center_y))
 
-    def add_move(self, move):
-        self.move_set.append(move)
+    def unlock_moves(self, move):
+        self.unlocked_moves.append(move)
 
-    def do_move(self, move_name: str):
-        for move in self.move_set:
-            if move.name == move_name and move.executable:
-                move.execute()
+    def equip_move(self, slot, move):
+        if move in self.unlocked_moves:
+            self.equipped_moves[slot] = move
 
-    def fire_move(self, move_name: str):
-        for move in self.move_set:
-            if move.name == move_name:
-                move.fire()
+    def equip_secondary_move(self, slot, move):
+        if move in self.unlocked_moves:
+            self.equipped_secondary_moves[slot] = move
+
+    def do_move(self, move):
+        if move.type == "basic":
+            move.execute()
+        elif move.type == "charge" or move.type == "charge and release":
+            move.start_charge()
+
+    def stop_move(self, move):
+        if move.type == "basic":
+            pass
+        elif move.type == "charge":
+            move.stop_charge()
+        elif move.type == "charge and release":
+            move.fire()
 
     def change_target(self, direction: str):
-        for move in self.move_set:
+        for slot, move in self.equipped_moves.items():
             if (hasattr(move, "choosing_target") and move.choosing_target):
                 move.change_target(direction)
 
-    def start_charging_move(self, move_name: str):
-        for move in self.move_set:
-            if move.name == move_name:
-                move.start_charge()
-
-    def stop_charging_move(self, move_name: str):
-        for move in self.move_set:
-            if move.name == move_name:
-                move.stop_charge()
-
     @property
     def doing_move(self):
-        for move in self.move_set:
+        for move in self.unlocked_moves:
             if move.active:
                 return True
         return False
 
     @property
     def charging_move(self):
-        for move in self.move_set:
+        for move in self.unlocked_moves:
             if move.charging:
                 return True
         return False
 
     @property
     def charged_move(self):
-        for move in self.move_set:
+        for move in self.unlocked_moves:
             if move.charged:
                 return True
         return False
 
     @property
     def refreshing_move(self):
-        for move in self.move_set:
+        for move in self.unlocked_moves:
             if move.refreshing:
                 return True
         return False
 
     def get_refreshing_moves(self):
         refreshing_moves = []
-        for move in self.move_set:
+        for move in self.unlocked_moves:
             if move.refreshing:
                 refreshing_moves.append(move)
         return refreshing_moves
 
     def get_active_moves(self):
         active_moves = []
-        for move in self.move_set:
+        for move in self.unlocked_moves:
             if move.active:
                 active_moves.append(move)
         return active_moves
 
     def get_charge_moves(self):
         charge_moves = []
-        for move in self.move_set:
+        for move in self.unlocked_moves:
             if move.charging or (move.type == "charge and release" and move.charged):
                 charge_moves.append(move)
         return charge_moves
@@ -274,9 +308,10 @@ class Player(MovingSprite):
 
     def draw_debug(self):
         index = 0
-        for move in self.move_set:
-            move.draw_debug(index)
-            index+=1
+        for slot, move in self.equipped_moves.items():
+            if move:
+                move.draw_debug(index)
+                index += 1
         xp_text = arcade.Text(f"xp: {self.xp}", start_x=self.center_x, start_y=self.top+LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
         xp_text.draw()
         super().draw_debug()
