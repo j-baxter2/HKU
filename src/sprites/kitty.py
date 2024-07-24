@@ -54,11 +54,11 @@ class Kitty(FollowingSprite):
 
     def update_while_alive(self):
         if not self.eating and not self.fleeing:
-            self.update_treats()
             self.locate_treat()
             self.update_meow()
             self.handle_treat_collision()
         self.update_fleeing()
+        self.update_treats()
         if self.target_treat:
             self.update_eating()
 

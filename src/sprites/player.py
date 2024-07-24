@@ -23,7 +23,11 @@ class Player(MovingSprite):
         self.max_stamina = self.player_data["stamina"]
         self.stamina_regen = self.player_data["stamina regen"]
         self.stamina_regen_bonus_stationary = self.player_data["stationary stamina bonus"]
-        self.footstep_name = self.player_data["footstep name"]
+        self.max_hp = self.player_data["hp"]
+        self.hp = self.max_hp
+        self.strength = self.player_data["strength"]
+        self.stamina = self.max_stamina
+        self.sprinting = False
 
         self.move_set = []
 
@@ -35,12 +39,7 @@ class Player(MovingSprite):
         self.ranking_data = None
         self.current_rank = 0
 
-        self.max_hp = self.player_data["hp"]
-        self.hp = self.max_hp
-        self.strength = self.player_data["strength"]
-        self.stamina = self.max_stamina
-        self.sprinting = False
-
+        self.footstep_name = self.player_data["footstep name"]
         self.footstep_sound = load_sound(self.footstep_name)
         self.sound_update_timer = 0
         self.sound_update_time = self.footstep_sound.get_length()
