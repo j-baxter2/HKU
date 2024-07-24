@@ -189,12 +189,18 @@ class Player(MovingSprite):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
 
     def update_treat_pickup(self):
-        if self.picking_up_treat:
-            treats = arcade.check_for_collision_with_list(self, self.treat_sprite_list)
-            for treat in treats:
-                self.treat_amount += 1
-                treat.picked_up = True
-                treat.kill()
+        treats = arcade.check_for_collision_with_list(self, self.treat_sprite_list)
+        for treat in treats:
+            if treat.decayed:
+                self.pick_up_treat(treat)
+            elif not treat.decayed and self.picking_up_treat:
+                self.pick_up_treat(treat)
+
+
+    def pick_up_treat(self, treat):
+        self.treat_amount += 1
+        treat.picked_up = True
+        treat.kill()
 
     def update_sound(self):
         self.update_walking_sound()
