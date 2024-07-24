@@ -8,8 +8,9 @@ import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
 class FollowingSprite(MovingSprite):
-    def __init__(self, data: dict, player: Player):
-        self.player = player
+    def __init__(self, data: dict, scene: arcade.Scene):
+        self.scene = scene
+        self.player = self.scene.get_sprite_list("Player")[0]
         self.follow_distance = data["follow radius"]
         self.random_movement_time = data["random movement time"]
         self.random_movement_timer = 0
@@ -88,7 +89,3 @@ class FollowingSprite(MovingSprite):
     def debug_draw(self):
         super().debug_draw()
         self.draw_follow_radius()
-        arcade.draw_text(f"RMT: {round(self.random_movement_timer,1)}", self.center_x, self.top + 60, arcade.color.RED, 12)
-        if hasattr(self, "hp"):
-            arcade.draw_text(f"HP: {self.hp}", self.center_x, self.top + 120, arcade.color.RED, 12)
-        arcade.draw_text(f"JBH: {self.just_been_hit}", self.center_x, self.center_y+100, arcade.color.WHITE, 20)

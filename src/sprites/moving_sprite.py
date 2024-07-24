@@ -1,7 +1,7 @@
 import arcade
 import random
 from pyglet.math import Vec2
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
+from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL
 from src.utils.sound import load_sound, play_sound
 
 class MovingSprite(arcade.Sprite):
@@ -144,7 +144,7 @@ class MovingSprite(arcade.Sprite):
     def update_just_been_hit(self):
         if self.just_been_hit:
             self.color = arcade.color.RED
-            play_sound(self.hurt_sound, volume=0.1)
+            play_sound(self.hurt_sound, volume=SOUND_EFFECT_VOL)
             self.just_been_hit_timer += DELTA_TIME
             if self.just_been_hit_timer >= self.just_been_hit_time:
                 self.stop_just_been_hit()

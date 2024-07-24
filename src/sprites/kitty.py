@@ -10,15 +10,15 @@ from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 from src.utils.sound import load_sound, play_sound
 
 class Kitty(FollowingSprite):
-    def __init__(self, id : int, treats: arcade.SpriteList, player: Player):
+    def __init__(self, id : int, scene: arcade.Scene):
         with open("resources/data/kitty.json", "r") as file:
             kitty_dict = json.load(file)
         self.kitty_data = kitty_dict[str(id)]
-        self.player = player
+        self.scene = scene
 
-        super().__init__(self.kitty_data, self.player)
+        super().__init__(self.kitty_data, self.scene)
 
-        self.treats = treats
+        self.treats = self.scene.get_sprite_list("Treat")
 
         self.hunger = self.kitty_data["hunger"]
         self.treats_eaten = 0
@@ -54,12 +54,16 @@ class Kitty(FollowingSprite):
 
     def update_while_alive(self):
         if not self.eating and not self.fleeing:
+            self.update_treats()
             self.locate_treat()
             self.update_meow()
             self.handle_treat_collision()
-            self.update_fleeing()
+        self.update_fleeing()
         if self.target_treat:
             self.update_eating()
+
+    def update_treats(self):
+        self.treats = self.scene.get_sprite_list("Treat")
 
     def update_meow(self):
         self.meow_timer += DELTA_TIME
@@ -184,6 +188,5 @@ class Kitty(FollowingSprite):
 
     def debug_draw(self):
         super().debug_draw()
-        arcade.draw_text(f"fleeing: {self.fleeing} eating: {self.eating}", self.center_x, self.center_y-100, arcade.color.BLACK, 12)
-        arcade.draw_text(f"eatingprogress: {round(self.eating_timer/self.eating_time,1)}", self.center_x, self.center_y+100, arcade.color.BLACK, 12)
-        arcade.draw_text(f"fleeingprogress: {round(self.fleeing_timer/self.fleeing_time,1)}", self.center_x, self.center_y+200, arcade.color.BLACK, 12)
+        kitty_debug_text = arcade.Text(f"fleeing: {self.fleeing} eating: {self.eating}\neatingprogress: {round(self.eating_timer/self.eating_time,1)}\nfleeingprogress: {round(self.fleeing_timer/self.fleeing_time,1)}", start_x=self.center_x+self.width, start_y=self.center_y, color=arcade.color.BLACK, font_size=12, width=self.width, anchor_x="left", anchor_y="center", multiline=True)
+        kitty_debug_text.draw()

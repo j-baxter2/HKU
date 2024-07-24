@@ -1,7 +1,7 @@
 import arcade
 from src.sprites.moving_sprite import MovingSprite
 import json
-from src.data.constants import DELTA_TIME
+from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
 from src.utils.sound import load_sound, play_sound
 
 class Move:
@@ -90,7 +90,7 @@ class Move:
         self.active_timer = 0
         self.get_affectees()
         self.start_damage_resist()
-        play_sound(self.start_sound)
+        play_sound(self.start_sound, volume=SOUND_EFFECT_VOL)
         self.origin_sprite.stamina -= self.cost
 
     def update_activity(self):
@@ -107,7 +107,7 @@ class Move:
         self.charged = False if self.charge_time else True
         self.stop_damage_resist()
         self.stop_activity_mobility()
-        play_sound(self.stop_sound)
+        play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL)
         self.origin_sprite.color = arcade.color.WHITE
         self.active_timer = 0
 
@@ -188,10 +188,17 @@ class Move:
             for affectee in self.affectees:
                 arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, affectee.center_x, affectee.center_y, self.color, 5)
 
-    def debug_draw(self):
-        arcade.draw_text(f"{self.name}: {self.active}\n{round(self.active_timer, 1)}/{self.active_time}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 100, arcade.color.BLACK, 12)
+    def debug_draw(self, index: int):
+        start_x = self.origin_sprite.center_x+self.origin_sprite.width
+        start_y = self.origin_sprite.top-index*(LINE_HEIGHT*4)
+        active_debug_text = arcade.Text(f"{self.name} active: {self.active}\nactiveprogress: {round(self.progress_fraction, 2)}", start_x=start_x, start_y=start_y, color=arcade.color.BLACK, font_size=12, width=self.origin_sprite.width, anchor_x="left", anchor_y="top", multiline=True)
+        active_debug_text.draw()
+        if self.refreshing:
+            refresh_debug_text = arcade.Text(f"refreshing: {self.refreshing}\nrefreshprogress: {round(self.refresh_fraction, 2)}", start_x=start_x+self.origin_sprite.width, start_y=start_y, color=arcade.color.BLACK, font_size=12, width=self.origin_sprite.width, anchor_x="left", anchor_y="top", multiline=True)
+            refresh_debug_text.draw()
         if self.charging:
-            arcade.draw_text(f"Charging {self.name}: {round(self.charge_fraction, 1)}", self.origin_sprite.center_x - 50, self.origin_sprite.center_y - 150, arcade.color.BLACK, 12)
+            charging_debug_text = arcade.Text(f"charging: {self.charging}\nchargeprogress: {round(self.charge_fraction, 1)}", start_x=start_x+self.origin_sprite.width*2, start_y=start_y, color=arcade.color.BLACK, font_size=12, width=self.origin_sprite.width, anchor_x="left", anchor_y="top", multiline=True)
+            charging_debug_text.draw()
 
     @property
     def executable(self):

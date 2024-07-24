@@ -7,7 +7,7 @@ from pyglet.math import Vec2
 from src.utils.move import Move
 from src.utils.level import Level
 from src.utils.sound import play_sound
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -26,12 +26,12 @@ class GameSection(arcade.Section):
         self.load_map("resources/maps/map.json")
         self.player_sprite = Player(id=1, scene=self.scene)
         self.player_sprite_list.append(self.player_sprite)
+        self.scene.add_sprite_list(name="Player",sprite_list=self.player_sprite_list, use_spatial_hash=True)
+        self.scene.add_sprite_list(name="Treat",sprite_list=self.player_sprite.treat_sprite_list)
         self.current_level_id = 0
         self.load_level()
         self.level_list = self.current_level.get_level_list()
-        self.scene.add_sprite_list(name="Player",sprite_list=self.player_sprite_list, use_spatial_hash=True)
         self.current_level.spawn_player()
-        self.scene.add_sprite_list(name="Treat",sprite_list=self.player_sprite.treat_sprite_list, use_spatial_hash=True)
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player_sprite,
             walls=[
@@ -52,10 +52,8 @@ class GameSection(arcade.Section):
     def on_update(self):
         self.physics_engine.update()
         self.update_camera()
-        self.player_sprite.update()
-        self.scene.update(["Enemy"])
-        self.scene.update(["Kitty"])
-        self.scene.update(["Treat"])
+        self.scene.update()
+
 
     def on_draw(self):
         self.scene.draw()
@@ -84,7 +82,7 @@ class GameSection(arcade.Section):
             if self.player_sprite.has_treats:
                 self.player_sprite.drop_treat()
             else:
-                play_sound(self.player_sprite.no_treat_sound, volume=0.01)
+                play_sound(self.player_sprite.no_treat_sound, volume=SOUND_EFFECT_VOL)
         elif key == controls.PICKUP_TREAT:
             self.player_sprite.picking_up_treat = True
         elif key == controls.SCARE:
@@ -128,7 +126,7 @@ class GameSection(arcade.Section):
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
     def load_level(self):
-        self.current_level = Level(level_id=self.current_level_id, player=self.player_sprite, game_section=self)
+        self.current_level = Level(level_id=self.current_level_id, scene=self.scene)
         self.current_level.load_enemies()
         self.current_level.load_kitties()
         self.scene.add_sprite_list(name = "Kitty", sprite_list=self.current_level.kitties, use_spatial_hash=True)
@@ -189,11 +187,13 @@ class UISection(arcade.Section):
         self.view.game_section.player_sprite.draw()
 
     def draw_level_id(self):
-        arcade.draw_text(f"Level: {self.view.game_section.current_level_id}", self.right - 10, self.top - 100, arcade.color.BLACK, 24, anchor_x="right")
+        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK, font_size=24, anchor_x="right")
+        level_text.draw()
 
     def draw_treat_count(self):
         treat_count = self.player.treat_amount
-        arcade.draw_text(f"Treats: {treat_count}", self.right - 10, self.top - 140, arcade.color.BLACK, 24, anchor_x="right")
+        treat_count_text = arcade.Text(f"Treats: {treat_count}", start_x=self.right-10, start_y=self.top-140, color=arcade.color.BLACK, font_size=24, anchor_x="right")
+        treat_count_text.draw()
 
     def draw_stamina_bar(self):
         if self.player:
@@ -276,7 +276,8 @@ class UISection(arcade.Section):
 
     def draw_xp_bar(self):
         if self.player.at_max_rank:
-            arcade.draw_text(f"MAX RANK", self.width // 2, self.top - 70, arcade.color.BLACK, 36, anchor_x="center", anchor_y="center")
+            max_rank_text = arcade.Text(f"MAX RANK", start_x=self.width // 2, start_y=self.top - 70, color=arcade.color.BLACK, font_size=36, anchor_x="center", anchor_y="center")
+            max_rank_text.draw()
         else:
             filled_width = (self.player.get_xp_fraction()) * 300
             arcade.draw_rectangle_filled(center_x=self.width // 2,
@@ -291,8 +292,10 @@ class UISection(arcade.Section):
                                         height=20,
                                         color=arcade.color.YELLOW)
 
-            arcade.draw_text(f"{self.player.current_rank}", self.width // 2 - 175, self.top - 70, arcade.color.BLACK, 24, anchor_x="center", anchor_y="center")
-            arcade.draw_text(f"{self.player.current_rank+1}", self.width // 2 + 175, self.top - 70, arcade.color.BLACK, 24, anchor_x="center", anchor_y="center")
+            current_rank_text = arcade.Text(f"{self.player.current_rank}", start_x=self.width // 2 - 175, start_y=self.top - 70, color=arcade.color.BLACK, font_size=24, anchor_x="center", anchor_y="center")
+            next_rank_text = arcade.Text(f"{self.player.current_rank+1}", start_x=self.width // 2 + 175, start_y=self.top - 70, color=arcade.color.BLACK, font_size=24, anchor_x="center", anchor_y="center")
+            current_rank_text.draw()
+            next_rank_text.draw()
 
     def get_player(self):
         return self.view.game_section.player_sprite
@@ -370,15 +373,17 @@ class GameView(arcade.View):
     def debug_draw(self):
         self.ui_section.camera.use()
 
-        arcade.draw_text("Debug Mode", self.window.width - 100, self.window.height - 20, arcade.color.RED, 12)
         enemy_count = len(self.game_section.scene.get_sprite_list("Enemy"))
-        arcade.draw_text(f"Enemies: {enemy_count}", self.window.width - 100, self.window.height - 40, arcade.color.RED, 12)
-        kitty_count = len(self.game_section.current_level.kitties)
-        arcade.draw_text(f"Kitties: {kitty_count}", self.window.width - 100, self.window.height - 60, arcade.color.RED, 12)
+        kitty_count = len(self.game_section.scene.get_sprite_list("Kitty"))
+        kitty_count_max = len(self.game_section.current_level.kitties)
+        treat_count = len(self.game_section.scene.get_sprite_list("Treat"))
         player_pos = self.game_section.player_sprite.get_integer_position()
-        arcade.draw_text(f"Player Pos: {player_pos}", self.window.width - 200, self.window.height - 80, arcade.color.RED, 12)
+
+        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
+        debug_text.draw()
         if self.between_levels:
-            arcade.draw_text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", self.window.width - 400, self.window.height - 200, arcade.color.RED, 12)
+            between_levels_text = arcade.Text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", start_x=20, start_y=self.window.height - 20 - LINE_HEIGHT*4, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top")
+            between_levels_text.draw()
 
 
         self.game_section.camera.use()
@@ -392,11 +397,13 @@ class GameView(arcade.View):
 
     def draw_victory_message(self):
         self.game_section.camera.use()
-        arcade.draw_text("Congrats", self.game_section.player_sprite.center_x, self.game_section.player_sprite.center_y+100, arcade.color.PURPLE, 24)
+        victory_message_text = arcade.Text(f"VICTORY", start_x=self.game_section.player_sprite.center_x, start_y=self.game_section.player_sprite.center_y+100, color=arcade.color.BLACK, font_size=24, anchor_x="center")
+        victory_message_text.draw()
 
     def draw_defeat_message(self):
         self.ui_section.camera.use()
-        arcade.draw_text("YOU HAVE DIED", self.ui_section.width // 2, self.ui_section.height // 2, arcade.color.BLACK, 24, anchor_x="center")
+        death_message_text = arcade.Text(f"YOU HAVE DIED", start_x=self.ui_section.width // 2, start_y=self.ui_section.height // 2, color=arcade.color.BLACK, font_size=24, anchor_x="center")
+        death_message_text.draw()
 
     def handle_gamestate(self):
         if self.should_change_level:

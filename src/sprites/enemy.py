@@ -8,13 +8,14 @@ import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
 class FollowingEnemy(FollowingSprite):
-    def __init__(self, id : int, player : Player, kitties: arcade.SpriteList):
+    def __init__(self, id : int, scene: arcade.Scene):
         with open("resources/data/enemy.json", "r") as file:
             enemy_dict = json.load(file)
         self.enemy_data = enemy_dict[str(id)]
+        self.scene = scene
+        super().__init__(self.enemy_data, self.scene)
 
-        self.player = player
-        self.kitties = kitties
+        self.kitties = self.scene.get_sprite_list("Kitty")
 
         self.max_hp = self.enemy_data["hp"]
         self.hp = self.max_hp
@@ -25,7 +26,6 @@ class FollowingEnemy(FollowingSprite):
 
         self.target_kitty = None
 
-        super().__init__(self.enemy_data, self.player)
 
     def setup(self):
         super().setup()

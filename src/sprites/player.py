@@ -5,7 +5,7 @@ import json
 from pyglet.math import Vec2
 from src.utils.move import Move
 from src.utils.sound import load_sound, play_sound
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
+from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
 class Player(MovingSprite):
 
@@ -154,7 +154,7 @@ class Player(MovingSprite):
         self.treat_sprite_list.append(treat)
         self.scene.add_sprite_list(name="Treat", sprite_list=self.treat_sprite_list)
 
-        play_sound(self.drop_treat_sound, volume=0.01)
+        play_sound(self.drop_treat_sound, volume=SOUND_EFFECT_VOL)
         self.treat_amount -= 1
 
     def update_treat_pickup(self):
@@ -175,7 +175,7 @@ class Player(MovingSprite):
             self.sound_update_timer += DELTA_TIME
 
         if self.sound_update_timer >= self.sound_update_time:
-            play_sound(self.footstep_sound, volume=0.01)
+            play_sound(self.footstep_sound, volume=SOUND_EFFECT_VOL)
             self.sound_update_timer = 0
 
     def give_xp(self, amount: int):
@@ -257,7 +257,10 @@ class Player(MovingSprite):
         return self.current_rank >= len(self.ranking_data) - 1
 
     def debug_draw(self):
+        index = 0
         for move in self.move_set:
-            move.debug_draw()
-        arcade.draw_text(f"xp: {self.xp}", self.center_x, self.center_y+100, arcade.color.WHITE, 20)
+            move.debug_draw(index)
+            index+=1
+        xp_text = arcade.Text(f"xp: {self.xp}", start_x=self.center_x, start_y=self.top+LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
+        xp_text.draw()
         super().debug_draw()

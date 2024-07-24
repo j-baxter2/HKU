@@ -6,10 +6,10 @@ from src.sprites.kitty import Kitty
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT
 
 class Level:
-    def __init__(self, level_id, player: Player, game_section):
+    def __init__(self, level_id, scene: arcade.Scene):
         self.level_id = level_id
-        self.player = player
-        self.game_section = game_section
+        self.scene = scene
+        self.player = self.scene.get_sprite_list("Player")[0]
         self.enemy_data = self.load_level_data(level_id)["enemies"]
         self.enemies = arcade.SpriteList()
         self.kitty_data = self.load_level_data(level_id)["kitties"]
@@ -29,7 +29,7 @@ class Level:
 
         for enemy_id, ratio in enemy_ratio.items():
             for _ in range(int(ratio * enemy_amount)):
-                enemy = FollowingEnemy(id=int(enemy_id), player=self.player, kitties=self.kitties)
+                enemy = FollowingEnemy(id=int(enemy_id), scene=self.scene)
                 enemy.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
                 self.enemies.append(enemy)
 
@@ -40,7 +40,7 @@ class Level:
 
         for kitty_id, ratio in kitty_ratio.items():
             for _ in range(int(ratio * kitty_amount)):
-                kitty = Kitty(id=int(kitty_id), treats=self.treats, player=self.player)
+                kitty = Kitty(id=int(kitty_id), scene=self.scene)
                 kitty.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
                 self.kitties.append(kitty)
 
