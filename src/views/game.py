@@ -173,9 +173,9 @@ class GameSection(arcade.Section):
     def any_kitties(self):
         return len(self.scene.get_sprite_list("Kitty")) > 0
 
-    def debug_draw(self):
+    def draw_debug(self):
         self.camera.use()
-        self.player_sprite.debug_draw()
+        self.player_sprite.draw_debug()
         for enemy in self.scene.get_sprite_list("Enemy"):
                 arcade.draw_line(self.player_sprite.center_x, self.player_sprite.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
         for kitty in self.scene.get_sprite_list("Kitty"):
@@ -212,7 +212,7 @@ class UISection(arcade.Section):
         self.view.game_section.player_sprite.draw()
 
     def draw_level_id(self):
-        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.PINK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         level_text.draw()
 
     def draw_treat_count(self):
@@ -365,7 +365,7 @@ class GameView(arcade.View):
             self.draw_defeat_message()
 
         if self.debug:
-            self.debug_draw()
+            self.draw_debug()
 
     def on_update(self, delta_time=DELTA_TIME):
         self.game_section.on_update()
@@ -395,7 +395,7 @@ class GameView(arcade.View):
     def on_key_release(self, key, modifiers):
         self.game_section.on_key_release(key, modifiers)
 
-    def debug_draw(self):
+    def draw_debug(self):
         self.ui_section.camera.use()
 
         enemy_count = len(self.game_section.scene.get_sprite_list("Enemy"))
@@ -412,13 +412,13 @@ class GameView(arcade.View):
 
 
         self.game_section.camera.use()
-        self.game_section.debug_draw()
+        self.game_section.draw_debug()
         enemies = self.game_section.scene.get_sprite_list("Enemy")
         for enemy in enemies:
-            enemy.debug_draw()
+            enemy.draw_debug()
         kitties = self.game_section.scene.get_sprite_list("Kitty")
         for kitty in kitties:
-            kitty.debug_draw()
+            kitty.draw_debug()
 
     def draw_victory_message(self):
         self.game_section.camera.use()

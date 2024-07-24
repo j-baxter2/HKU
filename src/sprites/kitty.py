@@ -186,7 +186,7 @@ class Kitty(FollowingSprite):
         angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
         return math.sin(angle)
 
-    def debug_draw(self):
-        super().debug_draw()
+    def draw_debug(self):
+        super().draw_debug()
         kitty_debug_text = arcade.Text(f"fleeing: {self.fleeing} eating: {self.eating}\neatingprogress: {round(self.eating_timer/self.eating_time,1)}\nfleeingprogress: {round(self.fleeing_timer/self.fleeing_time,1)}", start_x=self.center_x+self.width, start_y=self.center_y, color=arcade.color.BLACK, font_size=12, width=self.width, anchor_x="left", anchor_y="center", multiline=True)
         kitty_debug_text.draw()

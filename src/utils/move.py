@@ -181,7 +181,7 @@ class Move:
             for affectee in self.affectees:
                 arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, affectee.center_x, affectee.center_y, self.color, 5)
 
-    def debug_draw(self, index: int):
+    def draw_debug(self, index: int):
         start_x = self.origin_sprite.center_x+self.origin_sprite.width
         start_y = self.origin_sprite.top-index*(LINE_HEIGHT*4)
         active_debug_text = arcade.Text(f"{self.name} active: {self.active}\nactiveprogress: {round(self.progress_fraction, 2)}", start_x=start_x, start_y=start_y, color=arcade.color.BLACK, font_size=12, width=self.origin_sprite.width, anchor_x="left", anchor_y="top", multiline=True)

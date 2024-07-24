@@ -227,5 +227,5 @@ class MovingSprite(arcade.Sprite):
     def frame_time(self):
         return 1 / self.fps
 
-    def debug_draw(self):
+    def draw_debug(self):
         self.draw_hit_box()

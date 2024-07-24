@@ -93,6 +93,6 @@ class FollowingSprite(MovingSprite):
     def should_sprint(self):
         return self.just_been_hit
 
-    def debug_draw(self):
-        super().debug_draw()
+    def draw_debug(self):
+        super().draw_debug()
         self.draw_follow_radius()

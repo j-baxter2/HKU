@@ -114,8 +114,8 @@ class TargetArrowKey(Move):
     def potential_target_in_range(self):
         return self.potential_target is not None and arcade.get_distance_between_sprites(self.origin_sprite, self.potential_target) < self.range
 
-    def debug_draw(self, index: int):
-        super().debug_draw(index)
+    def draw_debug(self, index: int):
+        super().draw_debug(index)
         start_x = self.origin_sprite.center_x+self.origin_sprite.width
         start_y = self.origin_sprite.top-index*(LINE_HEIGHT*4)
         if self.choosing_target:

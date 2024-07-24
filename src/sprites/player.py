@@ -272,11 +272,11 @@ class Player(MovingSprite):
     def at_max_rank(self):
         return self.current_rank >= len(self.ranking_data) - 1
 
-    def debug_draw(self):
+    def draw_debug(self):
         index = 0
         for move in self.move_set:
-            move.debug_draw(index)
+            move.draw_debug(index)
             index+=1
         xp_text = arcade.Text(f"xp: {self.xp}", start_x=self.center_x, start_y=self.top+LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
         xp_text.draw()
-        super().debug_draw()
+        super().draw_debug()
