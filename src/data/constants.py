@@ -15,3 +15,7 @@ LINE_HEIGHT = 20
 CIRCLE_RADIUS = 20
 
 SOUND_EFFECT_VOL = 0.1
+
+UI_FONT_PATH = "resources/fonts/GWIBBLE_.ttf"
+UI_FONT = "Gwibble"
+UI_FONT_SIZE = 36

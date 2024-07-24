@@ -7,7 +7,7 @@ from pyglet.math import Vec2
 from src.utils.move import Move
 from src.utils.level import Level
 from src.utils.sound import play_sound
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -167,6 +167,7 @@ class UISection(arcade.Section):
     def setup(self):
         self.player = self.get_player()
         self.camera = arcade.Camera(self.width, self.height)
+        arcade.load_font(UI_FONT_PATH)
 
     def on_update(self):
         pass
@@ -187,12 +188,12 @@ class UISection(arcade.Section):
         self.view.game_section.player_sprite.draw()
 
     def draw_level_id(self):
-        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK, font_size=24, anchor_x="right")
+        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         level_text.draw()
 
     def draw_treat_count(self):
         treat_count = self.player.treat_amount
-        treat_count_text = arcade.Text(f"Treats: {treat_count}", start_x=self.right-10, start_y=self.top-140, color=arcade.color.BLACK, font_size=24, anchor_x="right")
+        treat_count_text = arcade.Text(f"Treats: {treat_count}", start_x=self.right-10, start_y=self.top-140, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         treat_count_text.draw()
 
     def draw_stamina_bar(self):
@@ -276,7 +277,7 @@ class UISection(arcade.Section):
 
     def draw_xp_bar(self):
         if self.player.at_max_rank:
-            max_rank_text = arcade.Text(f"MAX RANK", start_x=self.width // 2, start_y=self.top - 70, color=arcade.color.BLACK, font_size=36, anchor_x="center", anchor_y="center")
+            max_rank_text = arcade.Text(f"MAX RANK", start_x=self.width // 2, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE*1.5, font_name=UI_FONT)
             max_rank_text.draw()
         else:
             filled_width = (self.player.get_xp_fraction()) * 300
@@ -292,8 +293,8 @@ class UISection(arcade.Section):
                                         height=20,
                                         color=arcade.color.YELLOW)
 
-            current_rank_text = arcade.Text(f"{self.player.current_rank}", start_x=self.width // 2 - 175, start_y=self.top - 70, color=arcade.color.BLACK, font_size=24, anchor_x="center", anchor_y="center")
-            next_rank_text = arcade.Text(f"{self.player.current_rank+1}", start_x=self.width // 2 + 175, start_y=self.top - 70, color=arcade.color.BLACK, font_size=24, anchor_x="center", anchor_y="center")
+            current_rank_text = arcade.Text(f"{self.player.current_rank}", start_x=self.width // 2 - 175, start_y=self.top - 70, color=arcade.color.BLACK,anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+            next_rank_text = arcade.Text(f"{self.player.current_rank+1}", start_x=self.width // 2 + 175, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
             current_rank_text.draw()
             next_rank_text.draw()
 

@@ -45,7 +45,6 @@ class Move:
 
         self.color = getattr(arcade.color, self.color_key.upper())
 
-
         self.start_sound = load_sound(self.start_sound_name)
 
         self.stop_sound = load_sound(self.stop_sound_name)
