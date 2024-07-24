@@ -166,7 +166,7 @@ class Kitty(FollowingSprite):
 
     @property
     def should_sprint(self):
-        return self.target_treat or self.fleeing
+        return (self.target_treat is not None) or self.fleeing
 
     @property
     def should_meow(self):

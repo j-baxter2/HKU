@@ -28,7 +28,11 @@ class FollowingSprite(MovingSprite):
                 self.update_movement()
             self.random_movement_timer += DELTA_TIME
             self.update_animation(delta_time = DELTA_TIME)
+            self.update_player()
             self.update_while_alive()
+
+    def update_player(self):
+        self.player = self.scene.get_sprite_list("Player")[0]
 
     def update_fade(self):
         super().update_fade()

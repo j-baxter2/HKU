@@ -41,8 +41,8 @@ class MovingSprite(arcade.Sprite):
         self.current_walk_cycle = None
 
         self.animation_timer = 0
-        self.fps = animation_data["fps"]
-        self.frame_time = 1 / self.fps
+        self.base_fps = animation_data["fps"]
+        self.base_frame_time = 1 / self.base_fps
         self.walk_cycle_frames = animation_data["walk"]
 
         self.able_to_move = True
@@ -215,6 +215,17 @@ class MovingSprite(arcade.Sprite):
     @property
     def should_turn(self):
         return False
+
+    @property
+    def fps(self):
+        if self.should_sprint:
+            return self.base_fps * (1 + int(self.should_sprint))
+        else:
+            return self.base_fps
+
+    @property
+    def frame_time(self):
+        return 1 / self.fps
 
     def debug_draw(self):
         self.draw_hit_box()
