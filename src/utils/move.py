@@ -8,28 +8,29 @@ class Move:
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: MovingSprite):
         with open("resources/data/move.json", "r") as file:
             moves_dict = json.load(file)
-        move_data = moves_dict[str(id)]
+        self.move_data = moves_dict[str(id)]
 
         self.scene = scene
         self.origin_sprite = origin_sprite
 
-        self.name = move_data["name"]
-        self.damage = move_data["damage"]
-        self.damage_resist = move_data["damage resist"]
-        self.cost = move_data["cost"]
-        self.active_time = move_data["active time"]
-        self.refresh_time = move_data["refresh time"]
-        self.range = move_data["range"]
-        self.origin_mobile_while_charging = move_data["origin mobile while charging"]
-        self.origin_mobile_while_active = move_data["origin mobile while active"]
-        self.affectees_mobile_while_active = move_data["affectees mobile while active"]
-        self.affects = move_data["affects"]
-        self.charge_time = move_data["charge time"]
-        self.color_key = move_data["color"]
-        self.draw_lines = move_data["draw lines"]
-        self.draw_circle = move_data["draw circle"]
-        self.start_sound_name = move_data["start sound"]
-        self.stop_sound_name = move_data["stop sound"]
+        self.name = self.move_data["name"]
+        self.type = "basic"
+        self.damage = self.move_data["damage"]
+        self.damage_resist = self.move_data["damage resist"]
+        self.cost = self.move_data["cost"]
+        self.active_time = self.move_data["active time"]
+        self.refresh_time = self.move_data["refresh time"]
+        self.range = self.move_data["range"]
+        self.origin_mobile_while_charging = self.move_data["origin mobile while charging"]
+        self.origin_mobile_while_active = self.move_data["origin mobile while active"]
+        self.affectees_mobile_while_active = self.move_data["affectees mobile while active"]
+        self.affects = self.move_data["affects"]
+        self.charge_time = self.move_data["charge time"]
+        self.color_key = self.move_data["color"]
+        self.draw_lines = self.move_data["draw lines"]
+        self.draw_circle = self.move_data["draw circle"]
+        self.start_sound_name = self.move_data["start sound"]
+        self.stop_sound_name = self.move_data["stop sound"]
 
         self.affectees = []
 
@@ -116,14 +117,7 @@ class Move:
             self.apply_effects()
 
     def get_affectees(self):
-        affectees = []
-        potential_affectees = self.scene.get_sprite_list(self.affects)
-        for potential_affectee in potential_affectees:
-            if self.origin_sprite == potential_affectee:
-                affectees.append(potential_affectee)
-            elif arcade.get_distance_between_sprites(self.origin_sprite, potential_affectee) < self.range and not (potential_affectee.fading or potential_affectee.faded):
-                affectees.append(potential_affectee)
-        self.affectees = affectees
+        pass
 
     def update_affectees(self):
         for affectee in self.affectees:

@@ -74,5 +74,25 @@
         "draw circle": false,
         "start sound": "explosion2",
         "stop sound": null
+    },
+    "4": {
+        "name": "ranged",
+        "type": "charge and release",
+        "damage": 5,
+        "damage resist": null,
+        "cost": 10,
+        "active time": 0.5,
+        "refresh time": 0.25,
+        "range": 500,
+        "origin mobile while charging": true,
+        "origin mobile while active": true,
+        "affectees mobile while active": true,
+        "affects": "Enemy",
+        "charge time": 1,
+        "color": "PURPLE",
+        "draw lines": true,
+        "draw circle": false,
+        "start sound": "laser1",
+        "stop sound": null
     }
 }

@@ -32,7 +32,10 @@ class FollowingSprite(MovingSprite):
             self.update_while_alive()
 
     def update_player(self):
-        self.player = self.scene.get_sprite_list("Player")[0]
+        try:
+            self.player = self.scene.get_sprite_list("Player")[0]
+        except IndexError:
+            pass
 
     def update_fade(self):
         super().update_fade()

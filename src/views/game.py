@@ -5,6 +5,8 @@ from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
 from src.utils.move import Move
+from src.utils.move_affect_all_in_range import AffectAllMove
+from src.utils.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import play_sound
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
@@ -39,15 +41,17 @@ class GameSection(arcade.Section):
             ]
         )
         self.player_sprite.setup()
-        basic_attack = Move(0, self.scene, self.player_sprite)
+        basic_attack = AffectAllMove(0, self.scene, self.player_sprite)
         self.player_sprite.add_move(basic_attack)
-        basic_heal = Move(1, self.scene, self.player_sprite)
+        basic_heal = AffectAllMove(1, self.scene, self.player_sprite)
         self.player_sprite.add_move(basic_heal)
-        shock = Move(2, self.scene, self.player_sprite)
-        self.player_sprite.add_move(shock)
-        scare = Move(3, self.scene, self.player_sprite)
+        shock = AffectAllMove(2, self.scene, self.player_sprite)
+        #self.player_sprite.add_move(shock)
+        scare = AffectAllMove(3, self.scene, self.player_sprite)
         self.player_sprite.add_move(scare)
         self.camera = HKUCamera(self.width, self.height)
+        ranged = TargetArrowKey(4, self.scene, self.player_sprite)
+        self.player_sprite.add_move(ranged)
 
     def on_update(self):
         self.physics_engine.update()
@@ -59,6 +63,9 @@ class GameSection(arcade.Section):
         self.scene.draw()
         active_moves = self.player_sprite.get_active_moves()
         for move in active_moves:
+            move.draw()
+        charging_moves = self.player_sprite.get_charge_moves()
+        for move in charging_moves:
             move.draw()
 
     def on_key_press(self, key, modifiers):
@@ -74,10 +81,19 @@ class GameSection(arcade.Section):
             self.player_sprite.sprint_pressed = True
         elif key == controls.ATTACK:
             self.player_sprite.do_move("basic pat")
+        elif key == controls.ATTACK and modifiers == controls.ALT_MODIFIER:
+            #do alt attack
+            pass
         elif key == controls.HEAL:
             self.player_sprite.start_charging_move("basic heal")
+        elif key == controls.HEAL and modifiers == controls.ALT_MODIFIER:
+            #do alt heal
+            pass
         elif key == controls.SPECIAL:
-            self.player_sprite.start_charging_move("shock")
+            self.player_sprite.start_charging_move("ranged")
+        elif key == controls.SPECIAL and modifiers == controls.ALT_MODIFIER:
+            #do alt special
+            pass
         elif key == controls.DROP_TREAT:
             if self.player_sprite.has_treats:
                 self.player_sprite.drop_treat()
@@ -87,6 +103,14 @@ class GameSection(arcade.Section):
             self.player_sprite.picking_up_treat = True
         elif key == controls.SCARE:
             self.player_sprite.start_charging_move("scare kitty")
+        elif key == controls.TARGET_UP:
+            self.player_sprite.change_target("up")
+        elif key == controls.TARGET_DOWN:
+            self.player_sprite.change_target("down")
+        elif key == controls.TARGET_LEFT:
+            self.player_sprite.change_target("left")
+        elif key == controls.TARGET_RIGHT:
+            self.player_sprite.change_target("right")
 
     def on_key_release(self, key, modifiers):
         if key == controls.UP:
@@ -102,7 +126,7 @@ class GameSection(arcade.Section):
         elif key == controls.HEAL:
             self.player_sprite.stop_charging_move("basic heal")
         elif key == controls.SPECIAL:
-            self.player_sprite.stop_charging_move("shock")
+            self.player_sprite.fire_move("ranged")
         elif key == controls.PICKUP_TREAT:
             self.player_sprite.picking_up_treat = False
         elif key == controls.SCARE:
@@ -244,8 +268,8 @@ class UISection(arcade.Section):
                                             color=move.color)
 
     def draw_move_charge_bars(self):
-        if self.player.charging_move:
-            moves = self.player.get_charging_moves()
+        if self.player.charging_move or self.player.charged_move:
+            moves = self.player.get_charge_moves()
             for move_index, move in enumerate(moves):
                 filled_width = (move.charge_fraction) * 100
                 arcade.draw_rectangle_filled(center_x=self.left + 100,

@@ -11,6 +11,7 @@ SPECIAL = arcade.key.J
 DROP_TREAT = arcade.key.K
 PICKUP_TREAT = arcade.key.L
 SCARE = arcade.key.I
+ALT_MODIFIER = arcade.key.PERIOD
 TARGET_UP = arcade.key.UP
 TARGET_DOWN = arcade.key.DOWN
 TARGET_LEFT = arcade.key.LEFT

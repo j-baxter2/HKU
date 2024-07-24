@@ -191,6 +191,16 @@ class Player(MovingSprite):
             if move.name == move_name and move.executable:
                 move.execute()
 
+    def fire_move(self, move_name: str):
+        for move in self.move_set:
+            if move.name == move_name:
+                move.fire()
+
+    def change_target(self, direction: str):
+        for move in self.move_set:
+            if (hasattr(move, "choosing_target") and move.choosing_target):
+                move.change_target(direction)
+
     def start_charging_move(self, move_name: str):
         for move in self.move_set:
             if move.name == move_name:
@@ -216,6 +226,13 @@ class Player(MovingSprite):
         return False
 
     @property
+    def charged_move(self):
+        for move in self.move_set:
+            if move.charged:
+                return True
+        return False
+
+    @property
     def refreshing_move(self):
         for move in self.move_set:
             if move.refreshing:
@@ -236,12 +253,12 @@ class Player(MovingSprite):
                 active_moves.append(move)
         return active_moves
 
-    def get_charging_moves(self):
-        charging_moves = []
+    def get_charge_moves(self):
+        charge_moves = []
         for move in self.move_set:
-            if move.charging:
-                charging_moves.append(move)
-        return charging_moves
+            if move.charging or (move.type == "charge and release" and move.charged):
+                charge_moves.append(move)
+        return charge_moves
 
     @property
     def has_treats(self):
