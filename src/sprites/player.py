@@ -259,6 +259,13 @@ class Player(MovingSprite):
         return False
 
     @property
+    def choosing_target(self):
+        for move in self.unlocked_moves:
+            if hasattr(move, "choosing_target") and move.choosing_target:
+                return True
+        return False
+
+    @property
     def charging_move(self):
         for move in self.unlocked_moves:
             if move.charging:

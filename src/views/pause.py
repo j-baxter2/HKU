@@ -43,7 +43,7 @@ class PauseView(arcade.View):
         self.game_view.player.equip_move(slot, move)
 
     def on_show_view(self):
-        arcade.set_background_color(arcade.color.BLACK)
+        arcade.set_background_color(arcade.color.BLACK[:3]+(128,))
         self.manager.enable()
 
     def on_hide_view(self):

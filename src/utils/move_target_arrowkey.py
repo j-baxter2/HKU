@@ -1,4 +1,5 @@
 import arcade
+import math
 from src.utils.move import Move
 from src.sprites.moving_sprite import MovingSprite
 from src.utils.sound import play_sound
@@ -8,8 +9,10 @@ class TargetArrowKey(Move):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: MovingSprite):
         super().__init__(id, scene, origin_sprite)
         self.choosing_target = False
+        self.choosing_target_timer = 0
         self.target = None
         self.potential_target = None
+        self.origin_pos_when_fired = None
 
     def on_update(self, delta_time: float):
         self.update_activity()
@@ -46,17 +49,38 @@ class TargetArrowKey(Move):
         play_sound(self.start_sound, volume=SOUND_EFFECT_VOL)
         self.origin_sprite.stamina -= self.cost
 
+    def update_activity(self):
+        if self.active:
+            self.active_timer += DELTA_TIME
+            self.update_activity_mobility()
+            self.origin_sprite.color = self.color
+            if self.active_timer > self.active_time:
+                self.stop()
+
+    def stop(self):
+        self.active = False
+        self.refreshing = True
+        self.charged = False if self.charge_time else True
+        self.stop_damage_resist()
+        self.stop_activity_mobility()
+        self.target.take_damage(self.damage)
+        if self.target.is_dead:
+            self.origin_sprite.give_xp(self.target.max_hp*self.target.attack)
+        play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL)
+        self.origin_sprite.color = arcade.color.WHITE
+        self.active_timer = 0
+
     def fire(self):
         if self.target is not None and self.executable:
             self.start()
             self.stop_choose_target()
-            arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, self.target.center_x, self.target.center_y, self.color, 5)
-            self.target.take_damage(self.damage)
-            if self.target.is_dead:
-                self.origin_sprite.give_xp(self.target.max_hp*self.target.attack)
+            self.set_origin_pos_when_fired()
             self.charge_timer = 0
         else:
             self.stop_charge(success=False)
+
+    def set_origin_pos_when_fired(self):
+        self.origin_pos_when_fired = (self.origin_sprite.center_x, self.origin_sprite.center_y)
 
     def start_choose_target(self):
         self.choosing_target = True
@@ -67,10 +91,12 @@ class TargetArrowKey(Move):
                 break
 
     def change_target(self, direction: str):
-        print("change target executed")
         if self.choosing_target:
             potential_targets = self.scene.get_sprite_list(self.affects)
-            if direction == "up" and self.target:
+            if direction == "any":
+                potential_any_targets = [target for target in potential_targets if target != self.target]
+                self.potential_target = arcade.get_closest_sprite(self.origin_sprite, potential_any_targets)[0]
+            elif direction == "up" and self.target:
                 potential_up_targets = [target for target in potential_targets if target.center_y > self.target.center_y]
                 self.potential_target = arcade.get_closest_sprite(self.origin_sprite, potential_up_targets)[0]
             elif direction == "down" and self.target:
@@ -89,17 +115,26 @@ class TargetArrowKey(Move):
 
     def update_choose_target(self):
         if self.choosing_target:
+            self.choosing_target_timer += DELTA_TIME
             if self.target is not None:
                 self.target.color = self.color
-                arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, self.target.center_x, self.target.center_y, self.color, 5)
 
     def draw(self):
         if self.choosing_target:
             if self.target is not None:
-                arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, self.target.center_x, self.target.center_y, self.color, 5)
+                arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, self.target.center_x, self.target.center_y, self.color[:3]+(max(0,min(128*math.sin(self.charge_fraction*self.choosing_target_timer*100)+128,255)),), 5)
+        if self.active:
+            bullet_x = self.origin_pos_when_fired[0] + (self.target.center_x - self.origin_pos_when_fired[0]) * self.progress_fraction
+            bullet_y = self.origin_pos_when_fired[1] + (self.target.center_y - self.origin_pos_when_fired[1]) * self.progress_fraction
+            shard = arcade.Sprite("resources/textures/map_tiles/default_obsidian_shard.png")
+            shard.center_x = bullet_x
+            shard.center_y = bullet_y
+            shard.draw()
+
 
     def stop_choose_target(self):
         self.choosing_target = False
+        self.choosing_target_timer = 0
 
     @property
     def executable(self):

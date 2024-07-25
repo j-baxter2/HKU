@@ -72,7 +72,9 @@ class GameSection(arcade.Section):
         elif key == controls.SPRINT:
             self.player.sprint_pressed = True
         elif key == controls.ATTACK:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["quick attack 2"]:
+            if self.player.choosing_target:
+                self.player.change_target("any")
+            elif modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["quick attack 2"]:
                 self.player.do_move(self.player.equipped_moves["quick attack 2"])
             elif self.player.equipped_moves["quick attack"]:
                 self.player.do_move(self.player.equipped_moves["quick attack"])
@@ -459,4 +461,4 @@ class GameView(arcade.View):
 
     @property
     def completed(self):
-        return not self.game_section.more_levels and not self.game_section.any_enemies
+        return not self.game_section.more_levels and not self.game_section.any_enemies and not self.game_section.any_kitties
