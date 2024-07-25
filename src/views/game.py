@@ -200,16 +200,20 @@ class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
         super().__init__(left, bottom, width, height,
                           **kwargs)
+        self.scene = None
         self.player = None
+        self.kitties = None
+        self.enemies = None
+        self.sprite_lists = None
         self.camera = None
 
     def setup(self):
-        self.player = self.get_player()
+        self.update_sprite_lists()
         self.camera = arcade.Camera(self.width, self.height)
         arcade.load_font(UI_FONT_PATH)
 
     def on_update(self):
-        pass
+        self.update_sprite_lists()
 
     def on_draw(self):
         self.camera.use()
@@ -223,8 +227,14 @@ class UISection(arcade.Section):
             self.draw_move_refresh_circles()
             if not self.view.completed:
                 self.draw_level_id()
-        self.view.game_section.camera.use()
-        self.view.game_section.player.draw()
+
+    def update_sprite_lists(self):
+        self.scene = self.view.game_section.scene
+        self.players = self.scene.get_sprite_list("Player")
+        self.player = self.players[0]
+        self.kitties = self.scene.get_sprite_list("Kitty")
+        self.enemies = self.scene.get_sprite_list("Enemy")
+        self.sprite_lists = [self.players, self.kitties, self.enemies]
 
     def draw_level_id(self):
         level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)

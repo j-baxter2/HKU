@@ -26,7 +26,6 @@ class FollowingEnemy(FollowingSprite):
 
         self.target_kitty = None
 
-
     def setup(self):
         super().setup()
 
@@ -85,3 +84,7 @@ class FollowingEnemy(FollowingSprite):
     @property
     def should_sprint(self):
         return self.in_range or self.target_kitty is not None
+
+    def draw_debug(self):
+        just_been_hit_text = arcade.Text(f"Just been hit: {self.just_been_hit}", self.center_x, self.center_y+50, arcade.color.WHITE, 12)
+        just_been_hit_text.draw()

@@ -66,6 +66,10 @@ class LivingSprite(MovingSprite):
             self.color = self.fade_color
             self.start_fade()
 
+    def draw_hp_bar(self):
+        arcade.draw_rectangle_filled(self.center_x, self.center_y + self.height//2 - 10, self.width, 5, arcade.color.BLACK)
+        arcade.draw_rectangle_filled(self.center_x, self.center_y + self.height//2 - 10, self.width * (self.hp/self.max_hp), 5, arcade.color.RED)
+
     @property
     def is_alive(self):
         return not self.faded

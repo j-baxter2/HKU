@@ -1,7 +1,7 @@
 {
     "0" : {
         "name": "Gobu",
-        "hp": 2,
+        "hp": 10,
         "attack": 1,
         "follow radius": 500,
         "speed": 1,
