@@ -1,5 +1,5 @@
 import arcade
-from src.sprites.moving_sprite import MovingSprite
+from src.sprites.living_sprite import LivingSprite
 from src.sprites.treat import Treat
 import json
 from pyglet.math import Vec2
@@ -9,7 +9,7 @@ from src.utils.move_target_arrowkey import TargetArrowKey
 from src.utils.sound import load_sound, play_sound
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
-class Player(MovingSprite):
+class Player(LivingSprite):
 
     def __init__(self, id: int, scene: arcade.Scene):
         with open("resources/data/player.json", "r") as file:
@@ -90,6 +90,7 @@ class Player(MovingSprite):
         self.unlock_moves(ranged)
         self.equip_move("quick attack", basic_attack)
         self.equip_move("special", ranged)
+        self.equip_move("scare", scare)
 
     def update(self):
         super().update()
@@ -166,7 +167,7 @@ class Player(MovingSprite):
         self.sprinting = (self.sprint_pressed and not self.stationary)
 
     def update_animation(self):
-        if not self.current_walk_cycle:
+        if not self.current_animation:
             if self.up_pressed:
                 self.start_walk_cycle('up')
             elif self.down_pressed:
@@ -175,7 +176,7 @@ class Player(MovingSprite):
                 self.start_walk_cycle('left')
             elif self.right_pressed:
                 self.start_walk_cycle('right')
-        self.advance_walk_cycle()
+        self.advance_animation()
 
     def drop_treat(self):
         treat = Treat("resources/textures/map_tiles/default_apple.png", 1)

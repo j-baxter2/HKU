@@ -84,4 +84,4 @@ class FollowingEnemy(FollowingSprite):
 
     @property
     def should_sprint(self):
-        return self.in_range or self.target_kitty
+        return self.in_range or self.target_kitty is not None

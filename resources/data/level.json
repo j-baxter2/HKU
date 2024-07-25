@@ -23,10 +23,10 @@
             }
         },
         "kitties": {
-        "kitty amount": 1,
+        "kitty amount": 15,
         "kitty ratio": {
-            "0": 1,
-            "1": 0
+            "0": 0,
+            "1": 1
             }
         }
     }

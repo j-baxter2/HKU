@@ -227,7 +227,7 @@ class UISection(arcade.Section):
         self.view.game_section.player.draw()
 
     def draw_level_id(self):
-        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.PINK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         level_text.draw()
 
     def draw_treat_count(self):

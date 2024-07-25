@@ -32,25 +32,21 @@ class MovingSprite(arcade.Sprite):
         if self.textures:
             self.set_texture(0)
 
-
         self._hit_box_algorithm = 'Simple'
         self.set_hit_box(self.texture.hit_box_points)
 
-        animation_data = data["animation"]
+        self.animation_data = data["animation"]
 
-        self.current_walk_cycle = None
+        self.current_animation = None
 
         self.animation_timer = 0
-        self.base_fps = animation_data["fps"]
+        self.base_fps = self.animation_data["fps"]
         self.base_frame_time = 1 / self.base_fps
-        self.walk_cycle_frames = animation_data["walk"]
 
         self.able_to_move = True
         self.base_speed = data["speed"]
         self.sprint_multiplier = data["sprint multiplier"]
         self.speed = 0
-
-        self.damage_resist = 0
 
         self.fading = False
         self.fade_timer = 0
@@ -60,39 +56,31 @@ class MovingSprite(arcade.Sprite):
         self.fade_color_key = data["fade color"]
         self.fade_color = getattr(arcade.color, self.fade_color_key.upper())
 
-        self.just_been_hit = False
-        self.just_been_hit_timer = 0
-        self.just_been_hit_time = 0.5
+    def animation_cycle(self, starting_frame: int, ending_frame: int, looping: bool):
+        while True:
+            for i in range(starting_frame, ending_frame + 1):
+                self.set_texture(i)
+                yield
+            if not looping:
+                break
 
-        self.just_been_healed = False
-        self.just_been_healed_timer = 0
-        self.just_been_healed_time = 0.5
-
-        self.hurt_sound = load_sound("hurt2")
-
-    def walk_cycle(self, starting_frame: int, ending_frame: int):
-        if self.textures:
-            self.set_texture(starting_frame)
-        for i in range(starting_frame, ending_frame + 1):
-            self.set_texture(i)
-            yield
-
-    def start_walk_cycle(self, direction: str):
-        starting_frame, ending_frame = self.walk_cycle_frames[direction]
-        self.current_walk_cycle = self.walk_cycle(starting_frame, ending_frame)
+    def play_animation(self, starting_frame: int, ending_frame: int, looping: bool = False):
+        self.current_animation = self.animation_cycle(starting_frame, ending_frame, looping)
         self.animation_timer = 0
 
-    def advance_walk_cycle(self, delta_time=DELTA_TIME):
-        self.animation_timer += delta_time
-
+    def advance_animation(self):
+        self.animation_timer += DELTA_TIME
         if self.animation_timer >= self.frame_time:
             self.animation_timer -= self.frame_time
 
-            if self.current_walk_cycle:
+            if self.current_animation:
                 try:
-                    next(self.current_walk_cycle)
+                    next(self.current_animation)
                 except StopIteration:
-                    self.current_walk_cycle = None
+                    self.current_animation = None
+
+    def stop_animation(self):
+        self.current_animation = None
 
     def update(self):
         self.update_just_been_hit()
@@ -141,31 +129,6 @@ class MovingSprite(arcade.Sprite):
         self.center_x = max(0, min(self.center_x, MAP_WIDTH))
         self.center_y = max(0, min(self.center_y, MAP_HEIGHT))
 
-    def update_just_been_hit(self):
-        if self.just_been_hit:
-            self.color = arcade.color.RED
-            play_sound(self.hurt_sound, volume=SOUND_EFFECT_VOL)
-            self.just_been_hit_timer += DELTA_TIME
-            if self.just_been_hit_timer >= self.just_been_hit_time:
-                self.stop_just_been_hit()
-
-    def stop_just_been_hit(self):
-        self.just_been_hit = False
-        self.just_been_hit_timer = 0
-        self.color = arcade.color.WHITE
-
-    def update_just_been_healed(self):
-        if self.just_been_healed:
-            self.color = arcade.color.GREEN
-            self.just_been_healed_timer += DELTA_TIME
-            if self.just_been_healed_timer >= self.just_been_healed_time:
-                self.stop_just_been_healed()
-
-    def stop_just_been_healed(self):
-        self.just_been_healed = False
-        self.just_been_healed_timer = 0
-        self.color = arcade.color.WHITE
-
     @property
     def stationary(self):
         if self.velocity == [0, 0] or self.velocity == Vec2(0, 0):
@@ -179,14 +142,6 @@ class MovingSprite(arcade.Sprite):
         elif isinstance(self.velocity, Vec2):
             self.velocity = Vec2(random.uniform(-1, 1), random.uniform(-1,1))
 
-    def take_damage(self, amount: int):
-        self.hp -= amount * (1-self.damage_resist)
-        self.hp = min(max(0, self.hp), self.max_hp)
-        if self.hp <= 0:
-            self.stop_moving()
-            self.color = self.fade_color
-            self.start_fade()
-
     def start_moving(self):
         self.able_to_move = True
 
@@ -199,18 +154,6 @@ class MovingSprite(arcade.Sprite):
     def paralyze(self):
         self.stop_moving()
         self.able_to_move = False
-
-    @property
-    def is_alive(self):
-        return not self.faded
-
-    @property
-    def is_dead(self):
-        return self.hp <= 0
-
-    @property
-    def should_sprint(self):
-        return self.just_been_hit
 
     @property
     def should_turn(self):

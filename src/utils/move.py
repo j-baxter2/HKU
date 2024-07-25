@@ -1,11 +1,11 @@
 import arcade
-from src.sprites.moving_sprite import MovingSprite
+from src.sprites.living_sprite import LivingSprite
 import json
 from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
 from src.utils.sound import load_sound, play_sound
 
 class Move:
-    def __init__(self, id: int, scene: arcade.Scene, origin_sprite: MovingSprite):
+    def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):
         with open("resources/data/move.json", "r") as file:
             moves_dict = json.load(file)
         self.move_data = moves_dict[str(id)]
@@ -129,7 +129,7 @@ class Move:
             if self.damage < 0:
                 affectee.take_damage(self.damage)
                 affectee.just_healed = True
-            elif self.damage > 0:
+            elif self.damage >= 0:
                 affectee.take_damage(self.damage * self.origin_sprite.strength)
                 affectee.just_been_hit = True
                 if affectee.is_dead:

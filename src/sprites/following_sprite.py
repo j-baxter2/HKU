@@ -1,5 +1,5 @@
 import arcade
-from src.sprites.moving_sprite import MovingSprite
+from src.sprites.living_sprite import LivingSprite
 from src.sprites.player import Player
 from pyglet.math import Vec2
 import random
@@ -7,7 +7,7 @@ import math
 import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 
-class FollowingSprite(MovingSprite):
+class FollowingSprite(LivingSprite):
     def __init__(self, data: dict, scene: arcade.Scene):
         self.scene = scene
         self.player = self.scene.get_sprite_list("Player")[0]
@@ -62,11 +62,11 @@ class FollowingSprite(MovingSprite):
             return "left"
 
     def update_animation(self, delta_time):
-        if not self.current_walk_cycle:
+        if not self.current_animation:
             if self.animation_direction:
                 self.start_walk_cycle(self.animation_direction)
                 self.hit_box = self.texture.hit_box_points
-        self.advance_walk_cycle()
+        self.advance_animation()
 
 
     def draw_follow_radius(self):

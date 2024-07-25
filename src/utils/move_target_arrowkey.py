@@ -1,12 +1,12 @@
 import arcade
 import math
 from src.utils.move import Move
-from src.sprites.moving_sprite import MovingSprite
+from src.sprites.living_sprite import LivingSprite
 from src.utils.sound import play_sound
 from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
 
 class TargetArrowKey(Move):
-    def __init__(self, id: int, scene: arcade.Scene, origin_sprite: MovingSprite):
+    def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):
         super().__init__(id, scene, origin_sprite)
         self.choosing_target = False
         self.choosing_target_timer = 0
