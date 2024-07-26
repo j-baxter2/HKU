@@ -6,7 +6,7 @@ from pyglet.math import Vec2
 from src.utils.move import Move
 from src.utils.move_affect_all_in_range import AffectAllMove
 from src.utils.move_target_arrowkey import TargetArrowKey
-from src.utils.sound import load_sound, play_sound
+from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
 class Player(LivingSprite):
@@ -35,17 +35,17 @@ class Player(LivingSprite):
 
         self.equipped_moves = {
             "quick attack": None,
-            "quick attack 2": None,
+            "alt quick attack": None,
             "special": None,
-            "special 2": None,
+            "alt special": None,
             "heal": None,
-            "heal 2": None,
+            "alt heal": None,
             "drop treat": None,
-            "drop treat 2": None,
+            "alt drop treat": None,
             "pickup treat": None,
-            "pickup treat 2": None,
+            "alt pickup treat": None,
             "scare": None,
-            "scare 2": None
+            "alt scare": None
         }
 
         self.active_moves = []
@@ -57,9 +57,8 @@ class Player(LivingSprite):
         self.current_rank = 0
 
         self.footstep_name = self.player_data["footstep name"]
-        self.footstep_sound = load_sound(self.footstep_name)
-        self.sound_update_timer = 0
-        self.sound_update_time = self.footstep_sound.get_length()
+        self.footstep_sound = load_sound(self.footstep_name, source="hku")
+        self.footstep_handler = FootstepSoundHandler(self.footstep_sound, self)
 
         self.treat_amount = 0
         self.treat_sprite_list = None
@@ -91,6 +90,7 @@ class Player(LivingSprite):
         self.equip_move("quick attack", basic_attack)
         self.equip_move("special", ranged)
         self.equip_move("scare", scare)
+        self.equip_move("heal", basic_heal)
 
     def update(self):
         super().update()
@@ -207,14 +207,7 @@ class Player(LivingSprite):
         self.update_walking_sound()
 
     def update_walking_sound(self):
-        if self.stationary:
-            self.sound_update_timer = 0
-        else:
-            self.sound_update_timer += DELTA_TIME
-
-        if self.sound_update_timer >= self.sound_update_time:
-            play_sound(self.footstep_sound, volume=SOUND_EFFECT_VOL)
-            self.sound_update_timer = 0
+        self.footstep_handler.update_sound()
 
     def give_xp(self, amount: int):
         self.xp += amount

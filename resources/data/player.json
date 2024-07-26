@@ -36,7 +36,7 @@
         "speed": 10,
         "sprint multiplier": 1.5,
         "fade color": "purple",
-        "footstep name": "jump1",
+        "footstep name": "hihat1",
         "spritesheet": {
             "path": "resources/spritesheets/lyra.png",
             "columns": 4,

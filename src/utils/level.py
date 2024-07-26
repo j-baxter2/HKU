@@ -49,7 +49,7 @@ class Level:
     def give_player_treats(self):
         self.player.treat_amount = 0
         for kitty in self.scene.get_sprite_list("Kitty"):
-            self.player.treat_amount += kitty.hunger*5
+            self.player.treat_amount += kitty.hunger
 
     def get_level_list(self):
         return self.level_list

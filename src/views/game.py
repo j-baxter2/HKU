@@ -74,18 +74,18 @@ class GameSection(arcade.Section):
         elif key == controls.ATTACK:
             if self.player.choosing_target:
                 self.player.change_target("any")
-            elif modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["quick attack 2"]:
-                self.player.do_move(self.player.equipped_moves["quick attack 2"])
+            elif modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt quick attack"]:
+                self.player.do_move(self.player.equipped_moves["alt quick attack"])
             elif self.player.equipped_moves["quick attack"]:
                 self.player.do_move(self.player.equipped_moves["quick attack"])
         elif key == controls.HEAL:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["heal 2"]:
-                self.player.do_move(self.player.equipped_moves["heal 2"])
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt heal"]:
+                self.player.do_move(self.player.equipped_moves["alt heal"])
             elif self.player.equipped_moves["heal"]:
                 self.player.do_move(self.player.equipped_moves["heal"])
         elif key == controls.SPECIAL:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["special 2"]:
-                self.player.do_move(self.player.equipped_moves["special 2"])
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt special"]:
+                self.player.do_move(self.player.equipped_moves["alt special"])
             elif self.player.equipped_moves["special"]:
                 self.player.do_move(self.player.equipped_moves["special"])
         elif key == controls.DROP_TREAT:
@@ -96,8 +96,8 @@ class GameSection(arcade.Section):
         elif key == controls.PICKUP_TREAT:
             self.player.picking_up_treat = True
         elif key == controls.SCARE:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["scare 2"]:
-                self.player.do_move(self.player.equipped_moves["scare 2"])
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt scare"]:
+                self.player.do_move(self.player.equipped_moves["alt scare"])
             elif self.player.equipped_moves["scare"]:
                 self.player.do_move(self.player.equipped_moves["scare"])
         elif key == controls.TARGET_UP:
@@ -124,25 +124,25 @@ class GameSection(arcade.Section):
         elif key == controls.SPRINT:
             self.player.sprint_pressed = False
         elif key == controls.ATTACK:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["quick attack 2"]:
-                self.player.stop_move(self.player.equipped_moves["quick attack 2"])
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt quick attack"]:
+                self.player.stop_move(self.player.equipped_moves["alt quick attack"])
             elif self.player.equipped_moves["quick attack"]:
                 self.player.stop_move(self.player.equipped_moves["quick attack"])
         elif key == controls.HEAL:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["heal 2"]:
-                self.player.stop_move(self.player.equipped_moves["heal 2"])
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt heal"]:
+                self.player.stop_move(self.player.equipped_moves["alt heal"])
             elif self.player.equipped_moves["heal"]:
                 self.player.stop_move(self.player.equipped_moves["heal"])
         elif key == controls.SPECIAL:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["special 2"]:
-                self.player.stop_move(self.player.equipped_moves["special 2"])
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt special"]:
+                self.player.stop_move(self.player.equipped_moves["alt special"])
             elif self.player.equipped_moves["special"]:
                 self.player.stop_move(self.player.equipped_moves["special"])
         elif key == controls.PICKUP_TREAT:
             self.player.picking_up_treat = False
         elif key == controls.SCARE:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["scare 2"]:
-                self.player.stop_move(self.player.equipped_moves["scare 2"])
+            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt scare"]:
+                self.player.stop_move(self.player.equipped_moves["alt scare"])
             elif self.player.equipped_moves["scare"]:
                 self.player.stop_move(self.player.equipped_moves["scare"])
 

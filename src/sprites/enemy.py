@@ -59,6 +59,9 @@ class FollowingEnemy(FollowingSprite):
     def face_kitty(self):
         self.velocity = Vec2(self.target_kitty.center_x - self.center_x, self.target_kitty.center_y - self.center_y)
 
+    def face_player(self):
+        self.velocity = Vec2(self.apparent_player_position[0] - self.center_x, self.apparent_player_position[1] - self.center_y)
+
     def look_for_eating_kitty(self):
         for kitty in self.kitties:
             if arcade.get_distance_between_sprites(self, kitty) < self.follow_distance*3 and kitty.eating:
@@ -76,6 +79,13 @@ class FollowingEnemy(FollowingSprite):
                 #play roar
                 self.just_attacked = True
                 self.target_kitty.just_been_hit = True
+
+    @property
+    def apparent_player_position(self):
+        true_player_position = self.player.position
+        distance = arcade.get_distance_between_sprites(self, self.player)
+        apparent_player_position = (true_player_position[0] + random.uniform(-distance, distance), true_player_position[1] + random.uniform(-distance, distance))
+        return apparent_player_position
 
     @property
     def in_range(self):

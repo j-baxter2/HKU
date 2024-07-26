@@ -97,7 +97,7 @@
         "origin mobile while active": true,
         "affectees mobile while active": true,
         "affects": "Enemy",
-        "charge time": 3,
+        "charge time": 1,
         "color": "PURPLE",
         "draw lines": false,
         "draw circle": false,
