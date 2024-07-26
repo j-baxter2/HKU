@@ -18,6 +18,7 @@ class MenuView(arcade.View):
 
         new_game_button = arcade.gui.UIFlatButton(text="play game", style=style, width=200)
         self.v_box.add(new_game_button.with_space_around(bottom=20))
+        #efer
 
         settings_button = arcade.gui.UIFlatButton(text="settings", style=style, width=200)
         self.v_box.add(settings_button.with_space_around(bottom=20))
