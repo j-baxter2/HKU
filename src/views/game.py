@@ -5,9 +5,9 @@ from src.sprites.player import Player
 from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
-from src.utils.move import Move
-from src.utils.move_affect_all_in_range import AffectAllMove
-from src.utils.move_target_arrowkey import TargetArrowKey
+from src.moves.move import Move
+from src.moves.move_affect_all_in_range import AffectAllMove
+from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import play_sound
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE

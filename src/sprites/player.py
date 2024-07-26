@@ -3,9 +3,9 @@ from src.sprites.living_sprite import LivingSprite
 from src.sprites.treat import Treat
 import json
 from pyglet.math import Vec2
-from src.utils.move import Move
-from src.utils.move_affect_all_in_range import AffectAllMove
-from src.utils.move_target_arrowkey import TargetArrowKey
+from src.moves.move import Move
+from src.moves.move_affect_all_in_range import AffectAllMove
+from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 

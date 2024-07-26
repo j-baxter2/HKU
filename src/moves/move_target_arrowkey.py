@@ -1,6 +1,6 @@
 import arcade
 import math
-from src.utils.move import Move
+from src.moves.move import Move
 from src.sprites.living_sprite import LivingSprite
 from src.utils.sound import play_sound
 from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT

@@ -1,6 +1,6 @@
 import arcade
 from src.sprites.living_sprite import LivingSprite
-from src.utils.move import Move
+from src.moves.move import Move
 import json
 from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
 from src.utils.sound import load_sound, play_sound
