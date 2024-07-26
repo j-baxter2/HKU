@@ -13,6 +13,9 @@ class MenuView(arcade.View):
 
         style = {"font_name": UI_FONT, "font_size": 20}
 
+        title = arcade.gui.UILabel(text="Hungry Kitty Uprising", font_name=UI_FONT, font_size= 48)
+        self.v_box.add(title.with_space_around(bottom=40))
+
         new_game_button = arcade.gui.UIFlatButton(text="play game", style=style, width=200)
         self.v_box.add(new_game_button.with_space_around(bottom=20))
 
