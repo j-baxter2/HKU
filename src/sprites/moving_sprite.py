@@ -45,7 +45,6 @@ class MovingSprite(arcade.Sprite):
 
         self.able_to_move = True
         self.base_speed = data["speed"]
-        self.sprint_multiplier = data["sprint multiplier"]
         self.speed = 0
 
         self.fading = False
@@ -116,18 +115,15 @@ class MovingSprite(arcade.Sprite):
             self.randomize_velocity()
 
     def update_movement_speed(self):
-        if self.should_sprint:
-            self.speed = self.sprint_multiplier * self.base_speed
-        else:
-            self.speed = self.base_speed
+        self.speed = self.base_speed
 
     def handle_out_of_bounds(self):
         if self.center_x < 0 or self.center_x > MAP_WIDTH:
             self.velocity = [self.velocity[0] * -1, self.velocity[1]]
         elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
             self.velocity = [self.velocity[0], self.velocity[1] * -1]
-        self.center_x = max(0, min(self.center_x, MAP_WIDTH))
-        self.center_y = max(0, min(self.center_y, MAP_HEIGHT))
+        self.center_x = max(1, min(self.center_x, MAP_WIDTH-1))
+        self.center_y = max(1, min(self.center_y, MAP_HEIGHT-1))
 
     @property
     def stationary(self):
@@ -160,15 +156,12 @@ class MovingSprite(arcade.Sprite):
         return False
 
     @property
-    def fps(self):
-        if self.should_sprint:
-            return self.base_fps * (1 + int(self.should_sprint))
-        else:
-            return self.base_fps
-
-    @property
     def frame_time(self):
         return 1 / self.fps
+
+    @property
+    def fps(self):
+        return self.base_fps
 
     def draw_debug(self):
         self.draw_hit_box()

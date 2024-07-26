@@ -1,0 +1,12 @@
+{
+    "0": {
+        "spritesheet": {
+            "path": "resources/spritesheets/gobu.png",
+            "columns": 6,
+            "count": 18,
+            "width": 32,
+            "height": 32,
+            "scale": 4
+        }
+    }
+}

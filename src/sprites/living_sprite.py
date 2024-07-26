@@ -11,6 +11,8 @@ class LivingSprite(MovingSprite):
         super().__init__(self.data)
         self.walk_cycle_frames = self.animation_data["walk"]
 
+        self.sprint_multiplier = data["sprint multiplier"]
+
         self.damage_resist = 0
 
         self.just_been_hit = False
@@ -22,6 +24,12 @@ class LivingSprite(MovingSprite):
         self.just_been_healed_time = 0.5
 
         self.hurt_sound = load_sound("hurt2")
+
+    def update_movement_speed(self):
+        if self.should_sprint:
+            self.speed = self.sprint_multiplier * self.base_speed
+        else:
+            self.speed = self.base_speed
 
     def start_walk_cycle(self, direction: str):
         if direction == "up":
@@ -81,3 +89,10 @@ class LivingSprite(MovingSprite):
     @property
     def should_sprint(self):
         return self.just_been_hit
+
+    @property
+    def fps(self):
+        if self.should_sprint:
+            return self.base_fps * (1 + int(self.should_sprint))
+        else:
+            return self.base_fps

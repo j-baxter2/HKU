@@ -13,6 +13,8 @@ class TargetArrowKey(Move):
         self.target = None
         self.potential_target = None
         self.origin_pos_when_fired = None
+        self.projectile = arcade.Sprite()
+        self.hit_sprites = None
 
     def on_update(self, delta_time: float):
         self.update_activity()
@@ -54,6 +56,10 @@ class TargetArrowKey(Move):
             self.active_timer += DELTA_TIME
             self.update_activity_mobility()
             self.origin_sprite.color = self.color
+            self.get_hit_sprites()
+            if self.hit_sprites is not None:
+                for sprite in self.hit_sprites:
+                    self.damage_sprite(sprite)
             if self.active_timer > self.active_time:
                 self.stop()
 
@@ -61,26 +67,33 @@ class TargetArrowKey(Move):
         self.active = False
         self.refreshing = True
         self.charged = False if self.charge_time else True
+        self.hit_sprites = None
         self.stop_damage_resist()
         self.stop_activity_mobility()
-        self.target.take_damage(self.damage)
-        if self.target.is_dead:
-            self.origin_sprite.give_xp(self.target.max_hp*self.target.attack)
         play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL)
         self.origin_sprite.color = arcade.color.WHITE
         self.active_timer = 0
+
+    def damage_sprite(self, sprite):
+        sprite.take_damage(self.damage)
+        if sprite.is_dead:
+            self.origin_sprite.give_xp(sprite.max_hp*sprite.attack)
 
     def fire(self):
         if self.target is not None and self.executable:
             self.start()
             self.stop_choose_target()
             self.set_origin_pos_when_fired()
+            self.set_target_pos_when_fired()
             self.charge_timer = 0
         else:
             self.stop_charge(success=False)
 
     def set_origin_pos_when_fired(self):
         self.origin_pos_when_fired = (self.origin_sprite.center_x, self.origin_sprite.center_y)
+
+    def set_target_pos_when_fired(self):
+        self.target_pos_when_fired = (self.target.center_x, self.target.center_y)
 
     def start_choose_target(self):
         self.choosing_target = True
@@ -124,16 +137,18 @@ class TargetArrowKey(Move):
             if self.target is not None:
                 arcade.draw_line(self.origin_sprite.center_x, self.origin_sprite.center_y, self.target.center_x, self.target.center_y, self.color[:3]+(max(0,min(128*math.sin(self.charge_fraction*self.choosing_target_timer*100)+128,255)),), 5)
         if self.active:
-            bullet_x = self.origin_pos_when_fired[0] + (self.target.center_x - self.origin_pos_when_fired[0]) * self.progress_fraction
-            bullet_y = self.origin_pos_when_fired[1] + (self.target.center_y - self.origin_pos_when_fired[1]) * self.progress_fraction
-            shard = arcade.Sprite("resources/textures/map_tiles/default_obsidian_shard.png")
-            shard.center_x = bullet_x
-            shard.center_y = bullet_y
-            shard.draw()
+            bullet_x = self.origin_pos_when_fired[0] + (self.target_pos_when_fired[0] - self.origin_pos_when_fired[0]) * self.progress_fraction
+            bullet_y = self.origin_pos_when_fired[1] + (self.target_pos_when_fired[1] - self.origin_pos_when_fired[1]) * self.progress_fraction
+            self.projectile = arcade.Sprite("resources/textures/map_tiles/default_obsidian_shard.png")
+            self.projectile.center_x = bullet_x
+            self.projectile.center_y = bullet_y
+            self.projectile.draw()
 
 
     def stop_choose_target(self):
         self.choosing_target = False
+        if self.target is not None:
+            self.target.color = arcade.color.WHITE
         self.choosing_target_timer = 0
 
     @property
@@ -147,6 +162,10 @@ class TargetArrowKey(Move):
     @property
     def potential_target_in_range(self):
         return self.potential_target is not None and arcade.get_distance_between_sprites(self.origin_sprite, self.potential_target) < self.range
+
+    def get_hit_sprites(self):
+        potential_hit_sprites = self.scene.get_sprite_list(self.affects)
+        self.hit_sprites = arcade.check_for_collision_with_list(self.projectile, potential_hit_sprites)
 
     def draw_debug(self, index: int):
         super().draw_debug(index)
