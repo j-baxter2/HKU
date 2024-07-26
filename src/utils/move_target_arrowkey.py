@@ -13,6 +13,7 @@ class TargetArrowKey(Move):
         self.target = None
         self.potential_target = None
         self.origin_pos_when_fired = None
+        self.target_pos_when_fired = None
         self.projectile = arcade.Sprite()
         self.hit_sprites = None
 
@@ -72,6 +73,7 @@ class TargetArrowKey(Move):
         self.stop_activity_mobility()
         play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL)
         self.origin_sprite.color = arcade.color.WHITE
+        self.target = None
         self.active_timer = 0
 
     def damage_sprite(self, sprite):
@@ -99,7 +101,7 @@ class TargetArrowKey(Move):
         self.choosing_target = True
         potential_targets = self.scene.get_sprite_list(self.affects)
         for potential_target in potential_targets:
-            if arcade.get_distance_between_sprites(self.origin_sprite, potential_target) < self.range and (not potential_target.fading or potential_target.faded):
+            if arcade.get_distance_between_sprites(self.origin_sprite, potential_target) < self.range and not (potential_target.fading or potential_target.faded):
                 self.target = potential_target
                 break
 
@@ -132,6 +134,12 @@ class TargetArrowKey(Move):
             if self.target is not None:
                 self.target.color = self.color
 
+    def stop_choose_target(self):
+        self.choosing_target = False
+        if self.target is not None:
+            self.target.color = arcade.color.WHITE
+        self.choosing_target_timer = 0
+
     def draw(self):
         if self.choosing_target:
             if self.target is not None:
@@ -143,13 +151,6 @@ class TargetArrowKey(Move):
             self.projectile.center_x = bullet_x
             self.projectile.center_y = bullet_y
             self.projectile.draw()
-
-
-    def stop_choose_target(self):
-        self.choosing_target = False
-        if self.target is not None:
-            self.target.color = arcade.color.WHITE
-        self.choosing_target_timer = 0
 
     @property
     def executable(self):
