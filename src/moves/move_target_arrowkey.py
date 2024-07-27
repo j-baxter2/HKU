@@ -78,7 +78,9 @@ class TargetArrowKey(Move):
             self.stop_choose_target()
             self.set_origin_pos_when_fired()
             self.set_target_pos_when_fired()
-            self.projectile = Projectile(0, self.scene, self, start=self.origin_pos_when_fired, target= self.target_pos_when_fired)
+            angle = arcade.get_angle_degrees(*self.origin_pos_when_fired, *self.target_pos_when_fired)
+            # self.projectile = Projectile(0, self.scene, self, start=self.origin_pos_when_fired, target=self.target_pos_when_fired)
+            self.projectile = Projectile(0, self.scene, self, start=self.origin_pos_when_fired, angle=angle, targetting_method="angle")
             self.scene.add_sprite("Projectile", self.projectile)
             self.projectile.start()
             self.charge_timer = 0

@@ -1,12 +1,13 @@
 import arcade
 import json
+import math
 from src.sprites.moving_sprite import MovingSprite
 from src.moves.move import Move
 from src.data.constants import DELTA_TIME
 from pyglet.math import Vec2
 
 class Projectile(MovingSprite):
-    def __init__(self, id: int, scene: arcade.Scene, origin_move: Move, start: tuple, target: tuple):
+    def __init__(self, id: int, scene: arcade.Scene, origin_move: Move, start: tuple, target: tuple = (0,0), angle: float = 0, targetting_method: str = "tuple"):
         with open("resources/data/projectile.json", "r") as file:
             projectile_dict = json.load(file)
         self.projectile_data = projectile_dict[str(id)]
@@ -20,8 +21,13 @@ class Projectile(MovingSprite):
         self.hit_sprites = None
         self.start_x = start[0]
         self.start_y = start[1]
-        self.target_x = target[0]
-        self.target_y = target[1]
+        if targetting_method == "tuple":
+            self.target_x = target[0]
+            self.target_y = target[1]
+        elif targetting_method == "angle":
+            self.target_x = start[0] + math.sin(math.radians(angle))
+            self.target_y = start[1] + math.cos(math.radians(angle))
+
 
     def update(self):
         self.update_movement()
