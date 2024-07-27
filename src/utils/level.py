@@ -1,5 +1,6 @@
 import json
 import arcade
+import random
 from src.sprites.enemy import FollowingEnemy
 from src.sprites.player import Player
 from src.sprites.kitty import Kitty
@@ -31,7 +32,12 @@ class Level:
         for enemy_id, ratio in enemy_ratio.items():
             for _ in range(int(ratio * enemy_amount)):
                 enemy = FollowingEnemy(id=int(enemy_id), scene=self.scene)
-                enemy.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
+                while True:
+                    x = random.uniform(0, map_bounds[0])
+                    y = random.uniform(0, map_bounds[1])
+                    if not (0 <= x <= 1024 and 0 <= y <= 1024):
+                        break
+                enemy.position = (x,y)
                 self.scene.add_sprite("Enemy", enemy)
 
     def load_kitties(self):
@@ -40,7 +46,12 @@ class Level:
         for kitty_id, ratio in self.kitty_ratio.items():
             for _ in range(int(ratio * self.kitty_amount)):
                 kitty = Kitty(id=int(kitty_id), scene=self.scene)
-                kitty.position = arcade.rand_in_rect([0,0], map_bounds[0], map_bounds[1])
+                while True:
+                    x = random.uniform(0, map_bounds[0])
+                    y = random.uniform(0, map_bounds[1])
+                    if not (0 <= x <= 1024 and 0 <= y <= 1024):
+                        break
+                kitty.position = (x,y)
                 self.scene.add_sprite("Kitty", kitty)
 
     def spawn_player(self):
