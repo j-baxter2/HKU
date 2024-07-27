@@ -9,7 +9,7 @@ from src.moves.move import Move
 from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
-from src.utils.sound import play_sound
+from src.utils.sound import load_sound, play_sound
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
 
 class GameSection(arcade.Section):
@@ -32,7 +32,6 @@ class GameSection(arcade.Section):
         self.scene.add_sprite_list(name = "Kitty")
         self.scene.add_sprite_list(name = "Enemy")
         self.scene.add_sprite_list(name="Treat")
-
         self.current_level_id = 0
         self.load_level()
         self.level_list = self.current_level.get_level_list()
@@ -188,10 +187,10 @@ class GameSection(arcade.Section):
     def draw_debug(self):
         self.camera.use()
         self.player.draw_debug()
-        for enemy in self.scene.get_sprite_list("Enemy"):
-            arcade.draw_line(self.player.center_x, self.player.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
-        for kitty in self.scene.get_sprite_list("Kitty"):
-            arcade.draw_line(self.player.center_x, self.player.center_y, kitty.center_x, kitty.center_y, arcade.color.ORANGE, 5)
+        # for enemy in self.scene.get_sprite_list("Enemy"):
+        #     arcade.draw_line(self.player.center_x, self.player.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
+        # for kitty in self.scene.get_sprite_list("Kitty"):
+        #     arcade.draw_line(self.player.center_x, self.player.center_y, kitty.center_x, kitty.center_y, arcade.color.ORANGE, 5)
         for treat in self.scene.get_sprite_list("Treat"):
             treat.draw_debug()
 
@@ -370,16 +369,18 @@ class GameView(arcade.View):
         self.between_levels_time = 1
 
         self.debug = False
+        self.loaded_sound = load_sound("upgrade1")
 
     def setup(self):
         self.game_section.setup()
         self.ui_section.setup()
 
     def on_show_view(self):
+        play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
         arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
 
     def on_draw(self):
-        arcade.start_render()
+        self.clear()
 
         self.game_section.on_draw()
         self.ui_section.on_draw()

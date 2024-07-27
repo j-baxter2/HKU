@@ -1,0 +1,71 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "resources/maps/map.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "resources/maps/map.tmx": {
+            "scale": 0.3925,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 785.9872611464968,
+                "y": 619.1082802547769
+            }
+        },
+        "resources/maps/map.tmx#HKU_Tileset": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 0.0866
+        },
+        "resources/maps/terrain spritesheet.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "resources/maps/terrain2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "resources/maps/terrain3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "resources/maps/terrain4.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "resources/maps/terrain5.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "/Users/jamiebaxter/Documents/Coding/HKU/resources/spritesheets",
+    "map.height": 32,
+    "map.tileHeight": 48,
+    "map.tileWidth": 48,
+    "map.width": 48,
+    "openFiles": [
+        "resources/maps/map.tmx",
+        "resources/maps/terrain5.tsx"
+    ],
+    "project": "",
+    "recentFiles": [
+        "resources/maps/terrain5.tsx",
+        "resources/maps/map.tmx",
+        "resources/maps/terrain4.tsx",
+        "resources/maps/terrain3.tsx",
+        "resources/maps/terrain spritesheet.tsx",
+        "resources/maps/terrain2.tsx",
+        "tileset.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 48,
+        "width": 48
+    }
+}
