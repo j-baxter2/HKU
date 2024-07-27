@@ -2,6 +2,7 @@ import arcade
 from src.sprites.living_sprite import LivingSprite
 from src.sprites.treat import Treat
 import json
+import math
 from pyglet.math import Vec2
 from src.utils.move import Move
 from src.utils.move_affect_all_in_range import AffectAllMove
@@ -74,6 +75,12 @@ class Player(LivingSprite):
         self.right_pressed = False
         self.sprint_pressed = False
 
+        self.able_to_move = False
+
+        self.fading_in = True
+        self.fade_in_timer = 0
+        self.fade_in_time = 2
+
     def setup(self):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
         self.load_ranking_data()
@@ -100,6 +107,8 @@ class Player(LivingSprite):
             self.update_movement()
         if not self.at_max_rank:
             self.update_level_up()
+        if self.fading_in:
+            self.update_fade_in()
         self.update_animation()
         self.update_sound()
         self.update_sprinting_flag()
@@ -110,6 +119,15 @@ class Player(LivingSprite):
 
     def draw(self):
         super().draw()
+
+    def update_fade_in(self):
+        if self.fading_in:
+            self.fade_in_timer+=DELTA_TIME
+            self.alpha = min(self.fade_in_fraction * 255, 255)
+            if self.fade_in_timer >= self.fade_in_time:
+                self.fading_in = False
+                self.able_to_move = True
+                self.fade_in_timer = 0
 
     def load_ranking_data(self):
         with open("resources/data/player_levelling.json", "r") as file:
@@ -312,6 +330,10 @@ class Player(LivingSprite):
     @property
     def at_max_rank(self):
         return self.current_rank >= len(self.ranking_data) - 1
+
+    @property
+    def fade_in_fraction(self):
+        return self.fade_in_timer/self.fade_in_time
 
     def draw_debug(self):
         index = 0
