@@ -1,6 +1,7 @@
 import arcade
 import arcade.gui
 from src.data import controls
+from src.data import color
 
 class PauseView(arcade.View):
     def __init__(self, game_view):
@@ -43,7 +44,7 @@ class PauseView(arcade.View):
         self.game_view.player.equip_move(slot, move)
 
     def on_show_view(self):
-        arcade.set_background_color(arcade.color.BLACK[:3]+(128,))
+        arcade.set_background_color(color.LIGHT_BLUE)
         self.manager.enable()
 
     def on_hide_view(self):
