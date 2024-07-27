@@ -100,8 +100,8 @@ class Player(LivingSprite):
             self.update_movement()
         if not self.at_max_rank:
             self.update_level_up()
-        self.update_sound()
         self.update_animation()
+        self.update_sound()
         self.update_sprinting_flag()
         self.update_stamina(DELTA_TIME)
         self.update_moves()

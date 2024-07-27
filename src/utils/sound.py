@@ -26,10 +26,9 @@ class FootstepSoundHandler:
         self.footstep_sound = sound
         self.origin_sprite = origin_sprite
 
-        self.sound_update_timer = 0# Base time for sound updates
+        self.sound_update_timer = 0
         self.swung_8th_notes_multipliers = [4/7, 3/7]
-        self.current_multiplier_index = 0  # Index to track which multiplier to use
-        self.stationary = False
+        self.current_multiplier_index = 0
 
     def update_sound(self):
         self.update_walking_sound()
@@ -43,7 +42,6 @@ class FootstepSoundHandler:
         if self.sound_update_timer >= self.sound_update_time * self.swung_8th_notes_multipliers[self.current_multiplier_index]:
             play_sound(self.footstep_sound, volume=SOUND_EFFECT_VOL)
             self.sound_update_timer = 0
-            # Switch to the next multiplier for the swung rhythm
             self.current_multiplier_index = (self.current_multiplier_index + 1) % len(self.swung_8th_notes_multipliers)
 
     @property
