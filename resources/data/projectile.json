@@ -1,12 +1,18 @@
 {
     "0": {
         "spritesheet": {
-            "path": "resources/spritesheets/gobu.png",
-            "columns": 6,
-            "count": 18,
+            "path": "resources/spritesheets/fireball.png",
+            "columns": 2,
+            "count": 2,
             "width": 32,
             "height": 32,
-            "scale": 4
-        }
+            "scale": 2
+        },
+        "animation": {
+            "fps": 10
+        },
+        "fade color": "orange",
+        "speed": 40,
+        "being time": 5
     }
 }

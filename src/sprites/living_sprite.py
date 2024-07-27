@@ -25,6 +25,11 @@ class LivingSprite(MovingSprite):
 
         self.hurt_sound = load_sound("hurt1")
 
+    def update(self):
+        self.update_just_been_hit()
+        self.update_just_been_healed()
+        super().update()
+
     def update_movement_speed(self):
         if self.should_sprint:
             self.speed = self.sprint_multiplier * self.base_speed

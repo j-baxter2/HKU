@@ -32,6 +32,7 @@ class GameSection(arcade.Section):
         self.scene.add_sprite_list(name = "Kitty")
         self.scene.add_sprite_list(name = "Enemy")
         self.scene.add_sprite_list(name="Treat")
+        self.scene.add_sprite_list(name="Projectile")
         self.current_level_id = 0
         self.load_level()
         self.level_list = self.current_level.get_level_list()
@@ -193,6 +194,8 @@ class GameSection(arcade.Section):
         #     arcade.draw_line(self.player.center_x, self.player.center_y, kitty.center_x, kitty.center_y, arcade.color.ORANGE, 5)
         for treat in self.scene.get_sprite_list("Treat"):
             treat.draw_debug()
+        for projectile in self.scene.get_sprite_list("Projectile"):
+            projectile.draw_debug()
 
 
 class UISection(arcade.Section):

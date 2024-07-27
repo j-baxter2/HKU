@@ -82,8 +82,6 @@ class MovingSprite(arcade.Sprite):
         self.current_animation = None
 
     def update(self):
-        self.update_just_been_hit()
-        self.update_just_been_healed()
         super().update()
 
     def start_fade(self):
