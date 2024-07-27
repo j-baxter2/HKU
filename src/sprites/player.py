@@ -7,6 +7,7 @@ from pyglet.math import Vec2
 from src.moves.move import Move
 from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
+from src.moves.move_radial_fireball import RadialProjectile
 from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
@@ -94,8 +95,10 @@ class Player(LivingSprite):
         self.unlock_moves(scare)
         ranged = TargetArrowKey(4, self.scene, self)
         self.unlock_moves(ranged)
+        radial = RadialProjectile(5, self.scene, self)
+        self.unlock_moves(radial)
         self.equip_move("quick attack", basic_attack)
-        self.equip_move("special", ranged)
+        self.equip_move("special", radial)
         self.equip_move("scare", scare)
         self.equip_move("heal", basic_heal)
 

@@ -3,7 +3,7 @@ import json
 import math
 from src.sprites.moving_sprite import MovingSprite
 from src.moves.move import Move
-from src.data.constants import DELTA_TIME
+from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
 from pyglet.math import Vec2
 
 class Projectile(MovingSprite):
@@ -16,7 +16,7 @@ class Projectile(MovingSprite):
         self.scene = scene
         self.origin_move = origin_move
         self.being = False
-        self.being_time = self.projectile_data["being time"]
+        self.being_time = (self.origin_move.range / self.base_speed) * DELTA_TIME
         self.being_timer = 0
         self.hit_sprites = None
         self.start_x = start[0]
@@ -53,7 +53,7 @@ class Projectile(MovingSprite):
                     self.damage_sprite(sprite)
             if self.being_timer >= self.being_time:
                 self.being = False
-                self.start_fade()
+                self.kill()
 
     def get_hit_sprites(self):
         potential_hit_sprites = self.scene.get_sprite_list(self.origin_move.affects)
@@ -80,6 +80,12 @@ class Projectile(MovingSprite):
 
     def update_movement(self):
         super().update_movement()
+
+    def handle_out_of_bounds(self):
+        if self.center_x < 0 or self.center_x > MAP_WIDTH:
+            self.kill()
+        elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
+            self.kill()
 
     def draw_debug(self):
         super().draw_debug()

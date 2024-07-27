@@ -103,5 +103,26 @@
         "draw circle": false,
         "start sound": "laser1",
         "stop sound": null
+    },
+    "5": {
+        "name": "radial",
+        "type": "charge",
+        "slot": "special",
+        "damage": 5,
+        "damage resist": null,
+        "cost": 10,
+        "active time": 0.1,
+        "refresh time": 0.25,
+        "range": 256,
+        "origin mobile while charging": true,
+        "origin mobile while active": true,
+        "affectees mobile while active": true,
+        "affects": "Enemy",
+        "charge time": 1,
+        "color": "RED",
+        "draw lines": false,
+        "draw circle": false,
+        "start sound": "explosion2",
+        "stop sound": null
     }
 }
