@@ -23,7 +23,7 @@ class LivingSprite(MovingSprite):
         self.just_been_healed_timer = 0
         self.just_been_healed_time = 0.5
 
-        self.hurt_sound = load_sound("hurt2")
+        self.hurt_sound = load_sound("fall1")
 
     def update_movement_speed(self):
         if self.should_sprint:
