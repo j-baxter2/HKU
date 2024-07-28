@@ -76,6 +76,7 @@ class FollowingSprite(LivingSprite):
        if self.can_attack and arcade.check_for_collision(self, self.player):
            self.player.take_damage(self.attack)
            self.just_attacked = True
+           self.paralyze()
            self.player.just_been_hit = True
 
     def face_player(self):
