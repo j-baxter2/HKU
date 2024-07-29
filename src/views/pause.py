@@ -100,6 +100,8 @@ class MoveView(arcade.View):
 
         for move in self.unlocked_slot_moves:
             move_button = arcade.gui.UIFlatButton(text=f"{move.name}", width=200, style=style)
+            if move == self.player.equipped_moves[self.slot]:
+                pass
             vbox.add(move_button.with_space_around(bottom=20))
 
             move_button.on_click = lambda event, move=move: self.on_click_move(event, move)
