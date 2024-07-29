@@ -96,7 +96,6 @@ class Player(LivingSprite):
         radial = RadialProjectile(5, self.scene, self)
         self.unlock_moves(basic_attack)
         self.unlock_moves(basic_heal)
-        self.unlock_moves(shock)
         self.unlock_moves(scare)
         self.unlock_moves(radial)
         self.equip_move("quick attack", basic_attack)
@@ -148,7 +147,7 @@ class Player(LivingSprite):
             self.stamina = self.max_stamina
             if current_rank_data["unlock"] is not None:
                 for move in self.all_moves:
-                    if move.name == current_rank_data["unlock"]:
+                    if move.name in current_rank_data["unlock"]:
                         self.unlock_moves(move)
                         print(f"unlocked {move.name}")
 

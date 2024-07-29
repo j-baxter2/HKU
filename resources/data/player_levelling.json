@@ -13,7 +13,7 @@
         "strength": 1,
         "speed": 0.25,
         "stamina": 10,
-        "unlock": "ranged"
+        "unlock": ["ranged", "shock"]
     },
     "2": {
         "xp": 30,
