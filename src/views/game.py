@@ -233,7 +233,8 @@ class UISection(arcade.Section):
     def update_sprite_lists(self):
         self.scene = self.view.game_section.scene
         self.players = self.scene.get_sprite_list("Player")
-        self.player = self.players[0]
+        if len(self.players) > 0:
+            self.player = self.players[0]
         self.kitties = self.scene.get_sprite_list("Kitty")
         self.enemies = self.scene.get_sprite_list("Enemy")
         self.sprite_lists = [self.players, self.kitties, self.enemies]

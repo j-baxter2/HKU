@@ -40,7 +40,10 @@ class FollowingEnemy(FollowingSprite):
     def update_attack_refresh(self):
         if self.just_attacked:
             self.attack_refresh_time += DELTA_TIME
-            if self.attack_refresh_time >= 1:
+            if self.attack_refresh_time >= 0.7 and not self.able_to_move:
+                self.start_moving()
+                self.randomize_velocity()
+            elif self.attack_refresh_time >= 1:
                 self.reset_attack_timer()
 
     def reset_attack_timer(self):
@@ -78,6 +81,7 @@ class FollowingEnemy(FollowingSprite):
                 self.target_kitty.start_fleeing()
                 #play roar
                 self.just_attacked = True
+                self.paralyze()
                 self.target_kitty.just_been_hit = True
 
     @property
