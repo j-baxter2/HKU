@@ -33,6 +33,8 @@ class Player(LivingSprite):
         self.stamina = self.max_stamina
         self.sprinting = False
 
+        self.all_moves = []
+
         self.unlocked_moves = []
 
         self.equipped_moves = {
@@ -87,21 +89,17 @@ class Player(LivingSprite):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
         self.load_ranking_data()
         basic_attack = AffectAllMove(0, self.scene, self)
-        self.unlock_moves(basic_attack)
         basic_heal = AffectAllMove(1, self.scene, self)
-        self.unlock_moves(basic_heal)
         shock = AffectAllMove(2, self.scene, self)
-        #self.unlock_moves(shock)
         scare = AffectAllMove(3, self.scene, self)
-        self.unlock_moves(scare)
         ranged = TargetArrowKey(4, self.scene, self)
-        self.unlock_moves(ranged)
         radial = RadialProjectile(5, self.scene, self)
+        self.unlock_moves(basic_attack)
+        self.unlock_moves(basic_heal)
+        self.unlock_moves(shock)
+        self.unlock_moves(scare)
         self.unlock_moves(radial)
         self.equip_move("quick attack", basic_attack)
-        self.equip_move("special", radial)
-        self.equip_move("scare", scare)
-        self.equip_move("heal", basic_heal)
 
     def update(self):
         super().update()
@@ -139,13 +137,21 @@ class Player(LivingSprite):
         self.ranking_data = ranking_data
 
     def update_level_up(self):
-        if self.xp > self.ranking_data[str(self.current_rank+1)]["xp"]:
+        next_rank_data = self.ranking_data[str(self.current_rank+1)]
+        if self.xp > next_rank_data["xp"]:
             self.current_rank += 1
-            self.max_hp += self.ranking_data[str(self.current_rank)]["hp"]
+            current_rank_data = next_rank_data
+            self.max_hp += current_rank_data["hp"]
             self.hp = self.max_hp
-            self.strength += self.ranking_data[str(self.current_rank)]["strength"]
-            self.max_stamina += self.ranking_data[str(self.current_rank)]["stamina"]
+            self.strength += current_rank_data["strength"]
+            self.max_stamina += current_rank_data["stamina"]
             self.stamina = self.max_stamina
+            if current_rank_data["unlock"] is not None:
+                for move in self.all_moves:
+                    if move.name == current_rank_data["unlock"]:
+                        self.unlock_moves(move)
+                        print(f"unlocked {move.name}")
+
 
     def get_xp_to_next_level(self):
         return self.ranking_data[str(self.current_rank+1)]["xp"] - self.xp

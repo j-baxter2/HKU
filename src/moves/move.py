@@ -50,6 +50,7 @@ class Move:
         self.start_sound = load_sound(self.start_sound_name)
 
         self.stop_sound = load_sound(self.stop_sound_name)
+        self.origin_sprite.all_moves.append(self)
 
     def on_update(self, delta_time: float):
         self.update_affectees()
