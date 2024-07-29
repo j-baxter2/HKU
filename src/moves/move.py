@@ -15,6 +15,7 @@ class Move:
 
         self.name = self.move_data["name"]
         self.type = self.move_data["type"]
+        self.slot = self.move_data["slot"]
         self.damage = self.move_data["damage"]
         self.damage_resist = self.move_data["damage resist"]
         self.cost = self.move_data["cost"]
