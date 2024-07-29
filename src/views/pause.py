@@ -90,6 +90,8 @@ class MoveView(arcade.View):
     def setup_ui(self):
         self.manager.enable()
 
+        super_vbox = arcade.gui.UIBoxLayout(vertical=True, align="center")
+
         hbox = arcade.gui.UIBoxLayout(vertical=False, space_between=20)
 
         primary_vbox = arcade.gui.UIBoxLayout(vertical=True, align="center")
@@ -126,11 +128,19 @@ class MoveView(arcade.View):
             alt_vbox.add(alt_button.with_space_around(bottom=20))
             alt_button.on_click = lambda event, move=move: self.on_click_move(event, move, self.alt_slot)
 
+        back_button = arcade.gui.UIFlatButton(text="Back", width=200, style=style)
+
         hbox.add(primary_vbox)
         hbox.add(alt_vbox)
 
-        self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=hbox))
+        super_vbox.add(hbox)
+        super_vbox.add(back_button)
 
+        self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=super_vbox))
+
+        @back_button.event("on_click")
+        def on_click_back(event):
+            self.window.show_view(self.pause_view)
 
     def on_click_move(self, event, move, slot):
         self.player.equip_move(slot=slot, move=move)
