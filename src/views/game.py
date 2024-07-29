@@ -74,19 +74,19 @@ class GameSection(arcade.Section):
         elif key == controls.ATTACK:
             if self.player.choosing_target:
                 self.player.change_target("any")
-            elif modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt quick attack"]:
+            elif self.player.alt_pressed and self.player.equipped_moves.get("alt quick attack"):
                 self.player.do_move(self.player.equipped_moves["alt quick attack"])
-            elif self.player.equipped_moves["quick attack"]:
+            elif not self.player.alt_pressed and self.player.equipped_moves.get("quick attack"):
                 self.player.do_move(self.player.equipped_moves["quick attack"])
         elif key == controls.HEAL:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt heal"]:
+            if self.player.alt_pressed and self.player.equipped_moves.get("alt heal"):
                 self.player.do_move(self.player.equipped_moves["alt heal"])
-            elif self.player.equipped_moves["heal"]:
+            elif not self.player.alt_pressed and self.player.equipped_moves.get("heal"):
                 self.player.do_move(self.player.equipped_moves["heal"])
         elif key == controls.SPECIAL:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt special"]:
+            if self.player.alt_pressed and self.player.equipped_moves.get("alt special"):
                 self.player.do_move(self.player.equipped_moves["alt special"])
-            elif self.player.equipped_moves["special"]:
+            elif not self.player.alt_pressed and self.player.equipped_moves.get("special"):
                 self.player.do_move(self.player.equipped_moves["special"])
         elif key == controls.DROP_TREAT:
             if self.player.has_treats:
@@ -96,10 +96,12 @@ class GameSection(arcade.Section):
         elif key == controls.PICKUP_TREAT:
             self.player.picking_up_treat = True
         elif key == controls.SCARE:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt scare"]:
+            if self.player.alt_pressed and self.player.equipped_moves.get("alt scare"):
                 self.player.do_move(self.player.equipped_moves["alt scare"])
-            elif self.player.equipped_moves["scare"]:
+            elif not self.player.alt_pressed and self.player.equipped_moves.get("scare"):
                 self.player.do_move(self.player.equipped_moves["scare"])
+        elif key == controls.ALT_MODIFIER:
+            self.player.alt_pressed = True
         elif key == controls.TARGET_UP:
             self.player.change_target("up")
         elif key == controls.TARGET_DOWN:
@@ -124,27 +126,30 @@ class GameSection(arcade.Section):
         elif key == controls.SPRINT:
             self.player.sprint_pressed = False
         elif key == controls.ATTACK:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt quick attack"]:
-                self.player.stop_move(self.player.equipped_moves["alt quick attack"])
-            elif self.player.equipped_moves["quick attack"]:
+            if self.player.equipped_moves.get("quick attack"):
                 self.player.stop_move(self.player.equipped_moves["quick attack"])
+            if self.player.equipped_moves.get("alt quick attack"):
+                self.player.stop_move(self.player.equipped_moves["alt quick attack"])
         elif key == controls.HEAL:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt heal"]:
-                self.player.stop_move(self.player.equipped_moves["alt heal"])
-            elif self.player.equipped_moves["heal"]:
+            if self.player.equipped_moves.get("heal"):
                 self.player.stop_move(self.player.equipped_moves["heal"])
+            if self.player.equipped_moves.get("alt heal"):
+                self.player.stop_move(self.player.equipped_moves["alt heal"])
         elif key == controls.SPECIAL:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt special"]:
-                self.player.stop_move(self.player.equipped_moves["alt special"])
-            elif self.player.equipped_moves["special"]:
+            if self.player.equipped_moves.get("special"):
                 self.player.stop_move(self.player.equipped_moves["special"])
+            if self.player.equipped_moves.get("alt special"):
+                self.player.stop_move(self.player.equipped_moves["alt special"])
         elif key == controls.PICKUP_TREAT:
             self.player.picking_up_treat = False
         elif key == controls.SCARE:
-            if modifiers == controls.ALT_MODIFIER and self.player.equipped_moves["alt scare"]:
-                self.player.stop_move(self.player.equipped_moves["alt scare"])
-            elif self.player.equipped_moves["scare"]:
+            if self.player.equipped_moves.get("scare"):
                 self.player.stop_move(self.player.equipped_moves["scare"])
+            if self.player.equipped_moves.get("alt scare"):
+                self.player.stop_move(self.player.equipped_moves["alt scare"])
+        elif key == controls.ALT_MODIFIER:
+            self.player.alt_pressed = False
+
 
     def update_camera(self):
         if self.player.is_alive:

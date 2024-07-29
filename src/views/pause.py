@@ -81,6 +81,7 @@ class MoveView(arcade.View):
         self.game_view = game_view
         self.pause_view = pause_view
         self.slot = slot
+        self.alt_slot = f"alt {slot}"
         self.manager = arcade.gui.UIManager()
         self.player = self.game_view.game_section.player
         self.unlocked_slot_moves = []
@@ -88,28 +89,51 @@ class MoveView(arcade.View):
 
     def setup_ui(self):
         self.manager.enable()
-        vbox = arcade.gui.UIBoxLayout()
+
+        hbox = arcade.gui.UIBoxLayout(vertical=False, space_between=20)
+
+        primary_vbox = arcade.gui.UIBoxLayout(vertical=True, align="center")
+        alt_vbox = arcade.gui.UIBoxLayout(vertical=True, align="center")
 
         arcade.load_font(UI_FONT_PATH)
+
+        style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg": color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
+
+        primary_label = arcade.gui.UILabel(text="Primary", width=200, font_name=UI_FONT, font_size=20, text_color=arcade.color.BLACK)
+        primary_vbox.add(primary_label.with_space_around(bottom=20))
+
+        alt_label = arcade.gui.UILabel(text="ALT", width=200, font_name=UI_FONT, font_size=20, text_color=arcade.color.BLACK)
+        alt_vbox.add(alt_label.with_space_around(bottom=20))
 
         for move in self.player.unlocked_moves:
             if move.slot == self.slot:
                 self.unlocked_slot_moves.append(move)
 
-        style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg":color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
-
         for move in self.unlocked_slot_moves:
-            move_button = arcade.gui.UIFlatButton(text=f"{move.name}", width=200, style=style)
+            primary_button = arcade.gui.UIFlatButton(width=200, style=style)
             if move == self.player.equipped_moves[self.slot]:
-                pass
-            vbox.add(move_button.with_space_around(bottom=20))
+                primary_button.text = f"{move.name} (equipped)"
+            else:
+                primary_button.text = f"{move.name}"
+            primary_vbox.add(primary_button.with_space_around(bottom=20))
+            primary_button.on_click = lambda event, move=move: self.on_click_move(event, move, self.slot)
 
-            move_button.on_click = lambda event, move=move: self.on_click_move(event, move)
+            alt_button = arcade.gui.UIFlatButton(width=200, style=style)
+            if move == self.player.equipped_moves[self.alt_slot]:
+                alt_button.text = f"{move.name} (alt equipped)"
+            else:
+                alt_button.text = f"{move.name}"
+            alt_vbox.add(alt_button.with_space_around(bottom=20))
+            alt_button.on_click = lambda event, move=move: self.on_click_move(event, move, self.alt_slot)
 
-        self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=vbox))
+        hbox.add(primary_vbox)
+        hbox.add(alt_vbox)
 
-    def on_click_move(self, event, move):
-        self.player.equip_move(slot=self.slot, move=move)
+        self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=hbox))
+
+
+    def on_click_move(self, event, move, slot):
+        self.player.equip_move(slot=slot, move=move)
         self.window.show_view(self.pause_view)
 
     def on_key_press(self, key: int, modifiers: int):

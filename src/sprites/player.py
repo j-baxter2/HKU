@@ -75,6 +75,7 @@ class Player(LivingSprite):
         self.left_pressed = False
         self.right_pressed = False
         self.sprint_pressed = False
+        self.alt_pressed = False
 
         self.able_to_move = False
 
