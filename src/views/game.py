@@ -246,12 +246,12 @@ class UISection(arcade.Section):
         self.sprite_lists = [self.players, self.kitties, self.enemies]
 
     def draw_level_id(self):
-        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", x=self.right-10, y=self.top-100, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         level_text.draw()
 
     def draw_treat_count(self):
         treat_count = self.player.treat_amount
-        treat_count_text = arcade.Text(f"Treats: {treat_count}", start_x=self.right-10, start_y=self.top-140, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+        treat_count_text = arcade.Text(f"Treats: {treat_count}", x=self.right-10, y=self.top-140, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         treat_count_text.draw()
 
     def draw_bar(self, fraction, center_x, center_y, width, height, filled_color, empty_color=arcade.color.BLACK):
@@ -292,13 +292,13 @@ class UISection(arcade.Section):
 
     def draw_xp_bar(self):
         if self.player.at_max_rank:
-            max_rank_text = arcade.Text(f"MAX RANK", start_x=self.width // 2, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE*1.5, font_name=UI_FONT)
+            max_rank_text = arcade.Text(f"MAX RANK", x=self.width // 2, y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE*1.5, font_name=UI_FONT)
             max_rank_text.draw()
         else:
             self.draw_bar(self.player.get_xp_fraction(), self.width // 2, self.top - 70, 300, 20, arcade.color.YELLOW)
 
-            current_rank_text = arcade.Text(f"{self.player.current_rank}", start_x=self.width // 2 - 175, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
-            next_rank_text = arcade.Text(f"{self.player.current_rank+1}", start_x=self.width // 2 + 175, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+            current_rank_text = arcade.Text(f"{self.player.current_rank}", x=self.width // 2 - 175, y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+            next_rank_text = arcade.Text(f"{self.player.current_rank+1}", x=self.width // 2 + 175, y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
             current_rank_text.draw()
             next_rank_text.draw()
 
