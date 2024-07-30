@@ -1,5 +1,5 @@
 import arcade.gui
-from views.game import GameView
+from views.game import GameView  # Ensure this is correctly imported
 from src.data.constants import UI_FONT, UI_FONT_PATH
 from src.data import color
 
@@ -30,21 +30,25 @@ class MenuView(arcade.View):
             )
         )
 
-        @new_game_button.event("on_click")
-        def on_click_new_game(event):
-            game_view = GameView()
-            game_view.setup()
-            self.window.show_view(game_view)
+        # Assign event handlers
+        new_game_button.on_click = self.on_click_new_game
+        settings_button.on_click = self.on_click_settings
+        quit_button.on_click = self.on_click_quit
 
-        @settings_button.event("on_click")
-        def on_click_settings(self, event):
-            pass
+    def on_click_new_game(self, event):
+        print("New Game button clicked")  # Debug statement
+        game_view = GameView()
+        game_view.setup()
+        self.window.show_view(game_view)
 
-        @quit_button.event("on_click")
-        def on_click_quit(self, event):
-            arcade.close_window()
+    def on_click_settings(self, event):
+        print("Settings button clicked")
 
-    def on_update(self,delta_time):
+    def on_click_quit(self, event):
+        print("Quit button clicked")
+        arcade.close_window()
+
+    def on_update(self, delta_time):
         self.manager.on_update(delta_time)
 
     def on_show_view(self):
@@ -52,7 +56,6 @@ class MenuView(arcade.View):
         self.manager.enable()
 
     def on_hide_view(self):
-        self.clear()
         self.manager.disable()
 
     def on_draw(self):
