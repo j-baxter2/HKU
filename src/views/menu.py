@@ -12,24 +12,21 @@ class MenuView(arcade.View):
         self.manager = arcade.gui.UIManager()
         self.v_box = arcade.gui.UIBoxLayout()
 
-        style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg":color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
-
-        title = arcade.gui.UILabel(text="Hungry Kitty Uprising", font_name=UI_FONT, font_size= 48, text_color=color.ORANGE)
+        title = arcade.gui.UILabel(text="Hungry Kitty Uprising")
         self.v_box.add(title)
 
-        new_game_button = arcade.gui.UIFlatButton(text="play game", style=style, width=200)
+        new_game_button = arcade.gui.UIFlatButton(text="play game", width=200)
         self.v_box.add(new_game_button)
-        #efer
 
-        settings_button = arcade.gui.UIFlatButton(text="settings", style=style, width=200)
+        settings_button = arcade.gui.UIFlatButton(text="settings", width=200)
         self.v_box.add(settings_button)
 
-        quit_button = arcade.gui.UIFlatButton(text="quit", style=style, width=200)
+        quit_button = arcade.gui.UIFlatButton(text="quit", width=200)
         self.v_box.add(quit_button)
 
         self.manager.add(
-            arcade.gui.UIAnchorWidget(
-                anchor_x="center_x", anchor_y="center_y", child=self.v_box
+            arcade.gui.UIAnchorLayout(
+                anchor_x="center_x", anchor_y="center_y", children=[self.v_box]
             )
         )
 
