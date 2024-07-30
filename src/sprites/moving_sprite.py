@@ -100,7 +100,7 @@ class MovingSprite(arcade.Sprite):
         self.velocity = Vec2(self.velocity[0], self.velocity[1])
         self.velocity = self.velocity.normalize()
         self.update_movement_speed()
-        self.velocity = self.velocity.scale(self.speed)
+        self.velocity *= self.speed
         self.velocity = [self.velocity.x, self.velocity.y]
         self.handle_out_of_bounds()
 
