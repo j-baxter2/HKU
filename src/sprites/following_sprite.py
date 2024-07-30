@@ -50,7 +50,7 @@ class FollowingSprite(LivingSprite):
     @property
     def animation_direction(self):
         self.velocity = Vec2(self.velocity[0], self.velocity[1])
-        angle = self.velocity.heading
+        angle = self.velocity.heading()
         angle = math.degrees(angle)
         if angle < 135 and angle >= 45:
             return "up"
