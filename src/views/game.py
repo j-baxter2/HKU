@@ -363,7 +363,7 @@ class GameView(arcade.View):
         super().__init__()
 
         self.game_section = GameSection(0, 0,
-                                       self.window.width, self.window.height, accept_keyboard_events=True)
+                                       self.window.width, self.window.height)
         self.ui_section = UISection(0, 0,
                                    self.window.width, self.window.height)
 
