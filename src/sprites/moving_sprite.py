@@ -19,21 +19,17 @@ class MovingSprite(arcade.Sprite):
         width = sprite_data["width"]
         height = sprite_data["height"]
 
-        self.textures = arcade.load_spritesheet(
-            sheet_path,
-            sprite_width=width,
-            sprite_height=height,
-            columns=columns,
-            count=count,
+        self.sprite_sheet = arcade.load_spritesheet(
+            sheet_path
         )
 
         self.fade_texture_index = None
 
-        if self.textures:
+        if self.sprite_sheet:
             self.set_texture(0)
 
         self._hit_box_algorithm = 'Simple'
-        self.set_hit_box(self.texture.hit_box_points)
+        self.sync_hit_box_to_texture()
 
         self.animation_data = data["animation"]
 
