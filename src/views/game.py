@@ -50,7 +50,7 @@ class GameSection(arcade.Section):
     def on_update(self):
         self.physics_engine.update()
         self.update_camera()
-        self.scene.update()
+        self.scene.update(delta_time=DELTA_TIME)
 
     def on_draw(self):
         self.scene.draw()

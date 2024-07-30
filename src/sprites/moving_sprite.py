@@ -77,7 +77,7 @@ class MovingSprite(arcade.Sprite):
     def stop_animation(self):
         self.current_animation = None
 
-    def update(self):
+    def update(self, delta_time=DELTA_TIME):
         super().update()
 
     def start_fade(self):

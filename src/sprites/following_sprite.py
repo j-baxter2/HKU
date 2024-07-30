@@ -19,7 +19,7 @@ class FollowingSprite(LivingSprite):
     def setup(self):
         self.randomize_velocity()
 
-    def update(self):
+    def update(self, delta_time=DELTA_TIME):
         super().update()
         if self.fading:
             self.update_fade()

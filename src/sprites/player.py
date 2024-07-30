@@ -100,7 +100,7 @@ class Player(LivingSprite):
         self.unlock_moves(radial)
         self.equip_move("quick attack", basic_attack)
 
-    def update(self):
+    def update(self, delta_time=DELTA_TIME):
         super().update()
         if self.fading:
             self.update_fade()

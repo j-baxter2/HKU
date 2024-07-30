@@ -25,7 +25,7 @@ class LivingSprite(MovingSprite):
 
         self.hurt_sound = load_sound("hurt1")
 
-    def update(self):
+    def update(self, delta_time=DELTA_TIME):
         self.update_just_been_hit()
         self.update_just_been_healed()
         super().update()

@@ -29,7 +29,7 @@ class Projectile(MovingSprite):
             self.target_y = start[1] + math.cos(math.radians(angle))
 
 
-    def update(self):
+    def update(self, delta_time=DELTA_TIME):
         self.update_movement()
         self.update_activity()
         self.update_animation()

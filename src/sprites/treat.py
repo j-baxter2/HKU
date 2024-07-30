@@ -17,7 +17,7 @@ class Treat(arcade.Sprite):
         self.decay_time = 1
         self.opacity_timer = 0
 
-    def update(self):
+    def update(self, delta_time=DELTA_TIME):
         self.bob()
         self.life_timer += DELTA_TIME
         if self.healthy:
