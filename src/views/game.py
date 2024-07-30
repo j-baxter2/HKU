@@ -216,7 +216,7 @@ class UISection(arcade.Section):
 
     def setup(self):
         self.update_sprite_lists()
-        self.camera = arcade.Camera(self.width, self.height)
+        self.camera = HKUCamera(self.width, self.height)
         arcade.load_font(UI_FONT_PATH)
 
     def on_update(self):
