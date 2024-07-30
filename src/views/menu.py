@@ -46,7 +46,7 @@ class MenuView(arcade.View):
 
     def on_click_quit(self, event):
         print("Quit button clicked")
-        arcade.close_window()
+        self.window.close()
 
     def on_update(self, delta_time):
         self.manager.on_update(delta_time)
