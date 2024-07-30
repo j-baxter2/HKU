@@ -23,7 +23,7 @@ class GameSection(arcade.Section):
         self.player = None
         self.tile_map = None
         self.physics_engine = None
-        self.camera = None
+        self.game_camera = None
 
     def setup(self):
         self.load_map("resources/maps/map.json")
@@ -44,7 +44,7 @@ class GameSection(arcade.Section):
                 self.scene["Wall"]
             ]
         )
-        self.camera = HKUCamera(self.width, self.height)
+        self.game_camera = HKUCamera(self.width, self.height)
         self.player.setup()
 
     def on_update(self):
@@ -155,10 +155,9 @@ class GameSection(arcade.Section):
     def update_camera(self):
         if self.player.is_alive:
             player_position_for_cam = Vec2(self.player.center_x-(self.width//2), self.player.center_y-(self.height//2))
-            self.camera.move_to(player_position_for_cam)
         else:
             arcade.set_viewport(0, self.view.window.width, 0, self.view.window.height)
-        self.camera.use()
+        self.game_camera.use()
 
     def load_map(self, map_path):
         layer_options = {
@@ -192,7 +191,7 @@ class GameSection(arcade.Section):
         return len(self.scene.get_sprite_list("Kitty")) > 0
 
     def draw_debug(self):
-        self.camera.use()
+        self.game_camera.use()
         self.player.draw_debug()
         # for enemy in self.scene.get_sprite_list("Enemy"):
         #     arcade.draw_line(self.player.center_x, self.player.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
@@ -213,18 +212,18 @@ class UISection(arcade.Section):
         self.kitties = None
         self.enemies = None
         self.sprite_lists = None
-        self.camera = None
+        self.ui_camera = None
 
     def setup(self):
         self.update_sprite_lists()
-        self.camera = HKUCamera(self.width, self.height)
+        self.ui_camera = HKUCamera(self.width, self.height)
         arcade.load_font(UI_FONT_PATH)
 
     def on_update(self):
         self.update_sprite_lists()
 
     def on_draw(self):
-        self.camera.use()
+        self.ui_camera.use()
         if not (self.player.faded or self.player.fading):
             self.draw_xp_bar()
             self.draw_stamina_bar()
@@ -377,7 +376,7 @@ class GameView(arcade.View):
         self.game_section.on_key_release(key, modifiers)
 
     def draw_debug(self):
-        self.ui_section.camera.use()
+        self.ui_section.ui_camera.use()
 
         enemy_count = len(self.game_section.scene.get_sprite_list("Enemy"))
         kitty_count = len(self.game_section.scene.get_sprite_list("Kitty"))
@@ -393,7 +392,7 @@ class GameView(arcade.View):
             between_levels_text.draw()
 
 
-        self.game_section.camera.use()
+        self.game_section.game_camera.use()
         self.game_section.draw_debug()
         enemies = self.game_section.scene.get_sprite_list("Enemy")
         for enemy in enemies:
@@ -403,12 +402,12 @@ class GameView(arcade.View):
             kitty.draw_debug()
 
     def draw_victory_message(self):
-        self.game_section.camera.use()
+        self.game_section.game_camera.use()
         victory_message_text = arcade.Text(f"VICTORY", start_x=self.game_section.player.center_x, start_y=self.game_section.player.center_y+100, color=arcade.color.BLACK, font_size=24, anchor_x="center")
         victory_message_text.draw()
 
     def draw_defeat_message(self):
-        self.ui_section.camera.use()
+        self.ui_section.ui_camera.use()
         death_message_text = arcade.Text(f"YOU HAVE DIED", start_x=self.ui_section.width // 2, start_y=self.ui_section.height // 2, color=arcade.color.BLACK, font_size=24, anchor_x="center")
         death_message_text.draw()
 
