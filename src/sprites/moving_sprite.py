@@ -23,9 +23,11 @@ class MovingSprite(arcade.Sprite):
             sheet_path
         )
 
+        self.textures = self.sprite_sheet.get_texture_grid(size=(width,height), columns=columns, count=count)
+
         self.fade_texture_index = None
 
-        if self.sprite_sheet:
+        if self.textures:
             self.set_texture(0)
 
         self._hit_box_algorithm = 'Simple'
