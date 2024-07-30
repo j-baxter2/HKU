@@ -24,19 +24,19 @@ class PauseView(arcade.View):
 
         style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg":color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
         quick_attack_button = arcade.gui.UIFlatButton(text="Quick Attack", width=200, style=style)
-        vbox.add(quick_attack_button.with_space_around(bottom=20))
+        vbox.add(quick_attack_button)
 
         special_button = arcade.gui.UIFlatButton(text="Special", width=200, style=style)
-        vbox.add(special_button.with_space_around(bottom=20))
+        vbox.add(special_button)
 
         heal_button = arcade.gui.UIFlatButton(text="Heal", width=200, style=style)
-        vbox.add(heal_button.with_space_around(bottom=20))
+        vbox.add(heal_button)
 
         scare_button = arcade.gui.UIFlatButton(text="Scare", width=200, style=style)
-        vbox.add(scare_button.with_space_around(bottom=20))
+        vbox.add(scare_button)
 
         back_button = arcade.gui.UIFlatButton(text="Back", width=200, style=style)
-        vbox.add(back_button.with_space_around(bottom=20))
+        vbox.add(back_button)
 
         self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=vbox))
 
@@ -102,10 +102,10 @@ class MoveView(arcade.View):
         style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg": color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
 
         primary_label = arcade.gui.UILabel(text="Primary", width=200, font_name=UI_FONT, font_size=20, text_color=arcade.color.BLACK)
-        primary_vbox.add(primary_label.with_space_around(bottom=20))
+        primary_vbox.add(primary_label)
 
         alt_label = arcade.gui.UILabel(text="ALT", width=200, font_name=UI_FONT, font_size=20, text_color=arcade.color.BLACK)
-        alt_vbox.add(alt_label.with_space_around(bottom=20))
+        alt_vbox.add(alt_label)
 
         for move in self.player.unlocked_moves:
             if move.slot == self.slot:
@@ -117,7 +117,7 @@ class MoveView(arcade.View):
                 primary_button.text = f"{move.name} (equipped)"
             else:
                 primary_button.text = f"{move.name}"
-            primary_vbox.add(primary_button.with_space_around(bottom=20))
+            primary_vbox.add(primary_button)
             primary_button.on_click = lambda event, move=move: self.on_click_move(event, move, self.slot)
 
             alt_button = arcade.gui.UIFlatButton(width=200, style=style)
@@ -125,7 +125,7 @@ class MoveView(arcade.View):
                 alt_button.text = f"{move.name} (alt equipped)"
             else:
                 alt_button.text = f"{move.name}"
-            alt_vbox.add(alt_button.with_space_around(bottom=20))
+            alt_vbox.add(alt_button)
             alt_button.on_click = lambda event, move=move: self.on_click_move(event, move, self.alt_slot)
 
         back_button = arcade.gui.UIFlatButton(text="Back", width=200, style=style)
