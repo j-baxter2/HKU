@@ -1,5 +1,6 @@
 import arcade
 import arcade.color
+from arcade.types.rect import XYWH
 from src.views.pause import PauseView
 from src.sprites.player import Player
 from utils.camera import HKUCamera
@@ -10,7 +11,7 @@ from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import load_sound, play_sound
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, BAR_WIDTH, BAR_HEIGHT, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -253,104 +254,50 @@ class UISection(arcade.Section):
         treat_count_text = arcade.Text(f"Treats: {treat_count}", start_x=self.right-10, start_y=self.top-140, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         treat_count_text.draw()
 
+    def draw_bar(self, fraction, center_x, center_y, width, height, filled_color, empty_color=arcade.color.BLACK):
+        filled_width = fraction * width
+        empty_rect = XYWH(x=center_x, y=center_y, width=width, height=height)
+        arcade.draw_rect_filled(rect=empty_rect, color=empty_color)
+
+        filled_rect = XYWH(x=center_x - width / 2 + filled_width / 2, y=center_y, width=filled_width, height=height)
+        arcade.draw_rect_filled(rect=filled_rect, color=filled_color)
+
     def draw_stamina_bar(self):
         if self.player:
-            filled_width = (self.player.stamina / self.player.max_stamina) * 100
-            arcade.draw_rectangle_filled(center_x=self.left + 100,
-                                         center_y=self.bottom + 70,
-                                         width=100,
-                                         height=10,
-                                         color=arcade.color.BLACK)
-            arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
-                                         center_y=self.bottom + 70,
-                                         width=filled_width,
-                                         height=10,
-                                         color=arcade.color.GREEN)
+            self.draw_bar(self.player.stamina / self.player.max_stamina, self.left + 100, self.bottom + 70, BAR_WIDTH, BAR_HEIGHT, arcade.color.GREEN)
 
     def draw_hp_bar(self):
         if self.player:
-
-            filled_width = (self.player.hp / self.player.max_hp) * 100
-
-            arcade.draw_rectangle_filled(center_x=self.left + 100,
-                                         center_y=self.bottom + 120,
-                                         width=100,
-                                         height=10,
-                                         color=arcade.color.BLACK)
-
-            arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
-                                         center_y=self.bottom + 120,
-                                         width=filled_width,
-                                         height=10,
-                                         color=arcade.color.RED)
+            self.draw_bar(self.player.hp / self.player.max_hp, self.left + 100, self.bottom + 120, BAR_WIDTH, BAR_HEIGHT, arcade.color.RED)
 
     def draw_move_activity_bars(self):
         if self.player.doing_move:
             moves = self.player.get_active_moves()
             for move_index, move in enumerate(moves):
-                filled_width = (move.progress_fraction) * 100
-                arcade.draw_rectangle_filled(center_x=self.left + 100,
-                                            center_y=self.bottom + 220 + (move_index * BAR_SPACING),
-                                            width=100,
-                                            height=10,
-                                            color=arcade.color.BLACK)
-                arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
-                                            center_y=self.bottom + 220 + (move_index * BAR_SPACING),
-                                            width=filled_width,
-                                            height=10,
-                                            color=move.color)
+                self.draw_bar(move.progress_fraction, self.left + 100, self.bottom + 220 + (move_index * BAR_SPACING), BAR_WIDTH, BAR_HEIGHT, move.color)
 
     def draw_move_charge_bars(self):
         if self.player.charging_move or self.player.charged_move:
             moves = self.player.get_charge_moves()
             for move_index, move in enumerate(moves):
-                filled_width = (move.charge_fraction) * 100
-                arcade.draw_rectangle_filled(center_x=self.left + 100,
-                                            center_y=self.bottom + 270 + (move_index * BAR_SPACING),
-                                            width=100,
-                                            height=10,
-                                            color=arcade.color.BLACK)
-
-                arcade.draw_rectangle_filled(center_x=self.left + 100 - (50 - filled_width / 2),
-                                            center_y=self.bottom + 270 + (move_index * BAR_SPACING),
-                                            width=filled_width,
-                                            height=10,
-                                            color=move.color)
+                self.draw_bar(move.charge_fraction, self.left + 100, self.bottom + 270 + (move_index * BAR_SPACING), BAR_WIDTH, BAR_HEIGHT, move.color)
 
     def draw_move_refresh_circles(self):
         if self.player.refreshing_move:
             moves = self.player.get_refreshing_moves()
             for move_index, move in enumerate(moves):
-                filled_radius = (move.refresh_fraction) * CIRCLE_RADIUS
-                arcade.draw_circle_filled(center_x=self.left + 100,
-                                        center_y=self.bottom + 320 + (move_index * BAR_SPACING) + CIRCLE_RADIUS,
-                                        radius= CIRCLE_RADIUS,
-                                        color=arcade.color.BLACK)
-
-                arcade.draw_circle_filled(center_x=self.left + 100,
-                                        center_y=self.bottom + 320 + (move_index * BAR_SPACING) + CIRCLE_RADIUS,
-                                        radius=filled_radius,
-                                        color=move.color)
+                filled_radius = move.refresh_fraction * CIRCLE_RADIUS
+                arcade.draw_circle_filled(center_x=self.left + 100, center_y=self.bottom + 320 + (move_index * BAR_SPACING) + CIRCLE_RADIUS, radius=CIRCLE_RADIUS, color=arcade.color.BLACK)
+                arcade.draw_circle_filled(center_x=self.left + 100, center_y=self.bottom + 320 + (move_index * BAR_SPACING) + CIRCLE_RADIUS, radius=filled_radius, color=move.color)
 
     def draw_xp_bar(self):
         if self.player.at_max_rank:
             max_rank_text = arcade.Text(f"MAX RANK", start_x=self.width // 2, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE*1.5, font_name=UI_FONT)
             max_rank_text.draw()
         else:
-            filled_width = (self.player.get_xp_fraction()) * 300
-            arcade.draw_rectangle_filled(center_x=self.width // 2,
-                                                center_y=self.top - 70,
-                                                width=300,
-                                                height=20,
-                                                color=arcade.color.BLACK)
+            self.draw_bar(self.player.get_xp_fraction(), self.width // 2, self.top - 70, 300, 20, arcade.color.YELLOW)
 
-            arcade.draw_rectangle_filled(center_x=self.width // 2 - 150 + filled_width / 2,
-                                        center_y=self.top - 70,
-                                        width=filled_width,
-                                        height=20,
-                                        color=arcade.color.YELLOW)
-
-            current_rank_text = arcade.Text(f"{self.player.current_rank}", start_x=self.width // 2 - 175, start_y=self.top - 70, color=arcade.color.BLACK,anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+            current_rank_text = arcade.Text(f"{self.player.current_rank}", start_x=self.width // 2 - 175, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
             next_rank_text = arcade.Text(f"{self.player.current_rank+1}", start_x=self.width // 2 + 175, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
             current_rank_text.draw()
             next_rank_text.draw()

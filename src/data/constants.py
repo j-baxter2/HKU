@@ -11,6 +11,8 @@ MAP_HEIGHT = map_dict['height'] * map_dict['tileheight']
 DELTA_TIME = 1/60
 
 BAR_SPACING = 50
+BAR_WIDTH = 100
+BAR_HEIGHT = 10
 LINE_HEIGHT = 20
 CIRCLE_RADIUS = 20
 
