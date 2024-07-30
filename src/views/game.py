@@ -332,7 +332,7 @@ class GameView(arcade.View):
 
     def on_show_view(self):
         play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
-        arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
+        arcade.set_background_color(arcade.color.DARK_BLUE)
 
     def on_draw(self):
         self.clear()
