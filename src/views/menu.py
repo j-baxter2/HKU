@@ -56,6 +56,7 @@ class MenuView(arcade.View):
         self.manager.enable()
 
     def on_hide_view(self):
+        print("MenuView.on_hide_view executed")
         self.manager.disable()
 
     def on_draw(self):

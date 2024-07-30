@@ -331,10 +331,12 @@ class GameView(arcade.View):
         self.ui_section.setup()
 
     def on_show_view(self):
+        print("GameView shown")
         play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
         arcade.set_background_color(arcade.color.DARK_BLUE)
 
     def on_draw(self):
+        #print("GameView.on_draw executed")
         self.clear()
 
         self.game_section.on_draw()
