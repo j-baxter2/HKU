@@ -20,9 +20,13 @@ class MoveEnemyShoot(Move):
         self.projectile.start()
 
     def get_target_pos_when_fired(self):
-        player = self.scene.get_sprite_list("Player")[0]
-        return player.position
+        player_list = self.scene.get_sprite_list("Player")
+        if len(player_list) > 0:
+            player = self.scene.get_sprite_list("Player")[0]
+            return player.position
+        else:
+            return
 
     def execute(self):
-        if self.executable:
+        if self.executable and len(self.scene.get_sprite_list("Player") > 0):
             self.start()

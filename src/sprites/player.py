@@ -85,6 +85,8 @@ class Player(LivingSprite):
         self.fade_in_timer = 0
         self.fade_in_time = 2
 
+        self.attack = 0
+
     def setup(self):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
         self.load_ranking_data()
