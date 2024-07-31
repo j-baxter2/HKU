@@ -2,6 +2,7 @@ import arcade
 import json
 import math
 from src.sprites.moving_sprite import MovingSprite
+from src.sprites.player import Player
 from src.moves.move import Move
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
 from pyglet.math import Vec2
@@ -68,7 +69,7 @@ class Projectile(MovingSprite):
 
     def damage_sprite(self, sprite):
         sprite.take_damage(self.origin_move.damage)
-        if sprite.is_dead:
+        if sprite.is_dead and isinstance(self.origin_sprite, Player):
             self.origin_move.origin_sprite.give_xp(sprite.max_hp*sprite.attack)
 
     def update_movement_direction(self):
