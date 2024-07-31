@@ -22,7 +22,18 @@ class PauseView(arcade.View):
 
         arcade.load_font(UI_FONT_PATH)
 
-        style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg":color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
+        style = {
+            "font_name": UI_FONT, "font_size": 20,
+            "normal": {
+                "bg": color.LIGHT_GREEN
+            },
+            "hovered": {
+                "bg": color.MID_GREEN
+            },
+            "pressed": {
+                "bg": color.DARK_GREEN
+            }
+        }
         quick_attack_button = arcade.gui.UIFlatButton(text="Quick Attack", width=200, style=style)
         vbox.add(quick_attack_button.with_space_around(bottom=20))
 
