@@ -28,7 +28,7 @@
     },
     "1" : {
         "name": "Lyra",
-        "hp": 20,
+        "hp": 2000,
         "strength": 2,
         "stamina": 100,
         "stamina regen": 10,

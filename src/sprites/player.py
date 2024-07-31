@@ -151,7 +151,6 @@ class Player(LivingSprite):
                 for move in self.all_moves:
                     if move.name in current_rank_data["unlock"]:
                         self.unlock_moves(move)
-                        print(f"unlocked {move.name}")
 
 
     def get_xp_to_next_level(self):

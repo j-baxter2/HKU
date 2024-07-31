@@ -116,9 +116,9 @@ class MovingSprite(arcade.Sprite):
         self.speed = self.base_speed
 
     def handle_out_of_bounds(self):
-        if self.center_x < 0 or self.center_x > MAP_WIDTH:
+        if self.center_x < 0 or self.center_x > MAP_WIDTH-1:
             self.velocity = [self.velocity[0] * -1, self.velocity[1]]
-        elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
+        elif self.center_y < 0 or self.center_y > MAP_HEIGHT-1:
             self.velocity = [self.velocity[0], self.velocity[1] * -1]
         self.center_x = max(1, min(self.center_x, MAP_WIDTH-1))
         self.center_y = max(1, min(self.center_y, MAP_HEIGHT-1))

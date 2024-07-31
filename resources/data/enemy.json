@@ -56,7 +56,7 @@
     "2" : {
         "name": "Shoot",
         "hp": 2,
-        "follow radius": 500,
+        "follow radius": 2048,
         "speed": 4,
         "sprint multiplier": 5,
         "random movement time": 3,

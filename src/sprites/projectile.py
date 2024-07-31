@@ -49,7 +49,6 @@ class Projectile(MovingSprite):
             self.get_hit_sprites()
             if self.hit_sprites is not None:
                 for sprite in self.hit_sprites:
-                    print("executing damage sprite")
                     self.damage_sprite(sprite)
             if self.being_timer >= self.being_time:
                 self.being = False
@@ -62,8 +61,6 @@ class Projectile(MovingSprite):
             if not (sprite.fading or sprite.faded):
                 potential_hit_sprites_alive.append(sprite)
         hit_sprites = arcade.check_for_collision_with_list(self, potential_hit_sprites_alive)
-        if len(hit_sprites) > 0:
-            print("Sprites hit")
         self.hit_sprites = hit_sprites
 
     def damage_sprite(self, sprite):
