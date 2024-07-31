@@ -394,3 +394,37 @@ class TargetArrowKey(MoveByPlayer):
         if self.choosing_target:
             charging_debug_text = arcade.Text(f"choosing: {self.choosing_target}\ntarget: {self.target is not None}", start_x=start_x+self.origin_sprite.width, start_y=start_y, color=arcade.color.BLACK, font_size=12, width=self.origin_sprite.width, anchor_x="left", anchor_y="top", multiline=True)
             charging_debug_text.draw()
+
+class RadialProjectile(MoveByPlayer):
+    def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):
+        super().__init__(id, scene, origin_sprite)
+        self.projectile = None
+
+    def apply_effects(self):
+        origin_pos_when_fired = self.origin_sprite.position
+        for i in range(8):
+            self.projectile = Projectile(0, self.scene, self, start=origin_pos_when_fired, angle=45*i, targetting_method="angle")
+            self.scene.add_sprite("Projectile", self.projectile)
+            self.projectile.start()
+
+    def draw(self):
+        if self.charging:
+            for i in range(8):
+                x = self.origin_sprite.center_x + math.sin(math.radians(45*i))*self.range
+                y = self.origin_sprite.center_y + math.cos(math.radians(45*i))*self.range
+                arcade.draw_circle_outline(center_x=x, center_y=y, radius=32, color=self.color[:3])
+                arcade.draw_circle_filled(center_x=x, center_y=y, radius=32, color=self.color[:3]+(128,))
+
+class AffectAllMove(MoveByPlayer):
+    def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):
+        super().__init__(id, scene, origin_sprite)
+
+    def get_affectees(self):
+        affectees = []
+        potential_affectees = self.scene.get_sprite_list(self.affects)
+        for potential_affectee in potential_affectees:
+            if self.origin_sprite == potential_affectee:
+                affectees.append(potential_affectee)
+            elif arcade.get_distance_between_sprites(self.origin_sprite, potential_affectee) < self.range and not (potential_affectee.fading or potential_affectee.faded):
+                affectees.append(potential_affectee)
+        self.affectees = affectees
