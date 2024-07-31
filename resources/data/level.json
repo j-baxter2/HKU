@@ -16,11 +16,11 @@
     },
     "1": {
         "enemies": {
-        "enemy amount": 10,
+        "enemy amount": 1,
         "enemy ratio": {
-            "0": 0.2,
+            "0": 0,
             "1": 0,
-            "2": 0.8
+            "2": 1
             }
         },
         "kitties": {

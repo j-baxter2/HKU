@@ -19,6 +19,7 @@ class ShootingEnemy(BaseEnemy):
 
     def update_while_alive(self):
         self.update_shooting()
+        self.shoot_move.on_update(DELTA_TIME)
         self.color = arcade.color.RED
 
     def update_movement_direction(self):
@@ -29,5 +30,9 @@ class ShootingEnemy(BaseEnemy):
             self.random_movement_timer = 0
 
     def update_shooting(self):
-        if self.in_range:
+        if self.in_range and not self.shoot_move.refreshing:
             self.shoot_move.start()
+
+    def draw_debug(self):
+        super().draw_debug()
+        self.shoot_move.draw_debug(0)
