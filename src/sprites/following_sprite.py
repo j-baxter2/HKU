@@ -70,8 +70,6 @@ class FollowingSprite(LivingSprite):
         self.advance_animation()
 
 
-    def draw_follow_radius(self):
-        arcade.draw_circle_outline(self.center_x, self.center_y, self.follow_distance, arcade.color.BLUE, 8)
 
     def handle_player_collision(self):
        if self.can_attack and arcade.check_for_collision(self, self.player):
@@ -115,6 +113,9 @@ class FollowingSprite(LivingSprite):
     @property
     def should_sprint(self):
         return self.just_been_hit
+
+    def draw_follow_radius(self):
+        arcade.draw_circle_outline(self.center_x, self.center_y, self.follow_distance, arcade.color.BLUE, 8)
 
     def draw_debug(self):
         super().draw_debug()
