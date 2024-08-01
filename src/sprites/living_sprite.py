@@ -46,10 +46,14 @@ class LivingSprite(MovingSprite):
         elif direction == "right":
             self.play_animation(*self.walk_cycle_frames["right"])
 
+    def start_just_been_hit(self):
+        self.just_been_hit = True
+        self.just_been_hit_timer = 0
+        play_sound(self.hurt_sound, volume=SOUND_EFFECT_VOL)
+
     def update_just_been_hit(self):
         if self.just_been_hit:
             self.color = arcade.color.RED
-            play_sound(self.hurt_sound, volume=SOUND_EFFECT_VOL)
             self.just_been_hit_timer += DELTA_TIME
             if self.just_been_hit_timer >= self.just_been_hit_time:
                 self.stop_just_been_hit()

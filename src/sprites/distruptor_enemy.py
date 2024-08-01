@@ -65,7 +65,7 @@ class DistruptorEnemy(BaseEnemy):
            self.player.take_damage(self.attack)
            self.just_attacked = True
            self.paralyze()
-           self.player.just_been_hit = True
+           self.player.start_just_been_hit()
 
     def handle_kitty_collision(self):
         if self.target_kitty:
@@ -74,12 +74,8 @@ class DistruptorEnemy(BaseEnemy):
                 #play roar
                 self.just_attacked = True
                 self.paralyze()
-                self.target_kitty.just_been_hit = True
+                self.target_kitty.start_just_been_hit()
 
     @property
     def should_sprint(self):
         return self.in_range or self.target_kitty is not None
-
-    def draw_debug(self):
-        just_been_hit_text = arcade.Text(f"Just been hit: {self.just_been_hit}", self.center_x, self.center_y+50, arcade.color.WHITE, 12)
-        just_been_hit_text.draw()
