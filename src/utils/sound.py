@@ -15,9 +15,11 @@ def load_sound(name:str, source = "builtin", file_type = "wav"):
     else:
         pass
 
-def play_sound(sound, volume = 1.0, pan = 0.0, speed = 1.0):
+def play_sound(sound, volume = 1.0, pan = 0.0, speed = 1.0, looping = False, return_player = False):
     if sound:
-        arcade.play_sound(sound, volume=volume, pan=pan, speed=speed)
+        player = arcade.play_sound(sound, volume=volume, pan=pan, speed=speed, looping=looping)
+        if return_player:
+            return player
     else:
         pass
 
@@ -46,4 +48,4 @@ class FootstepSoundHandler:
 
     @property
     def sound_update_time(self):
-        return 0.3 / (1+int(self.origin_sprite.should_sprint))
+        return 0.25 / (1+int(self.origin_sprite.should_sprint))

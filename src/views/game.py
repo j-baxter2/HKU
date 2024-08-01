@@ -10,7 +10,7 @@ from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import load_sound, play_sound
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -379,14 +379,20 @@ class GameView(arcade.View):
 
         self.debug = False
         self.loaded_sound = load_sound("upgrade1")
+        self.music = load_sound("music/hkusong1", source="hku")
 
     def setup(self):
+        self.music_player = play_sound(self.music, looping=True, return_player=True, volume=MUSIC_VOL)
         self.game_section.setup()
         self.ui_section.setup()
 
     def on_show_view(self):
         play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
+        self.music_player.play()
         arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
+
+    def on_hide_view(self):
+        self.music_player.pause()
 
     def on_draw(self):
         self.clear()
