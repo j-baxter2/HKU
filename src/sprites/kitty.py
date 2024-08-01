@@ -128,20 +128,6 @@ class Kitty(FollowingSprite):
             self.randomize_velocity()
             self.random_movement_timer = 0
 
-    @property
-    def animation_direction(self):
-        self.velocity = Vec2(self.velocity[0], self.velocity[1])
-        angle = self.velocity.heading
-        angle = math.degrees(angle)
-        if angle < 135 and angle >= 45:
-            return "up"
-        elif angle < 45 and angle >= -45:
-            return "right"
-        elif angle < -45 and angle >= -135:
-            return "down"
-        else:
-            return "left"
-
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
 
