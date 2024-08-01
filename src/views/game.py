@@ -337,7 +337,7 @@ class UISection(arcade.Section):
             max_rank_text = arcade.Text(f"MAX RANK", start_x=self.width // 2, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE*1.5, font_name=UI_FONT)
             max_rank_text.draw()
         else:
-            filled_width = (self.player.get_xp_fraction()) * 300
+            filled_width = max(0,(self.player.get_xp_fraction()) * 300)
             arcade.draw_rectangle_filled(center_x=self.width // 2,
                                                 center_y=self.top - 70,
                                                 width=300,
