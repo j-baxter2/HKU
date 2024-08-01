@@ -12,7 +12,6 @@ from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
 class Player(LivingSprite):
-
     def __init__(self, id: int, scene: arcade.Scene):
         with open("resources/data/player.json", "r") as file:
             player_dict = json.load(file)
