@@ -139,20 +139,6 @@ class Kitty(FollowingSprite):
     def should_meow(self):
         return self.meow_timer >= (self.meow_time+random.uniform(-self.meow_time*0.5, self.meow_time*3))
 
-
-    def get_volume_from_player_pos(self):
-        distance = arcade.get_distance_between_sprites(self, self.player)
-        distance_in_m = distance / 128
-        if distance == 0:
-            volume = 1
-        else:
-            volume = 1/(distance_in_m)
-        return min(max(volume, 0), 1)
-
-    def get_pan_from_player_pos(self):
-        angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
-        return math.sin(angle)
-
     def draw_debug(self):
         super().draw_debug()
         kitty_debug_text = arcade.Text(f"fleeing: {self.fleeing} eating: {self.eating}\neatingprogress: {round(self.eating_timer/self.eating_time,1)}\nfleeingprogress: {round(self.fleeing_timer/self.fleeing_time,1)}", start_x=self.center_x+self.width, start_y=self.center_y, color=arcade.color.BLACK, font_size=12, width=self.width, anchor_x="left", anchor_y="center", multiline=True)
