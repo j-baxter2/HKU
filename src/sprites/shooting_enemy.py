@@ -56,7 +56,8 @@ class ShootingEnemy(BaseEnemy):
             self.start_fleeing()
 
     def face_away_player(self):
-        self.velocity = Vec2(-(self.apparent_player_position[0] - self.center_x), -(self.apparent_player_position[1] - self.center_y))
+        apparent_player_position = self.apparent_player_position(vision=0.5)
+        self.velocity = Vec2(-(apparent_player_position[0] - self.center_x), -(apparent_player_position[1] - self.center_y))
 
     @property
     def player_too_close(self):
@@ -77,13 +78,6 @@ class ShootingEnemy(BaseEnemy):
     @property
     def fleeing_fraction(self):
         return self.fleeing_timer/self.fleeing_time
-
-    @property
-    def apparent_player_position(self):
-        true_player_position = self.player.position
-        distance = arcade.get_distance_between_sprites(self, self.player)
-        apparent_player_position = (true_player_position[0] + random.uniform(-distance/2, distance/2), true_player_position[1] + random.uniform(-distance/2, distance/2))
-        return apparent_player_position
 
     def draw_debug(self):
         super().draw_debug()

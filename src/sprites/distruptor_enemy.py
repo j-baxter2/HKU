@@ -73,17 +73,6 @@ class DistruptorEnemy(BaseEnemy):
                 self.target_kitty.just_been_hit = True
 
     @property
-    def apparent_player_position(self):
-        true_player_position = self.player.position
-        distance = arcade.get_distance_between_sprites(self, self.player)
-        apparent_player_position = (true_player_position[0] + random.uniform(-distance, distance), true_player_position[1] + random.uniform(-distance, distance))
-        return apparent_player_position
-
-    @property
-    def in_range(self):
-        return arcade.get_distance_between_sprites(self, self.player) < self.follow_distance
-
-    @property
     def should_sprint(self):
         return self.in_range or self.target_kitty is not None
 
