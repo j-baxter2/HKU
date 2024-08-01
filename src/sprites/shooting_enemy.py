@@ -32,9 +32,9 @@ class ShootingEnemy(BaseEnemy):
 
     def update_movement_direction(self):
         if self.in_range and self.fleeing:
-            self.face_away_player()
+            self.face_away(self.apparent_player_position())
         elif self.in_range and not (self.player.fading or self.player.faded) and not self.fleeing:
-            self.face_player()
+            self.face(self.apparent_player_position())
         elif self.should_turn:
             self.randomize_velocity()
             self.random_movement_timer = 0
@@ -54,10 +54,6 @@ class ShootingEnemy(BaseEnemy):
     def update_monitor_player_proximity(self):
         if self.player_too_close or self.just_been_hit:
             self.start_fleeing()
-
-    def face_away_player(self):
-        apparent_player_position = self.apparent_player_position(vision=0.5)
-        self.velocity = Vec2(-(apparent_player_position[0] - self.center_x), -(apparent_player_position[1] - self.center_y))
 
     @property
     def player_too_close(self):

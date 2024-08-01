@@ -43,9 +43,9 @@ class DistruptorEnemy(BaseEnemy):
 
     def update_movement_direction(self):
         if self.target_kitty:
-            self.face_kitty()
+            self.face(self.target_kitty.position)
         elif self.in_range and not self.player.faded:
-            self.face_player()
+            self.face(self.apparent_player_position())
         elif self.should_turn:
             self.randomize_velocity()
             self.random_movement_timer = 0

@@ -121,15 +121,9 @@ class Kitty(FollowingSprite):
             if arcade.check_for_collision(self, self.target_treat) and not self.eating:
                 self.start_eating()
 
-    def face_treat(self):
-        self.velocity = Vec2(self.target_treat.center_x - self.center_x, self.target_treat.center_y - self.center_y)
-
-    def face_away_from_treat(self):
-        self.velocity = Vec2(self.center_x - self.target_treat.center_x, self.center_y - self.target_treat.center_y)
-
     def update_movement_direction(self):
         if self.target_treat and not self.fleeing:
-            self.face_treat()
+            self.face(self.target_treat.position)
         elif self.should_turn:
             self.randomize_velocity()
             self.random_movement_timer = 0

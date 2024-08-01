@@ -80,9 +80,6 @@ class FollowingSprite(LivingSprite):
            self.paralyze()
            self.player.just_been_hit = True
 
-    def face_player(self):
-        self.velocity = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
-
     def start_fleeing(self):
         self.fleeing = True
         self.fleeing_timer = 0
@@ -95,9 +92,11 @@ class FollowingSprite(LivingSprite):
                 self.fleeing = False
                 self.fleeing_timer = 0
 
-    def face_player(self):
-        apparent_player_position = self.apparent_player_position()
-        self.velocity = Vec2(apparent_player_position[0] - self.center_x, apparent_player_position[1] - self.center_y)
+    def face(self, position):
+        self.velocity = Vec2(position[0] - self.center_x, position[1] - self.center_y)
+
+    def face_away(self, position):
+        self.velocity = Vec2(self.center_x - position[0], self.center_y - position[1])
 
     def apparent_player_position(self, vision=0.0):
         true_player_position = self.player.position
