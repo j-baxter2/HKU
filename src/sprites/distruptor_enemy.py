@@ -50,9 +50,6 @@ class DistruptorEnemy(BaseEnemy):
             self.randomize_velocity()
             self.random_movement_timer = 0
 
-    def face_kitty(self):
-        self.velocity = Vec2(self.target_kitty.center_x - self.center_x, self.target_kitty.center_y - self.center_y)
-
     def look_for_eating_kitty(self):
         for kitty in self.kitties:
             if arcade.get_distance_between_sprites(self, kitty) < self.follow_distance*3 and kitty.eating:
