@@ -132,10 +132,6 @@ class Kitty(FollowingSprite):
         super().update_animation(delta_time)
 
     @property
-    def should_turn(self):
-        return self.random_movement_timer >= (self.random_movement_time+random.uniform(-0.1, 5))
-
-    @property
     def should_sprint(self):
         return (self.target_treat is not None) or self.fleeing
 
