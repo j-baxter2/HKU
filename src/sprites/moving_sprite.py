@@ -123,12 +123,11 @@ class MovingSprite(arcade.Sprite):
         self.center_x = max(1, min(self.center_x, MAP_WIDTH-1))
         self.center_y = max(1, min(self.center_y, MAP_HEIGHT-1))
 
-    @property
-    def stationary(self):
-        if self.velocity == [0, 0] or self.velocity == Vec2(0, 0):
-            return True
-        else:
-            return False
+    def face(self, position):
+        self.velocity = Vec2(position[0] - self.center_x, position[1] - self.center_y)
+
+    def face_away(self, position):
+        self.velocity = Vec2(self.center_x - position[0], self.center_y - position[1])
 
     def randomize_velocity(self):
         if isinstance(self.velocity, list):
@@ -148,6 +147,13 @@ class MovingSprite(arcade.Sprite):
     def paralyze(self):
         self.stop_moving()
         self.able_to_move = False
+
+    @property
+    def stationary(self):
+        if self.velocity == [0, 0] or self.velocity == Vec2(0, 0):
+            return True
+        else:
+            return False
 
     @property
     def should_turn(self):
