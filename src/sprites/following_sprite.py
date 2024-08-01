@@ -46,6 +46,7 @@ class FollowingSprite(LivingSprite):
     def update_movement_direction(self):
         if self.should_turn:
             self.randomize_velocity()
+            self.random_movement_timer = 0
 
     @property
     def animation_direction(self):
@@ -93,6 +94,16 @@ class FollowingSprite(LivingSprite):
             if self.fleeing_timer >= self.fleeing_time:
                 self.fleeing = False
                 self.fleeing_timer = 0
+
+    def face_player(self):
+        apparent_player_position = self.apparent_player_position()
+        self.velocity = Vec2(apparent_player_position[0] - self.center_x, apparent_player_position[1] - self.center_y)
+
+    def apparent_player_position(self, vision=0.0):
+        true_player_position = self.player.position
+        distance = arcade.get_distance_between_sprites(self, self.player)
+        apparent_player_position = (true_player_position[0] + random.uniform(-distance*(1-vision), distance*(1-vision)), true_player_position[1] + random.uniform(-distance*(1-vision), distance*(1-vision)))
+        return apparent_player_position
 
     @property
     def should_turn(self):
