@@ -69,15 +69,6 @@ class FollowingSprite(LivingSprite):
                 self.hit_box = self.texture.hit_box_points
         self.advance_animation()
 
-
-
-    def handle_player_collision(self):
-       if self.can_attack and arcade.check_for_collision(self, self.player):
-           self.player.take_damage(self.attack)
-           self.just_attacked = True
-           self.paralyze()
-           self.player.just_been_hit = True
-
     def start_fleeing(self):
         self.fleeing = True
         self.fleeing_timer = 0

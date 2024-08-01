@@ -60,6 +60,13 @@ class DistruptorEnemy(BaseEnemy):
         if self.target_kitty.fading or self.target_kitty.faded or not self.target_kitty.eating:
             self.target_kitty = None
 
+    def handle_player_collision(self):
+       if self.can_attack and arcade.check_for_collision(self, self.player):
+           self.player.take_damage(self.attack)
+           self.just_attacked = True
+           self.paralyze()
+           self.player.just_been_hit = True
+
     def handle_kitty_collision(self):
         if self.target_kitty:
             if self.can_attack and arcade.check_for_collision(self, self.target_kitty):
