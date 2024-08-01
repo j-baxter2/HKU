@@ -69,7 +69,6 @@ class Projectile(MovingSprite):
             self.origin_move.origin_sprite.give_xp(sprite.max_hp*sprite.attack)
 
     def update_movement_direction(self):
-        arcade.get_angle_degrees(self.start_x, self.start_y, self.target_x, self.target_y)
         self.velocity = Vec2(self.target_x-self.start_x, self.target_y-self.start_y)
 
     def update_movement_speed(self):
