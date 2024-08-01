@@ -93,6 +93,19 @@ class FollowingSprite(LivingSprite):
         apparent_player_position = (true_player_position[0] + random.uniform(-distance*(1-vision), distance*(1-vision)), true_player_position[1] + random.uniform(-distance*(1-vision), distance*(1-vision)))
         return apparent_player_position
 
+    def get_volume_from_player_pos(self):
+        distance = arcade.get_distance_between_sprites(self, self.player)
+        distance_in_m = distance / 128
+        if distance == 0:
+            volume = 1
+        else:
+            volume = 1/(distance_in_m)
+        return min(max(volume, 0), 1)
+
+    def get_pan_from_player_pos(self):
+        angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
+        return math.sin(angle)
+
     @property
     def should_turn(self):
         return self.random_movement_timer >= (self.random_movement_time+random.uniform(-0.1, 5))
