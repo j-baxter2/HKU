@@ -15,11 +15,13 @@ class ShootingEnemy(BaseEnemy):
         self.fleeing = False
         self.fleeing_timer = 0
         self.fleeing_time = 0
+        self.attack = 0
 
     def setup(self):
         super().setup()
         self.shoot_move = MoveEnemyShoot(id=6, scene=self.scene, origin_sprite=self)
         self.fleeing_time = self.shoot_move.refresh_time
+        self.attack = self.shoot_move.damage
 
     def update_while_alive(self):
         self.update_shooting()
@@ -52,18 +54,6 @@ class ShootingEnemy(BaseEnemy):
     def update_monitor_player_proximity(self):
         if self.player_too_close or self.just_been_hit:
             self.start_fleeing()
-
-    def start_fleeing(self):
-        self.fleeing = True
-        self.fleeing_timer = 0
-        #play scared sound
-
-    def update_fleeing(self):
-        if self.fleeing:
-            self.fleeing_timer += DELTA_TIME
-            if self.fleeing_timer >= self.fleeing_time:
-                self.fleeing = False
-                self.fleeing_timer = 0
 
     def face_away_player(self):
         self.velocity = Vec2(-(self.apparent_player_position[0] - self.center_x), -(self.apparent_player_position[1] - self.center_y))

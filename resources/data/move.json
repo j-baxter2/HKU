@@ -78,7 +78,7 @@
         "affects": "Kitty",
         "charge time": 0.5,
         "color": "yellow",
-        "draw lines": true,
+        "draw lines": false,
         "draw circle": false,
         "start sound": "explosion2",
         "stop sound": null

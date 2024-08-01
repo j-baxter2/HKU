@@ -44,6 +44,7 @@ class Kitty(FollowingSprite):
         self.sitting_frames = self.kitty_data["animation"]["sitting"]
 
     def take_damage(self, damage):
+        self.stop_eating(success=False)
         self.start_fleeing()
 
     @property
@@ -107,19 +108,6 @@ class Kitty(FollowingSprite):
             #play satisfied sound
         self.stop_animation()
         self.target_treat = None
-
-    def start_fleeing(self):
-        self.stop_eating(success=False)
-        self.fleeing = True
-        self.fleeing_timer = 0
-        #play scared sound
-
-    def update_fleeing(self):
-        if self.fleeing:
-            self.fleeing_timer += DELTA_TIME
-            if self.fleeing_timer >= self.fleeing_time:
-                self.fleeing = False
-                self.fleeing_timer = 0
 
     def locate_treat(self):
         for treat in self.treats:

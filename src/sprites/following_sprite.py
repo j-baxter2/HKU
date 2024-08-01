@@ -82,6 +82,18 @@ class FollowingSprite(LivingSprite):
     def face_player(self):
         self.velocity = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
 
+    def start_fleeing(self):
+        self.fleeing = True
+        self.fleeing_timer = 0
+        #play scared sound
+
+    def update_fleeing(self):
+        if self.fleeing:
+            self.fleeing_timer += DELTA_TIME
+            if self.fleeing_timer >= self.fleeing_time:
+                self.fleeing = False
+                self.fleeing_timer = 0
+
     @property
     def should_turn(self):
         return self.random_movement_timer >= (self.random_movement_time+random.uniform(-0.1, 5))

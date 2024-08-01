@@ -12,7 +12,6 @@ class BaseEnemy(FollowingSprite):
         with open("resources/data/enemy.json", "r") as file:
             enemy_dict = json.load(file)
         self.enemy_data = enemy_dict[str(id)]
-        self.scene = scene
         super().__init__(self.enemy_data, self.scene)
         self.max_hp = self.enemy_data["hp"]
         self.hp = self.max_hp
