@@ -78,6 +78,7 @@ class LivingSprite(MovingSprite):
     def take_damage(self, amount: int):
         self.hp -= amount * (1-self.damage_resist)
         self.hp = min(max(0, self.hp), self.max_hp)
+        self.start_just_been_hit()
         if self.hp <= 0:
             self.stop_moving()
             self.color = self.fade_color

@@ -127,7 +127,6 @@ class Move:
                 affectee.just_healed = True
             elif self.damage >= 0:
                 affectee.take_damage(self.damage)
-                affectee.start_just_been_hit()
 
     def update_activity_mobility(self):
         if not self.origin_mobile_while_active:

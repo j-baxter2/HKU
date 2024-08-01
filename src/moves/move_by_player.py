@@ -31,7 +31,6 @@ class MoveByPlayer(Move):
                 affectee.just_healed = True
             elif self.damage >= 0:
                 affectee.take_damage(self.damage * self.origin_sprite.strength)
-                affectee.start_just_been_hit()
                 if affectee.is_dead:
                     self.origin_sprite.give_xp(affectee.max_hp * affectee.attack)
 
@@ -45,15 +44,6 @@ class MoveByPlayer(Move):
                 self.origin_sprite.damage_resist -= self.damage_resist
             else:
                 self.origin_sprite.damage_resist = 0
-
-    def apply_effects(self):
-        for affectee in self.affectees:
-            if self.damage < 0:
-                affectee.take_damage(self.damage)
-                affectee.just_healed = True
-            elif self.damage >= 0:
-                affectee.take_damage(self.damage)
-                affectee.start_just_been_hit()
 
     @property
     def executable(self):
