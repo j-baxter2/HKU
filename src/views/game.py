@@ -433,7 +433,6 @@ class GameView(arcade.View):
         a_x = x+self.game_section.camera.position.x
         a_y = y+self.game_section.camera.position.y
         self.mouse_pos = (a_x, a_y)
-        print(f"Mouse position: {self.mouse_pos}")
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.APOSTROPHE:
