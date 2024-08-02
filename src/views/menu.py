@@ -6,8 +6,10 @@ from src.data import color
 class MenuView(arcade.View):
     def __init__(self):
         super().__init__()
+        self.window.views["menu"] = self
 
         arcade.load_font(UI_FONT_PATH)
+
 
         self.manager = arcade.gui.UIManager()
         self.v_box = arcade.gui.UIBoxLayout()
