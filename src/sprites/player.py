@@ -8,6 +8,7 @@ from src.moves.move import Move
 from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.moves.move_radial_fireball import RadialProjectile
+from src.moves.move_custom_fire import MoveCustomFire
 from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
@@ -95,11 +96,14 @@ class Player(LivingSprite):
         scare = AffectAllMove(3, self.scene, self)
         ranged = TargetArrowKey(4, self.scene, self)
         radial = RadialProjectile(5, self.scene, self)
+        custom_fire = MoveCustomFire(7, self.scene, self)
         self.unlock_moves(basic_attack)
         self.unlock_moves(basic_heal)
         self.unlock_moves(scare)
         self.unlock_moves(radial)
+        self.unlock_moves(custom_fire)
         self.equip_move("quick attack", basic_attack)
+        self.equip_move("special", custom_fire)
 
     def update(self):
         super().update()
