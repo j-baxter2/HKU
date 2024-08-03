@@ -15,9 +15,9 @@ def load_sound(name:str, source = "builtin", file_type = "wav"):
     else:
         pass
 
-def play_sound(sound, volume = 1.0, pan = 0.0, speed = 1.0, looping = False, return_player = False):
+def play_sound(sound, volume = 1.0, pan = 0.0, speed = 1.0, loop = False, return_player = False):
     if sound:
-        player = arcade.play_sound(sound, volume=volume, pan=pan, speed=speed, looping=looping)
+        player = arcade.play_sound(sound, volume=volume, pan=pan, speed=speed, loop=loop)
         if return_player:
             return player
     else:

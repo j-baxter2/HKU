@@ -31,7 +31,6 @@ class MovingSprite(arcade.Sprite):
             self.set_texture(0)
 
         self._hit_box_algorithm = 'Simple'
-        self.sync_hit_box_to_texture()
 
         self.animation_data = data["animation"]
 

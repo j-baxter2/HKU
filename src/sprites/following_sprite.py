@@ -66,7 +66,7 @@ class FollowingSprite(LivingSprite):
         if not self.current_animation:
             if self.animation_direction:
                 self.start_walk_cycle(self.animation_direction)
-                self.hit_box = self.texture.hit_box_points
+                #self.hit_box = self.texture.hit_box_points
         self.advance_animation()
 
     def start_fleeing(self):

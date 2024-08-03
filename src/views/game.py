@@ -16,8 +16,7 @@ from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, B
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
                  **kwargs):
-        super().__init__(left, bottom, width, height,
-                          **kwargs)
+        super().__init__(left, bottom, width, height, name="Game", accept_keyboard_keys=True, draw_order=0, **kwargs)
         self.current_level_id = 0
         self.scene = None
         self.player = None
@@ -48,7 +47,7 @@ class GameSection(arcade.Section):
         self.game_camera = HKUCamera(self.width, self.height)
         self.player.setup()
 
-    def on_update(self):
+    def on_update(self, delta_time=DELTA_TIME):
         self.physics_engine.update()
         self.update_camera()
         self.scene.update(delta_time=DELTA_TIME)
@@ -206,8 +205,7 @@ class GameSection(arcade.Section):
 
 class UISection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int, **kwargs):
-        super().__init__(left, bottom, width, height,
-                          **kwargs)
+        super().__init__(left, bottom, width, height, name="Game", accept_keyboard_keys=True, draw_order=1, **kwargs)
         self.scene = None
         self.player = None
         self.kitties = None
@@ -220,7 +218,7 @@ class UISection(arcade.Section):
         self.ui_camera = HKUCamera(self.width, self.height)
         arcade.load_font(UI_FONT_PATH)
 
-    def on_update(self):
+    def on_update(self, delta_time=DELTA_TIME):
         self.update_sprite_lists()
 
     def on_draw(self):
@@ -314,8 +312,8 @@ class GameView(arcade.View):
         self.ui_section = UISection(0, 0,
                                    self.window.width, self.window.height)
 
-        self.add_section(self.game_section)
-        self.add_section(self.ui_section)
+        self.add_section(section=self.game_section)
+        self.add_section(section=self.ui_section)
 
         self.player = None
 
@@ -330,7 +328,7 @@ class GameView(arcade.View):
         self.mouse_pos = (0,0)
 
     def setup(self):
-        self.music_player = play_sound(self.music, looping=True, return_player=True, volume=MUSIC_VOL)
+        self.music_player = play_sound(self.music, loop=True, return_player=True, volume=MUSIC_VOL)
         self.game_section.setup()
         self.ui_section.setup()
 
