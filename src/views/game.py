@@ -11,7 +11,7 @@ from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import load_sound, play_sound
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, BAR_WIDTH, BAR_HEIGHT, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, BAR_WIDTH, BAR_HEIGHT, CIRCLE_RADIUS, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -24,6 +24,7 @@ class GameSection(arcade.Section):
         self.tile_map = None
         self.physics_engine = None
         self.game_camera = None
+        self.mouse_pos = (0,0)
 
     def setup(self):
         self.load_map("resources/maps/map.json")
@@ -307,7 +308,7 @@ class UISection(arcade.Section):
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
-
+        self.window.views["game"] = self
         self.game_section = GameSection(0, 0,
                                        self.window.width, self.window.height)
         self.ui_section = UISection(0, 0,
@@ -325,8 +326,12 @@ class GameView(arcade.View):
 
         self.debug = False
         self.loaded_sound = load_sound("upgrade1")
+        self.music = load_sound("music/hkusong1", source="hku")
+
+        self.mouse_pos = (0,0)
 
     def setup(self):
+        self.music_player = play_sound(self.music, looping=True, return_player=True, volume=MUSIC_VOL)
         self.game_section.setup()
         self.ui_section.setup()
 
@@ -334,6 +339,9 @@ class GameView(arcade.View):
         print("GameView shown")
         play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
         arcade.set_background_color(arcade.color.DARK_BLUE)
+
+    def on_hide_view(self):
+        self.music_player.pause()
 
     def on_draw(self):
         #print("GameView.on_draw executed")
@@ -368,6 +376,11 @@ class GameView(arcade.View):
                 self.handle_level_completion()
                 self.between_levels_timer = 0
 
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
+        a_x = x+self.game_section.camera.position.x
+        a_y = y+self.game_section.camera.position.y
+        self.mouse_pos = (a_x, a_y)
+
     def on_key_press(self, key, modifiers):
         if key == arcade.key.APOSTROPHE:
             self.debug = not self.debug
@@ -387,7 +400,7 @@ class GameView(arcade.View):
         projectile_count = len(self.game_section.scene.get_sprite_list("Projectile"))
         player_pos = self.game_section.player.get_integer_position()
 
-        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nProjectiles: {projectile_count}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
+        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nMouse: {self.mouse_pos}\nProjectiles: {projectile_count}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
         debug_text.draw()
         if self.between_levels:
             between_levels_text = arcade.Text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", start_x=20, start_y=self.window.height - 20 - LINE_HEIGHT*4, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top")

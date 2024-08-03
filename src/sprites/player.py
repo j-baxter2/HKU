@@ -8,11 +8,13 @@ from src.moves.move import Move
 from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.moves.move_radial_fireball import RadialProjectile
+from src.moves.move_custom_fire import MoveCustomFire
+from src.moves.move_mouse_aim import MoveMouseAim
+
 from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
 class Player(LivingSprite):
-
     def __init__(self, id: int, scene: arcade.Scene):
         with open("resources/data/player.json", "r") as file:
             player_dict = json.load(file)
@@ -85,6 +87,8 @@ class Player(LivingSprite):
         self.fade_in_timer = 0
         self.fade_in_time = 2
 
+        self.attack = 0
+
     def setup(self):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
         self.load_ranking_data()
@@ -94,11 +98,16 @@ class Player(LivingSprite):
         scare = AffectAllMove(3, self.scene, self)
         ranged = TargetArrowKey(4, self.scene, self)
         radial = RadialProjectile(5, self.scene, self)
+        custom_fire = MoveCustomFire(7, self.scene, self)
+        mouse_aim = MoveMouseAim(7, self.scene, self)
         self.unlock_moves(basic_attack)
         self.unlock_moves(basic_heal)
         self.unlock_moves(scare)
         self.unlock_moves(radial)
+        self.unlock_moves(custom_fire)
+        self.unlock_moves(mouse_aim)
         self.equip_move("quick attack", basic_attack)
+        self.equip_move("special", mouse_aim)
 
     def update(self, delta_time=DELTA_TIME):
         super().update()
@@ -149,7 +158,6 @@ class Player(LivingSprite):
                 for move in self.all_moves:
                     if move.name in current_rank_data["unlock"]:
                         self.unlock_moves(move)
-                        print(f"unlocked {move.name}")
 
 
     def get_xp_to_next_level(self):

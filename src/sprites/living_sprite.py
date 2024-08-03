@@ -46,10 +46,14 @@ class LivingSprite(MovingSprite):
         elif direction == "right":
             self.play_animation(*self.walk_cycle_frames["right"])
 
+    def start_just_been_hit(self):
+        self.just_been_hit = True
+        self.just_been_hit_timer = 0
+        play_sound(self.hurt_sound, volume=SOUND_EFFECT_VOL)
+
     def update_just_been_hit(self):
         if self.just_been_hit:
             self.color = arcade.color.RED
-            play_sound(self.hurt_sound, volume=SOUND_EFFECT_VOL)
             self.just_been_hit_timer += DELTA_TIME
             if self.just_been_hit_timer >= self.just_been_hit_time:
                 self.stop_just_been_hit()
@@ -74,10 +78,14 @@ class LivingSprite(MovingSprite):
     def take_damage(self, amount: int):
         self.hp -= amount * (1-self.damage_resist)
         self.hp = min(max(0, self.hp), self.max_hp)
+        self.start_just_been_hit()
         if self.hp <= 0:
             self.stop_moving()
             self.color = self.fade_color
             self.start_fade()
+
+    def give_xp(self, amount):
+        pass
 
     def draw_hp_bar(self):
         arcade.draw_rectangle_filled(self.center_x, self.center_y + self.height//2 - 10, self.width, 5, arcade.color.BLACK)

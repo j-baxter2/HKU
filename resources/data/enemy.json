@@ -52,5 +52,31 @@
                 "right": [8, 11]
             }
         }
+    },
+    "2" : {
+        "name": "Shoot",
+        "hp": 2,
+        "follow radius": 2048,
+        "speed": 4,
+        "sprint multiplier": 5,
+        "random movement time": 3,
+        "fade color": "brown",
+        "spritesheet": {
+            "path": "resources/spritesheets/gobu.png",
+            "columns": 6,
+            "count": 18,
+            "width": 32,
+            "height": 32,
+            "scale": 4
+            },
+        "animation": {
+            "fps": 10,
+            "walk": {
+                "up": [12, 17],
+                "down": [0, 5],
+                "left": [6, 11],
+                "right": [6, 11]
+            }
+        }
     }
 }

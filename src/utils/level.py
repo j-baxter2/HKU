@@ -1,7 +1,8 @@
 import json
 import arcade
 import random
-from src.sprites.enemy import FollowingEnemy
+from src.sprites.distruptor_enemy import DistruptorEnemy
+from src.sprites.shooting_enemy import ShootingEnemy
 from src.sprites.player import Player
 from src.sprites.kitty import Kitty
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT
@@ -31,7 +32,10 @@ class Level:
 
         for enemy_id, ratio in enemy_ratio.items():
             for _ in range(int(ratio * enemy_amount)):
-                enemy = FollowingEnemy(id=int(enemy_id), scene=self.scene)
+                if enemy_id == "0":
+                    enemy = DistruptorEnemy(id=int(enemy_id), scene=self.scene)
+                elif enemy_id == "2":
+                    enemy = ShootingEnemy(id=int(enemy_id), scene=self.scene)
                 while True:
                     x = random.uniform(0, map_bounds[0])
                     y = random.uniform(0, map_bounds[1])

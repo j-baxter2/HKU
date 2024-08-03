@@ -46,6 +46,7 @@ class FollowingSprite(LivingSprite):
     def update_movement_direction(self):
         if self.should_turn:
             self.randomize_velocity()
+            self.random_movement_timer = 0
 
     @property
     def animation_direction(self):
@@ -68,19 +69,36 @@ class FollowingSprite(LivingSprite):
                 self.hit_box = self.texture.hit_box_points
         self.advance_animation()
 
+    def start_fleeing(self):
+        self.fleeing = True
+        self.fleeing_timer = 0
+        #play scared sound
 
-    def draw_follow_radius(self):
-        arcade.draw_circle_outline(self.center_x, self.center_y, self.follow_distance, arcade.color.BLUE, 8)
+    def update_fleeing(self):
+        if self.fleeing:
+            self.fleeing_timer += DELTA_TIME
+            if self.fleeing_timer >= self.fleeing_time:
+                self.fleeing = False
+                self.fleeing_timer = 0
 
-    def handle_player_collision(self):
-       if self.can_attack and arcade.check_for_collision(self, self.player):
-           self.player.take_damage(self.attack)
-           self.just_attacked = True
-           self.paralyze()
-           self.player.just_been_hit = True
+    def apparent_player_position(self, vision=0.0):
+        true_player_position = self.player.position
+        distance = arcade.get_distance_between_sprites(self, self.player)
+        apparent_player_position = (true_player_position[0] + random.uniform(-distance*(1-vision), distance*(1-vision)), true_player_position[1] + random.uniform(-distance*(1-vision), distance*(1-vision)))
+        return apparent_player_position
 
-    def face_player(self):
-        self.velocity = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
+    def get_volume_from_player_pos(self):
+        distance = arcade.get_distance_between_sprites(self, self.player)
+        distance_in_m = distance / 128
+        if distance == 0:
+            volume = 1
+        else:
+            volume = 1/(distance_in_m)
+        return min(max(volume, 0), 1)
+
+    def get_pan_from_player_pos(self):
+        angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
+        return math.sin(angle)
 
     @property
     def should_turn(self):
@@ -93,6 +111,9 @@ class FollowingSprite(LivingSprite):
     @property
     def should_sprint(self):
         return self.just_been_hit
+
+    def draw_follow_radius(self):
+        arcade.draw_circle_outline(self.center_x, self.center_y, self.follow_distance, arcade.color.BLUE, 8)
 
     def draw_debug(self):
         super().draw_debug()
