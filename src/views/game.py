@@ -314,9 +314,8 @@ class GameView(arcade.View):
         self.ui_section = UISection(0, 0,
                                    self.window.width, self.window.height)
 
-        self.sectionManager = arcade.SectionManager(self)
-        self.sectionManager.add_section(self.game_section)
-        self.sectionManager.add_section(self.ui_section)
+        self.add_section(self.game_section)
+        self.add_section(self.ui_section)
 
         self.player = None
 
