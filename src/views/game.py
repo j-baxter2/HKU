@@ -23,6 +23,7 @@ class GameSection(arcade.Section):
         self.tile_map = None
         self.physics_engine = None
         self.camera = None
+        self.mouse_pos = (0,0)
 
     def setup(self):
         self.load_map("resources/maps/map.json")
@@ -337,7 +338,7 @@ class UISection(arcade.Section):
             max_rank_text = arcade.Text(f"MAX RANK", start_x=self.width // 2, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE*1.5, font_name=UI_FONT)
             max_rank_text.draw()
         else:
-            filled_width = (self.player.get_xp_fraction()) * 300
+            filled_width = max(0,(self.player.get_xp_fraction()) * 300)
             arcade.draw_rectangle_filled(center_x=self.width // 2,
                                                 center_y=self.top - 70,
                                                 width=300,
@@ -361,7 +362,7 @@ class UISection(arcade.Section):
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
-
+        self.window.views["game"] = self
         self.game_section = GameSection(0, 0,
                                        self.window.width, self.window.height, accept_keyboard_events=True)
         self.ui_section = UISection(0, 0,
@@ -391,6 +392,8 @@ class GameView(arcade.View):
         self.crossfade_time = 2.0  # Crossfade duration in seconds
         self.crossfade_timer = 0
         self.new_media_player = None
+
+        self.mouse_pos = (0,0)
 
     def setup(self):
         self.game_section.setup()
@@ -472,6 +475,11 @@ class GameView(arcade.View):
                 self.handle_level_completion()
                 self.between_levels_timer = 0
 
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
+        a_x = x+self.game_section.camera.position.x
+        a_y = y+self.game_section.camera.position.y
+        self.mouse_pos = (a_x, a_y)
+
     def on_key_press(self, key, modifiers):
         if key == arcade.key.APOSTROPHE:
             self.debug = not self.debug
@@ -491,7 +499,7 @@ class GameView(arcade.View):
         projectile_count = len(self.game_section.scene.get_sprite_list("Projectile"))
         player_pos = self.game_section.player.get_integer_position()
 
-        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nProjectiles: {projectile_count}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
+        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nMouse: {self.mouse_pos}\nProjectiles: {projectile_count}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
         debug_text.draw()
         if self.between_levels:
             between_levels_text = arcade.Text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", start_x=20, start_y=self.window.height - 20 - LINE_HEIGHT*4, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top")
