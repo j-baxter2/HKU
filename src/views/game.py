@@ -389,9 +389,12 @@ class GameView(arcade.View):
 
         self.my_music = arcade.load_sound(self.songs[self.curr_song_key])
 
-        self.crossfade_time = 2.0  # Crossfade duration in seconds
+        self.crossfade_time = 2  # Crossfade duration in seconds
         self.crossfade_timer = 0
         self.new_media_player = None
+
+        self.out_of_battle_timer = 0
+        self.time_out_of_battle = 3
 
         self.mouse_pos = (0,0)
 
@@ -400,13 +403,17 @@ class GameView(arcade.View):
         self.ui_section.setup()
 
     def on_show_view(self):
+        self.window.set_mouse_visible(False)
         play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
-        self.play_music(self.curr_song_key)
         arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
+        self.play_music(self.curr_song_key)
 
     def on_hide_view(self):
+        self.window.set_mouse_visible()
         if self.media_player:
             self.media_player.pause()
+            if self.new_media_player:
+                self.new_media_player.pause()
 
     def on_draw(self):
         self.clear()
@@ -430,7 +437,19 @@ class GameView(arcade.View):
         self.update_music()
 
     def update_music(self, delta_time=DELTA_TIME):
-        new_song_key = "battle" if self.game_section.player.in_battle else "normal"
+        if self.game_section.player.in_battle:
+            self.out_of_battle_timer = 0
+            new_song_key = "battle"
+        else:
+            if self.curr_song_key == "battle":
+                self.out_of_battle_timer += delta_time
+                if self.out_of_battle_timer >= self.time_out_of_battle:
+                    new_song_key = "normal"
+                else:
+                    new_song_key = self.curr_song_key
+            else:
+                new_song_key = "normal"
+
         if new_song_key != self.curr_song_key:
             self.curr_song_key = new_song_key
             self.crossfade_to_new_music(new_song_key)
