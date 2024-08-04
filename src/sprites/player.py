@@ -346,8 +346,12 @@ class Player(LivingSprite):
 
     @property
     def in_battle(self):
-        distance = arcade.get_closest_sprite(self, self.scene.get_sprite_list("Enemy"))[1]
-        return distance <= 2048
+        tuple = arcade.get_closest_sprite(self, self.scene.get_sprite_list("Enemy"))
+        if tuple is not None:
+            distance = tuple[1]
+            return distance <= 2048
+        else:
+            return False
 
     def draw_debug(self):
         index = 0
