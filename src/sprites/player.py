@@ -349,7 +349,7 @@ class Player(LivingSprite):
         tuple = arcade.get_closest_sprite(self, self.scene.get_sprite_list("Enemy"))
         if tuple is not None:
             distance = tuple[1]
-            return distance <= 2048
+            return distance <= 1024 or self.just_been_hit
         else:
             return False
 
@@ -359,6 +359,6 @@ class Player(LivingSprite):
             if move:
                 move.draw_debug(index)
                 index += 1
-        xp_text = arcade.Text(f"xp: {self.xp}", start_x=self.center_x, start_y=self.top+LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
+        xp_text = arcade.Text(f"xp: {self.xp}\nIB: {self.in_battle}", start_x=self.center_x, start_y=self.top+LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
         xp_text.draw()
         super().draw_debug()

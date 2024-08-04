@@ -371,28 +371,35 @@ class GameView(arcade.View):
         self.sectionManager.add_section(self.game_section)
         self.sectionManager.add_section(self.ui_section)
 
-        self.player = None
-
         self.between_levels = True
         self.between_levels_timer = 0
         self.between_levels_time = 1
 
         self.debug = False
         self.loaded_sound = load_sound("upgrade1")
-        self.music = load_sound("music/hkusong1", source="hku")
+
+        self.media_player = None
+        self.songs = {
+            "normal": "resources/sounds/music/hkusong1.wav",
+            "battle": "resources/sounds/music/battlemusic1.wav"
+        }
+
+        self.curr_song_key = "normal"
+
+        self.my_music = arcade.load_sound(self.songs[self.curr_song_key])
 
     def setup(self):
-        self.music_player = play_sound(self.music, looping=True, return_player=True, volume=MUSIC_VOL)
         self.game_section.setup()
         self.ui_section.setup()
 
     def on_show_view(self):
         play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
-        self.music_player.play()
+        self.play_music(self.curr_song_key)
         arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
 
     def on_hide_view(self):
-        self.music_player.pause()
+        if self.media_player:
+            self.media_player.pause()
 
     def on_draw(self):
         self.clear()
@@ -413,6 +420,19 @@ class GameView(arcade.View):
         self.ui_section.on_update()
         self.handle_gamestate()
         self.update_between_levels()
+        self.update_music()
+
+    def update_music(self):
+        new_song_key = "battle" if self.game_section.player.in_battle else "normal"
+        if new_song_key != self.curr_song_key:
+            self.curr_song_key = new_song_key
+            self.play_music(self.curr_song_key)
+
+    def play_music(self, song_key):
+        if self.media_player:
+            self.media_player.pause()
+        self.my_music = arcade.load_sound(self.songs[song_key])
+        self.media_player = self.my_music.play()
 
     def start_between_levels(self):
         self.between_levels = True
