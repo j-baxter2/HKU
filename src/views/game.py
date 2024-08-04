@@ -388,6 +388,10 @@ class GameView(arcade.View):
 
         self.my_music = arcade.load_sound(self.songs[self.curr_song_key])
 
+        self.crossfade_time = 2.0  # Crossfade duration in seconds
+        self.crossfade_timer = 0
+        self.new_media_player = None
+
     def setup(self):
         self.game_section.setup()
         self.ui_section.setup()
@@ -422,11 +426,33 @@ class GameView(arcade.View):
         self.update_between_levels()
         self.update_music()
 
-    def update_music(self):
+    def update_music(self, delta_time=DELTA_TIME):
         new_song_key = "battle" if self.game_section.player.in_battle else "normal"
         if new_song_key != self.curr_song_key:
             self.curr_song_key = new_song_key
-            self.play_music(self.curr_song_key)
+            self.crossfade_to_new_music(new_song_key)
+
+        # Handle crossfade if in progress
+        if self.crossfade_timer > 0:
+            self.crossfade_timer -= delta_time
+            progress = (self.crossfade_time - self.crossfade_timer) / self.crossfade_time
+            if self.media_player:
+                self.media_player.volume = max(0, 1 - progress)
+            if self.new_media_player:
+                self.new_media_player.volume = min(1, progress)
+
+            if self.crossfade_timer <= 0:
+                if self.media_player:
+                    self.media_player.pause()
+                self.media_player = self.new_media_player
+                self.new_media_player = None
+
+    def crossfade_to_new_music(self, song_key):
+        self.crossfade_timer = self.crossfade_time
+        self.new_music = arcade.load_sound(self.songs[song_key])
+        self.new_media_player = self.new_music.play(volume=0)
+        if self.media_player:
+            self.media_player.volume = 1  # Ensure current music is at full volume
 
     def play_music(self, song_key):
         if self.media_player:
