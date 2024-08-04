@@ -16,6 +16,7 @@ class MoveMouseAim(MoveByPlayer):
         self.projectiles_fired = 0
         self.n_projectiles = 20
         self.window = arcade.get_window()
+        self.fire_sound = load_sound("explosion2")
 
     def get_values_from_mouse(self):
         start = self.origin_sprite.position
@@ -48,6 +49,7 @@ class MoveMouseAim(MoveByPlayer):
             self.origin_sprite.color = self.color
             if self.sub_active_timer >= self.active_time / self.n_projectiles:
                 self.fire_projectile()
+                play_sound(self.fire_sound)
                 self.projectiles_fired+=1
                 self.sub_active_timer=0
             if self.active_timer > self.active_time:
