@@ -10,6 +10,7 @@ from src.moves.move_target_arrowkey import TargetArrowKey
 from src.moves.move_radial_fireball import RadialProjectile
 from src.moves.move_custom_fire import MoveCustomFire
 from src.moves.move_mouse_aim import MoveMouseAim
+from src.moves.move_arrow_aim import MoveArrowAim
 
 from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
@@ -100,14 +101,16 @@ class Player(LivingSprite):
         radial = RadialProjectile(5, self.scene, self)
         custom_fire = MoveCustomFire(7, self.scene, self)
         mouse_aim = MoveMouseAim(7, self.scene, self)
+        arrow_aim = MoveArrowAim(7, self.scene, self)
         self.unlock_moves(basic_attack)
         self.unlock_moves(basic_heal)
         self.unlock_moves(scare)
         self.unlock_moves(radial)
         self.unlock_moves(custom_fire)
         self.unlock_moves(mouse_aim)
+        self.unlock_moves(arrow_aim)
         self.equip_move("quick attack", basic_attack)
-        self.equip_move("special", mouse_aim)
+        self.equip_move("special", arrow_aim)
 
     def update(self):
         super().update()

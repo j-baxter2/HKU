@@ -9,7 +9,7 @@ import json
 from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
 from src.utils.sound import load_sound, play_sound
 
-class MoveMouseAim(MoveByPlayer):
+class MoveArrowAim(MoveByPlayer):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):
         super().__init__(id, scene, origin_sprite)
         self.sub_active_timer = 0
@@ -18,27 +18,27 @@ class MoveMouseAim(MoveByPlayer):
         self.window = arcade.get_window()
         self.fire_sound = load_sound("explosion2")
         self.choosing_target = False
-
-    def get_values_from_mouse(self):
-        start = self.origin_sprite.position
-        target = self.window.views["game"].mouse_pos
-        origin_to_mouse = Vec2(target[0]-start[0],target[1]-start[1])
-        origin_to_mouse = origin_to_mouse.normalize()
-        distance = arcade.get_distance(*start, *target)
-        origin_to_mouse = origin_to_mouse.scale(min(distance, self.range))
-        target = (start[0] + origin_to_mouse[0], start[1] + origin_to_mouse[1])
-        range=origin_to_mouse.mag
-        return start, target, range
+        self.origin_sprite = origin_sprite
+        self.target = origin_sprite.position
 
     def start(self):
         self.active = True
         self.active_timer = 0
         self.sub_active_timer = 0
         self.projectiles_fired = 0
+        self.target = (self.origin_sprite.left, self.origin_sprite.top)
 
     def fire_projectile(self):
-        start, target, proj_range = self.get_values_from_mouse()
-        self.projectile = ProjectileSpecify(0, self.scene, self, start=start, target=target, targetting_method="tuple", range=proj_range)
+        start = self.origin_sprite.position
+        target = self.target
+        origin_to_target = Vec2(target[0]-start[0],target[1]-start[1])
+        origin_to_target = origin_to_target.normalize()
+        distance = arcade.get_distance(*start, *target)
+        origin_to_target = origin_to_target.scale(min(distance, self.range))
+        target = (start[0] + origin_to_target[0], start[1] + origin_to_target[1])
+        proj_range=origin_to_target.mag
+        self.projectile = ProjectileSpecify(0, self.scene, self, start=start, target=self.target, targetting_method="tuple", range=proj_range)
+
         self.scene.add_sprite("Projectile", self.projectile)
         self.projectile.start()
 
@@ -62,8 +62,18 @@ class MoveMouseAim(MoveByPlayer):
         if self.executable:
             self.start()
 
+    def change_target(self, direction: str):
+        if self.choosing_target:
+            if direction == "up" and self.target:
+                self.target = (self.target[0],self.target[1]+32)
+            elif direction == "down" and self.target:
+                self.target = (self.target[0],self.target[1]-32)
+            elif direction == "left" and self.target:
+                self.target = (self.target[0]-32,self.target[1])
+            elif direction == "right" and self.target:
+                self.target = (self.target[0]+32,self.target[1])
+
     def draw(self):
         if self.active:
-            _, target, _  = self.get_values_from_mouse()
-            arcade.draw_circle_outline(center_x=target[0], center_y=target[1], radius=32, color=self.color[:3])
-            arcade.draw_circle_filled(center_x=target[0], center_y=target[1], radius=32, color=self.color[:3]+(128,))
+            arcade.draw_circle_outline(center_x=self.target[0], center_y=self.target[1], radius=32, color=self.color[:3])
+            arcade.draw_circle_filled(center_x=self.target[0], center_y=self.target[1], radius=32, color=self.color[:3]+(128,))
