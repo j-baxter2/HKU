@@ -344,6 +344,11 @@ class Player(LivingSprite):
     def fade_in_fraction(self):
         return self.fade_in_timer/self.fade_in_time
 
+    @property
+    def in_battle(self):
+        distance = arcade.get_closest_sprite(self, self.scene.get_sprite_list("Enemy"))[1]
+        return distance <= 2048
+
     def draw_debug(self):
         index = 0
         for slot, move in self.equipped_moves.items():
