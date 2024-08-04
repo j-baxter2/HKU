@@ -12,13 +12,13 @@
  <tile id="100" probability="0.01"/>
  <wangsets>
   <wangset name="terrain set" type="corner" tile="-1">
-   <wangcolor name="grass" color="#ff0000" tile="-1" probability="1"/>
-   <wangcolor name="grass path" color="#00ff00" tile="-1" probability="1"/>
-   <wangcolor name="grass water" color="#0000ff" tile="-1" probability="1"/>
+   <wangcolor name="grass" color="#ff0000" tile="-1" probability="0.8"/>
+   <wangcolor name="grass path" color="#00ff00" tile="-1" probability="0.1"/>
+   <wangcolor name="grass water" color="#0000ff" tile="-1" probability="0.3"/>
    <wangcolor name="sand" color="#ff7700" tile="-1" probability="0.1"/>
-   <wangcolor name="sand path" color="#00e9ff" tile="-1" probability="1"/>
-   <wangcolor name="sand water" color="#ff00d8" tile="-1" probability="1"/>
-   <wangcolor name="stone" color="#ffff00" tile="-1" probability="1"/>
+   <wangcolor name="sand path" color="#00e9ff" tile="-1" probability="0.05"/>
+   <wangcolor name="sand water" color="#ff00d8" tile="-1" probability="0.6"/>
+   <wangcolor name="stone" color="#ffff00" tile="-1" probability="0.2"/>
    <wangtile tileid="0" wangid="0,1,0,7,0,1,0,1"/>
    <wangtile tileid="1" wangid="0,1,0,7,0,7,0,1"/>
    <wangtile tileid="2" wangid="0,1,0,1,0,7,0,1"/>
