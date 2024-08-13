@@ -2,9 +2,10 @@ import json
 
 WINDOW_TITLE = "( Hungry Kitty Uprising | A BestKitty Game )"
 
-with open("resources/maps/map.json", "r") as file:
+with open("resources/maps/map2.json", "r") as file:
             map_dict = json.load(file)
 
+TILE_SIZE = map_dict['tilewidth']
 MAP_WIDTH = map_dict['width'] * map_dict['tilewidth']
 MAP_HEIGHT = map_dict['height'] * map_dict['tileheight']
 

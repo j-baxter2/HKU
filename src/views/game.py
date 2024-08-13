@@ -26,7 +26,7 @@ class GameSection(arcade.Section):
         self.mouse_pos = (0,0)
 
     def setup(self):
-        self.load_map("resources/maps/map.json")
+        self.load_map("resources/maps/map2.json")
         self.player = Player(id=1, scene=self.scene)
         self.scene.add_sprite_list(name="Player", use_spatial_hash=True)
         self.scene.add_sprite("Player", self.player)
