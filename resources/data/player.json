@@ -14,7 +14,7 @@
             "count": 24,
             "width": 16,
             "height": 16,
-            "scale": 8
+            "scale": 1
             },
         "animation": {
             "fps": 30,
@@ -43,7 +43,7 @@
             "count": 16,
             "width": 32,
             "height": 48,
-            "scale": 4
+            "scale": 1
             },
         "animation": {
             "fps": 10,

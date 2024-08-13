@@ -10,14 +10,18 @@ class MovingSprite(arcade.Sprite):
         sprite_data = data["spritesheet"]
 
         sheet_path = sprite_data["path"]
-        scale = sprite_data["scale"]
+        tile_scale = sprite_data["scale"]
 
-        super().__init__(sheet_path, scale)
 
         columns = sprite_data["columns"]
         count = sprite_data["count"]
         width = sprite_data["width"]
         height = sprite_data["height"]
+
+        # Calculate scale using the formula
+        true_scale = (tile_scale * TILE_SIZE) / max(width, height)
+
+        super().__init__(sheet_path, true_scale)
 
         self.textures = arcade.load_spritesheet(
             sheet_path,
