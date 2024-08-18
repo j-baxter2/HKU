@@ -99,7 +99,7 @@ class Player(LivingSprite):
         scare = AffectAllMove(3, self.scene, self)
         ranged = TargetArrowKey(4, self.scene, self)
         radial = RadialProjectile(5, self.scene, self)
-        custom_fire = MoveCustomFire(7, self.scene, self)
+        custom_fire = MoveCustomFire(8, self.scene, self)
         mouse_aim = MoveMouseAim(7, self.scene, self)
         arrow_aim = MoveArrowAim(7, self.scene, self)
         self.unlock_moves(basic_attack)
@@ -110,7 +110,7 @@ class Player(LivingSprite):
         self.unlock_moves(mouse_aim)
         self.unlock_moves(arrow_aim)
         self.equip_move("quick attack", basic_attack)
-        self.equip_move("special", arrow_aim)
+        self.equip_move("special", custom_fire)
 
     def update(self):
         super().update()

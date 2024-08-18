@@ -165,5 +165,26 @@
         "draw circle": false,
         "start sound": "explosion2",
         "stop sound": null
+    },
+    "8" : {
+        "name": "fire spiral",
+        "type": "basic",
+        "slot": "special",
+        "damage": 5,
+        "damage resist": null,
+        "cost": 10,
+        "active time": 1,
+        "refresh time": 3,
+        "range": 512,
+        "origin mobile while charging": true,
+        "origin mobile while active": true,
+        "affectees mobile while active": true,
+        "affects": "Enemy",
+        "charge time": null,
+        "color": "ORANGE",
+        "draw lines": false,
+        "draw circle": false,
+        "start sound": "explosion2",
+        "stop sound": null
     }
 }
