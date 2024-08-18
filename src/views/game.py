@@ -192,7 +192,11 @@ class GameSection(arcade.Section):
 
     @property
     def any_kitties(self):
-        return len(self.scene.get_sprite_list("Kitty")) > 0
+        kitties = self.scene.get_sprite_list("Kitty")
+        for kitty in kitties:
+            if not (kitty.fading or kitty.faded):
+                return True
+        return False
 
     def draw_debug(self):
         self.camera.use()
@@ -488,6 +492,13 @@ class GameView(arcade.View):
     def start_between_levels(self):
         self.between_levels = True
         self.between_levels_timer = 0
+        enemies = self.game_section.scene.get_sprite_list("Enemy")
+        for enemy in enemies:
+            enemy.start_fade()
+        treats = self.game_section.scene.get_sprite_list("Treat")
+        for treat in treats:
+            treat.kill()
+
 
     def update_between_levels(self):
         if self.between_levels:

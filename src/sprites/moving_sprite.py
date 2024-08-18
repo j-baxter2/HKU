@@ -89,6 +89,7 @@ class MovingSprite(arcade.Sprite):
         super().update()
 
     def start_fade(self):
+        self.paralyze()
         if self.fade_texture_index:
             self.set_texture(self.fade_texture_index)
         self.fading = True
