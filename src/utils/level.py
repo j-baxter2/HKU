@@ -78,6 +78,6 @@ class Level:
             y = random.uniform(edge_margin, MAP_HEIGHT - edge_margin)
 
             # Create and place the treat
-            treat = Treat("resources/textures/map_tiles/default_apple.png", 1)
+            treat = Treat("resources/textures/map_tiles/default_apple.png", 0.8)
             treat.position = (x, y)
             self.scene.add_sprite("Treat", treat)
