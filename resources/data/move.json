@@ -146,7 +146,7 @@
         "stop sound": null
     },
     "7" : {
-        "name": "custom fire",
+        "name": "fire stream",
         "type": "basic",
         "slot": "special",
         "damage": 5,
