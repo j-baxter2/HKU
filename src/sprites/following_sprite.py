@@ -5,7 +5,7 @@ from pyglet.math import Vec2
 import random
 import math
 import json
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, M
 
 class FollowingSprite(LivingSprite):
     def __init__(self, data: dict, scene: arcade.Scene):
@@ -89,7 +89,7 @@ class FollowingSprite(LivingSprite):
 
     def get_volume_from_player_pos(self):
         distance = arcade.get_distance_between_sprites(self, self.player)
-        distance_in_m = distance / 128
+        distance_in_m = distance / M
         if distance == 0:
             volume = 1
         else:

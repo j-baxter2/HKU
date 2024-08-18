@@ -1,7 +1,7 @@
 import arcade
 import random
 from pyglet.math import Vec2
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, TILE_SIZE
+from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, TILE_SIZE, M
 from src.utils.sound import load_sound, play_sound
 
 class MovingSprite(arcade.Sprite):
@@ -19,7 +19,7 @@ class MovingSprite(arcade.Sprite):
         height = sprite_data["height"]
 
         # Calculate scale using the formula
-        true_scale = (tile_scale * 128) / max(width, height)
+        true_scale = (tile_scale * M) / max(width, height)
 
         super().__init__(sheet_path, true_scale)
 
