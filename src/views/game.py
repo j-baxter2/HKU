@@ -37,7 +37,6 @@ class GameSection(arcade.Section):
         self.current_level_id = 0
         self.load_level()
         self.level_list = self.current_level.get_level_list()
-        self.current_level.spawn_player()
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player,
             walls=[
@@ -172,13 +171,14 @@ class GameSection(arcade.Section):
 
     def load_level(self):
         self.current_level = Level(level_id=self.current_level_id, scene=self.scene)
+        self.current_level.spawn_player()
         self.current_level.load_enemies()
         self.current_level.load_kitties()
         for kitty in self.scene.get_sprite_list("Kitty"):
             kitty.setup()
         for enemy in self.scene.get_sprite_list("Enemy"):
             enemy.setup()
-        self.current_level.give_player_treats()
+        self.current_level.spawn_treats()
 
     @property
     def more_levels(self):
