@@ -71,9 +71,6 @@ class Level:
                 kitty.position = (x,y)
                 self.scene.add_sprite("Kitty", kitty)
 
-    def spawn_player(self):
-        self.player.center_x, self.player.center_y = 300, 300
-
     def get_level_list(self):
         return self.level_list
 

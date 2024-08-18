@@ -35,6 +35,8 @@ class GameSection(arcade.Section):
         self.scene.add_sprite_list(name="Treat")
         self.scene.add_sprite_list(name="Projectile")
         self.current_level_id = 0
+        self.player.left = 256
+        self.player.bottom = 256
         self.load_level()
         self.level_list = self.current_level.get_level_list()
         self.physics_engine = arcade.PhysicsEngineSimple(
@@ -172,7 +174,6 @@ class GameSection(arcade.Section):
 
     def load_level(self):
         self.current_level = Level(level_id=self.current_level_id, scene=self.scene)
-        self.current_level.spawn_player()
         self.current_level.load_enemies()
         self.current_level.load_kitties()
         for kitty in self.scene.get_sprite_list("Kitty"):
@@ -559,8 +560,8 @@ class GameView(arcade.View):
 
     @property
     def should_change_level(self):
-        return not self.game_section.any_enemies and not self.between_levels and not self.game_section.any_kitties
+        return not self.between_levels and not self.game_section.any_kitties
 
     @property
     def completed(self):
-        return not self.game_section.more_levels and not self.game_section.any_enemies and not self.game_section.any_kitties
+        return not self.game_section.more_levels and not self.game_section.any_kitties
