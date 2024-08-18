@@ -3,7 +3,7 @@ from src.data.constants import DELTA_TIME
 import math
 
 class Treat(arcade.Sprite):
-    def __init__(self, image_file, scale=1):
+    def __init__(self, image_file, scale=1, decayed=False):
         super().__init__(image_file, scale)
         self.being_eaten = False
         self.picked_up = False
@@ -12,7 +12,7 @@ class Treat(arcade.Sprite):
         self.life_timer = 0
         self.healthy_time = 0.5
         self.decaying = False
-        self.decayed = False
+        self.decayed = decayed
         self.decay_timer = 0
         self.decay_time = 1
         self.opacity_timer = 0

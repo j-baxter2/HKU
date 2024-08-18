@@ -1,7 +1,7 @@
 import arcade
 import random
 from pyglet.math import Vec2
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL
+from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, TILE_SIZE, M
 from src.utils.sound import load_sound, play_sound
 
 class MovingSprite(arcade.Sprite):
@@ -10,14 +10,18 @@ class MovingSprite(arcade.Sprite):
         sprite_data = data["spritesheet"]
 
         sheet_path = sprite_data["path"]
-        scale = sprite_data["scale"]
+        tile_scale = sprite_data["scale"]
 
-        super().__init__(sheet_path, scale)
 
         columns = sprite_data["columns"]
         count = sprite_data["count"]
         width = sprite_data["width"]
         height = sprite_data["height"]
+
+        # Calculate scale using the formula
+        true_scale = (tile_scale * M) / max(width, height)
+
+        super().__init__(sheet_path, true_scale)
 
         self.textures = arcade.load_spritesheet(
             sheet_path,
@@ -85,6 +89,7 @@ class MovingSprite(arcade.Sprite):
         super().update()
 
     def start_fade(self):
+        self.paralyze()
         if self.fade_texture_index:
             self.set_texture(self.fade_texture_index)
         self.fading = True

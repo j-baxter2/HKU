@@ -2,6 +2,7 @@ import arcade
 import json
 from src.sprites.following_sprite import FollowingSprite
 from src.sprites.player import Player
+from src.sprites.treat import Treat
 from pyglet.math import Vec2
 import random
 import math
@@ -40,6 +41,9 @@ class Kitty(FollowingSprite):
         self.fleeing_timer = 0
         self.fleeing_time = 3
 
+        self.need_second_timer = 0
+        self.need_second_time = 3
+
         self.fade_texture_index = self.kitty_data["spritesheet"]["fade texture"]
         self.sitting_frames = self.kitty_data["animation"]["sitting"]
 
@@ -61,11 +65,29 @@ class Kitty(FollowingSprite):
             self.handle_treat_collision()
         self.update_fleeing()
         self.update_treats()
+        self.update_need_second()
         if self.target_treat:
             self.update_eating()
 
     def update_treats(self):
         self.treats = self.scene.get_sprite_list("Treat")
+
+    def update_need_second(self):
+        if self.treats_eaten == 1:
+            self.need_second_timer += DELTA_TIME
+            red = 255*(self.need_second_timer/self.need_second_time)
+            self.color = [min(red, 255), 255, 255]
+            if self.need_second_timer >= self.need_second_time:
+                self.color = arcade.color.WHITE
+                self.treats_eaten = 0
+                edge_margin = 64
+                x = random.uniform(edge_margin, MAP_WIDTH - edge_margin)
+                y = random.uniform(edge_margin, MAP_HEIGHT - edge_margin)
+
+                treat = Treat("resources/textures/map_tiles/default_apple.png", 0.8, decayed=True)
+                treat.position = (x, y)
+                self.scene.add_sprite("Treat", treat)
+                self.need_second_timer = 0
 
     def update_meow(self):
         self.meow_timer += DELTA_TIME

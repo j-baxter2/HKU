@@ -14,7 +14,7 @@
             "count": 24,
             "width": 16,
             "height": 16,
-            "scale": 8
+            "scale": 1
             },
         "animation": {
             "fps": 30,
@@ -28,7 +28,7 @@
     },
     "1" : {
         "name": "Lyra",
-        "hp": 50,
+        "hp": 500,
         "strength": 2,
         "stamina": 100,
         "stamina regen": 10,
@@ -43,7 +43,7 @@
             "count": 16,
             "width": 32,
             "height": 48,
-            "scale": 4
+            "scale": 1.25
             },
         "animation": {
             "fps": 10,
