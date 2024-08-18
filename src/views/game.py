@@ -381,7 +381,7 @@ class GameView(arcade.View):
 
         self.between_levels = True
         self.between_levels_timer = 0
-        self.between_levels_time = 1
+        self.between_levels_time = 5
 
         self.debug = False
         self.loaded_sound = load_sound("upgrade1")
