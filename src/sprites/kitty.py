@@ -40,6 +40,10 @@ class Kitty(FollowingSprite):
         self.fleeing_timer = 0
         self.fleeing_time = 3
 
+        self.need_second = False
+        self.need_second_timer = 0
+        self.need_second_time = 3
+
         self.fade_texture_index = self.kitty_data["spritesheet"]["fade texture"]
         self.sitting_frames = self.kitty_data["animation"]["sitting"]
 
@@ -66,6 +70,8 @@ class Kitty(FollowingSprite):
 
     def update_treats(self):
         self.treats = self.scene.get_sprite_list("Treat")
+
+    def update_need_second(self):
 
     def update_meow(self):
         self.meow_timer += DELTA_TIME
