@@ -50,6 +50,7 @@ class GameSection(arcade.Section):
         self.physics_engine.update()
         self.update_camera()
         self.scene.update()
+        self.current_level.update_respawn_enemies()
 
     def on_draw(self):
         self.scene.draw()

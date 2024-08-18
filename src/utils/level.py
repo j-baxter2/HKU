@@ -18,10 +18,16 @@ class Level:
         self.kitty_data = self.load_level_data(level_id)["kitties"]
         self.treats = self.scene.get_sprite_list("Treat")
 
+        self.enemy_amount = self.enemy_data["enemy amount"]
+        self.enemy_ratio = self.enemy_data["enemy ratio"]
+
         self.kitty_amount = self.kitty_data["kitty amount"]
         self.kitty_ratio = self.kitty_data["kitty ratio"]
 
         self.treat_amount = 0
+
+        self.initial_enemy_count = {enemy_id: int(ratio * self.enemy_amount) for enemy_id, ratio in self.enemy_ratio.items()}
+
 
     def load_level_data(self, level_id):
         with open("resources/data/level.json", "r") as file:
@@ -30,23 +36,26 @@ class Level:
         return level_data[str(level_id)]
 
     def load_enemies(self):
-        enemy_amount = self.enemy_data["enemy amount"]
-        enemy_ratio = self.enemy_data["enemy ratio"]
         map_bounds = [MAP_WIDTH, MAP_HEIGHT]
 
-        for enemy_id, ratio in enemy_ratio.items():
-            for _ in range(int(ratio * enemy_amount)):
-                if enemy_id == "0":
-                    enemy = DistruptorEnemy(id=int(enemy_id), scene=self.scene)
-                elif enemy_id == "2":
-                    enemy = ShootingEnemy(id=int(enemy_id), scene=self.scene)
-                while True:
-                    x = random.uniform(0, map_bounds[0])
-                    y = random.uniform(0, map_bounds[1])
-                    if not (0 <= x <= 1024 and 0 <= y <= 1024):
-                        break
-                enemy.position = (x,y)
-                self.scene.add_sprite("Enemy", enemy)
+        for enemy_id, ratio in self.enemy_ratio.items():
+            for _ in range(int(ratio * self.enemy_amount)):
+                self.spawn_enemy(enemy_id=enemy_id, map_bounds=map_bounds)
+
+    def spawn_enemy(self, enemy_id, map_bounds):
+        if enemy_id == "0":
+            enemy = DistruptorEnemy(id=int(enemy_id), scene=self.scene)
+        elif enemy_id == "2":
+            enemy = ShootingEnemy(id=int(enemy_id), scene=self.scene)
+
+        while True:
+            x = random.uniform(0, map_bounds[0])
+            y = random.uniform(0, map_bounds[1])
+            if not (0 <= x <= 1024 and 0 <= y <= 1024):
+                break
+        enemy.position = (x, y)
+        self.scene.add_sprite("Enemy", enemy)
+        enemy.setup()
 
     def load_kitties(self):
         map_bounds = [MAP_WIDTH, MAP_HEIGHT]
@@ -67,6 +76,26 @@ class Level:
 
     def get_level_list(self):
         return self.level_list
+
+    def update_respawn_enemies(self):
+        map_bounds = [MAP_WIDTH, MAP_HEIGHT]
+        current_enemy_counts = {"0": 0, "1": 0, "2": 0}
+
+        # Count current enemies
+        for enemy in self.scene.get_sprite_list("Enemy"):
+            if isinstance(enemy, DistruptorEnemy):
+                current_enemy_counts["0"] += 1
+                current_enemy_counts["1"] += 1
+            elif isinstance(enemy, ShootingEnemy):
+                current_enemy_counts["2"] += 1
+
+        for enemy_id, initial_count in self.initial_enemy_count.items():
+            threshold = 0.7 * initial_count
+            if current_enemy_counts[enemy_id] < threshold:
+                # Calculate how many enemies to respawn
+                respawn_count = int(threshold) - current_enemy_counts[enemy_id]
+                for _ in range(respawn_count):
+                    self.spawn_enemy(enemy_id, map_bounds)
 
     def spawn_treats(self):
         for kitty in self.scene.get_sprite_list("Kitty"):
