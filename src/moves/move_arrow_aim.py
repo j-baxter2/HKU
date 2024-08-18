@@ -20,6 +20,7 @@ class MoveArrowAim(MoveByPlayer):
         self.choosing_target = False
         self.origin_sprite = origin_sprite
         self.target = origin_sprite.position
+        self.direction = "right"
 
     def start(self):
         self.active = True
@@ -48,6 +49,7 @@ class MoveArrowAim(MoveByPlayer):
             self.active_timer += DELTA_TIME
             self.sub_active_timer += DELTA_TIME
             self.update_activity_mobility()
+            self.update_target()
             self.origin_sprite.color = self.color
             if self.sub_active_timer >= self.active_time / self.n_projectiles:
                 self.fire_projectile()
@@ -62,16 +64,22 @@ class MoveArrowAim(MoveByPlayer):
         if self.executable:
             self.start()
 
+    def update_target(self):
+        x = self.origin_sprite.position[0]
+        y = self.origin_sprite.position[1]
+        if self.target:
+            if self.direction == "up":
+                self.target = (x, y + self.range)
+            elif self.direction == "down":
+                self.target = (x, y - self.range)
+            elif self.direction == "left":
+                self.target = (x - self.range, y)
+            elif self.direction == "right":
+                self.target = (x + self.range, y)
+
     def change_target(self, direction: str):
         if self.choosing_target:
-            if direction == "up" and self.target:
-                self.target = (self.target[0],self.target[1]+32)
-            elif direction == "down" and self.target:
-                self.target = (self.target[0],self.target[1]-32)
-            elif direction == "left" and self.target:
-                self.target = (self.target[0]-32,self.target[1])
-            elif direction == "right" and self.target:
-                self.target = (self.target[0]+32,self.target[1])
+            self.direction = direction
 
     def draw(self):
         if self.active:

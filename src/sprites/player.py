@@ -107,10 +107,9 @@ class Player(LivingSprite):
         self.unlock_moves(scare)
         self.unlock_moves(radial)
         self.unlock_moves(custom_fire)
-        self.unlock_moves(mouse_aim)
         self.unlock_moves(arrow_aim)
         self.equip_move("quick attack", basic_attack)
-        self.equip_move("special", custom_fire)
+        self.equip_move("special", arrow_aim)
 
     def update(self):
         super().update()

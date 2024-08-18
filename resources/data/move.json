@@ -154,7 +154,7 @@
         "cost": 10,
         "active time": 5,
         "refresh time": 3,
-        "range": 512,
+        "range": 480,
         "origin mobile while charging": true,
         "origin mobile while active": true,
         "affectees mobile while active": true,
