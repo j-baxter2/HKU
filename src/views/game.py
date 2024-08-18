@@ -10,7 +10,7 @@ from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import load_sound, play_sound
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -26,7 +26,7 @@ class GameSection(arcade.Section):
         self.mouse_pos = (0,0)
 
     def setup(self):
-        self.load_map("resources/maps/map.json")
+        self.load_map("resources/maps/map2.json")
         self.player = Player(id=1, scene=self.scene)
         self.scene.add_sprite_list(name="Player", use_spatial_hash=True)
         self.scene.add_sprite("Player", self.player)
@@ -37,7 +37,6 @@ class GameSection(arcade.Section):
         self.current_level_id = 0
         self.load_level()
         self.level_list = self.current_level.get_level_list()
-        self.current_level.spawn_player()
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player,
             walls=[
@@ -166,18 +165,20 @@ class GameSection(arcade.Section):
                 "use_spatial_hash": True
             }
         }
-        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options)
+        scaling = M / TILE_SIZE
+        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options, scaling=scaling)
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
     def load_level(self):
         self.current_level = Level(level_id=self.current_level_id, scene=self.scene)
+        self.current_level.spawn_player()
         self.current_level.load_enemies()
         self.current_level.load_kitties()
         for kitty in self.scene.get_sprite_list("Kitty"):
             kitty.setup()
         for enemy in self.scene.get_sprite_list("Enemy"):
             enemy.setup()
-        self.current_level.give_player_treats()
+        self.current_level.spawn_treats()
 
     @property
     def more_levels(self):

@@ -214,7 +214,7 @@ class Player(LivingSprite):
         self.advance_animation()
 
     def drop_treat(self):
-        treat = Treat("resources/textures/map_tiles/default_apple.png", 1)
+        treat = Treat("resources/textures/map_tiles/default_apple.png", 0.8)
         treat.center_x = self.left
         treat.center_y = self.center_y
         self.scene.add_sprite("Treat", treat)

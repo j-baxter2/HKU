@@ -1,9 +1,11 @@
 import json
+import math
 import arcade
 import random
 from src.sprites.distruptor_enemy import DistruptorEnemy
 from src.sprites.shooting_enemy import ShootingEnemy
 from src.sprites.player import Player
+from src.sprites.treat import Treat
 from src.sprites.kitty import Kitty
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT
 
@@ -18,6 +20,8 @@ class Level:
 
         self.kitty_amount = self.kitty_data["kitty amount"]
         self.kitty_ratio = self.kitty_data["kitty ratio"]
+
+        self.treat_amount = 0
 
     def load_level_data(self, level_id):
         with open("resources/data/level.json", "r") as file:
@@ -61,10 +65,19 @@ class Level:
     def spawn_player(self):
         self.player.center_x, self.player.center_y = 300, 300
 
-    def give_player_treats(self):
-        self.player.treat_amount = 0
-        for kitty in self.scene.get_sprite_list("Kitty"):
-            self.player.treat_amount += kitty.hunger
-
     def get_level_list(self):
         return self.level_list
+
+    def spawn_treats(self):
+        for kitty in self.scene.get_sprite_list("Kitty"):
+            self.treat_amount += kitty.hunger
+        edge_margin = 64  # Avoid spawning too close to the edge
+
+        for i in range(self.treat_amount):
+            x = random.uniform(edge_margin, MAP_WIDTH - edge_margin)
+            y = random.uniform(edge_margin, MAP_HEIGHT - edge_margin)
+
+            # Create and place the treat
+            treat = Treat("resources/textures/map_tiles/default_apple.png", 0.8)
+            treat.position = (x, y)
+            self.scene.add_sprite("Treat", treat)
