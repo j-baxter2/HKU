@@ -84,7 +84,7 @@ class Kitty(FollowingSprite):
                 x = random.uniform(edge_margin, MAP_WIDTH - edge_margin)
                 y = random.uniform(edge_margin, MAP_HEIGHT - edge_margin)
 
-                treat = Treat("resources/textures/map_tiles/default_apple.png", 0.8, decayed=True)
+                treat = Treat("resources/spritesheets/treat.png", 4, decayed=True)
                 treat.position = (x, y)
                 self.scene.add_sprite("Treat", treat)
                 self.need_second_timer = 0

@@ -8,6 +8,8 @@ class MenuView(arcade.View):
         super().__init__()
         self.window.views["menu"] = self
 
+        self.background = arcade.load_texture("resources/textures/ui/landscape.png")
+
         arcade.load_font(UI_FONT_PATH)
 
 
@@ -16,18 +18,20 @@ class MenuView(arcade.View):
 
         style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg":color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
 
-        title = arcade.gui.UILabel(text="Hungry Kitty Uprising", font_name=UI_FONT, font_size= 48, text_color=color.ORANGE)
-        self.v_box.add(title.with_space_around(bottom=40))
+        title_sprite = arcade.Sprite("resources/textures/ui/title.png")
 
-        new_game_button = arcade.gui.UIFlatButton(text="play game", style=style, width=200)
-        self.v_box.add(new_game_button.with_space_around(bottom=20))
-        #efer
+        title_widget = arcade.gui.UISpriteWidget(sprite=title_sprite, width=736, height=256)
+        self.v_box.add(title_widget.with_space_around(bottom=40))
 
-        settings_button = arcade.gui.UIFlatButton(text="settings", style=style, width=200)
-        self.v_box.add(settings_button.with_space_around(bottom=20))
+        play_texture = arcade.load_texture("resources/textures/ui/play_button.png")
 
-        quit_button = arcade.gui.UIFlatButton(text="quit", style=style, width=200)
-        self.v_box.add(quit_button.with_space_around(bottom=20))
+        h_play_texture = arcade.load_texture("resources/textures/ui/hovered_play_button.png")
+
+        p_play_texture = arcade.load_texture("resources/textures/ui/pressed_play_button.png")
+
+        play_button = arcade.gui.UITextureButton(texture=play_texture, texture_hovered=h_play_texture, texture_pressed=p_play_texture, scale=2)
+
+        self.v_box.add(play_button.with_space_around(bottom=20))
 
         self.manager.add(
             arcade.gui.UIAnchorWidget(
@@ -35,19 +39,11 @@ class MenuView(arcade.View):
             )
         )
 
-        @new_game_button.event("on_click")
-        def on_click_new_game(event):
+        @play_button.event("on_click")
+        def on_click_play(event):
             game_view = GameView()
             game_view.setup()
             self.window.show_view(game_view)
-
-        @settings_button.event("on_click")
-        def on_click_settings(self, event):
-            pass
-
-        @quit_button.event("on_click")
-        def on_click_quit(self, event):
-            arcade.close_window()
 
     def on_update(self,delta_time):
         self.manager.on_update(delta_time)
@@ -61,4 +57,7 @@ class MenuView(arcade.View):
 
     def on_draw(self):
         self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                            self.window.width, self.window.height,
+                                            self.background)
         self.manager.draw()

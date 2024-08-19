@@ -35,8 +35,8 @@ class GameSection(arcade.Section):
         self.scene.add_sprite_list(name="Treat")
         self.scene.add_sprite_list(name="Projectile")
         self.current_level_id = 0
-        self.player.left = 256
-        self.player.bottom = 256
+        self.player.left = 1024
+        self.player.bottom = 1024
         self.load_level()
         self.level_list = self.current_level.get_level_list()
         self.physics_engine = arcade.PhysicsEngineSimple(
