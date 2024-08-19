@@ -100,8 +100,8 @@ class Level:
         edge_margin = 64  # Avoid spawning too close to the edge
 
         for i in range(self.treat_amount):
-            x = random.uniform(edge_margin, MAP_WIDTH - edge_margin)
-            y = random.uniform(edge_margin, MAP_HEIGHT - edge_margin)
+            x = random.uniform(edge_margin+1304, MAP_WIDTH - edge_margin)
+            y = random.uniform(edge_margin+1823, MAP_HEIGHT - edge_margin)
 
             # Create and place the treat
             treat = Treat("resources/spritesheets/treat.png", 4, decayed=True)

@@ -81,8 +81,8 @@ class Kitty(FollowingSprite):
                 self.color = arcade.color.WHITE
                 self.treats_eaten = 0
                 edge_margin = 64
-                x = random.uniform(edge_margin, MAP_WIDTH - edge_margin)
-                y = random.uniform(edge_margin, MAP_HEIGHT - edge_margin)
+                x = random.uniform(edge_margin+1304, MAP_WIDTH - edge_margin)
+                y = random.uniform(edge_margin+1823, MAP_HEIGHT - edge_margin)
 
                 treat = Treat("resources/spritesheets/treat.png", 4, decayed=True)
                 treat.position = (x, y)
