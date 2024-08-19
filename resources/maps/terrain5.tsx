@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.11.0" name="terrain5" tilewidth="48" tileheight="48" tilecount="144" columns="12">
  <image source="../spritesheets/terrain_spritesheet.png" width="576" height="576"/>
- <tile id="75" probability="0.01"/>
- <tile id="76" probability="0.01"/>
+ <tile id="75" probability="0.095"/>
+ <tile id="76" probability="0.095"/>
  <tile id="80" probability="0.01"/>
  <tile id="81" probability="0.01"/>
- <tile id="87" probability="0.01"/>
- <tile id="88" probability="0.01"/>
+ <tile id="87" probability="0.08"/>
+ <tile id="88" probability="0.08"/>
  <tile id="92" probability="0.01"/>
- <tile id="99" probability="0.01"/>
- <tile id="100" probability="0.01"/>
+ <tile id="99" probability="0.08"/>
+ <tile id="100" probability="0.05"/>
  <wangsets>
   <wangset name="terrain set" type="corner" tile="-1">
    <wangcolor name="grass" color="#ff0000" tile="-1" probability="0.8"/>
@@ -117,9 +117,13 @@
    <wangtile tileid="108" wangid="0,1,0,2,0,1,0,1"/>
    <wangtile tileid="109" wangid="0,1,0,2,0,2,0,1"/>
    <wangtile tileid="110" wangid="0,1,0,1,0,2,0,1"/>
+   <wangtile tileid="111" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="112" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="120" wangid="0,2,0,2,0,1,0,1"/>
    <wangtile tileid="121" wangid="0,2,0,2,0,2,0,2"/>
    <wangtile tileid="122" wangid="0,1,0,1,0,2,0,2"/>
+   <wangtile tileid="123" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="124" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="132" wangid="0,2,0,1,0,1,0,1"/>
    <wangtile tileid="133" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="134" wangid="0,1,0,1,0,1,0,2"/>
