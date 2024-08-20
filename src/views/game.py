@@ -3,6 +3,7 @@ import arcade.color
 from src.views.pause import PauseView
 from src.sprites.player import Player
 from src.sprites.sound_player import AmbientPlayer
+from src.sprites.slime import Slime
 from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
@@ -35,6 +36,7 @@ class GameSection(arcade.Section):
         self.scene.add_sprite_list(name="Enemy")
         self.scene.add_sprite_list(name="Treat")
         self.scene.add_sprite_list(name="Projectile")
+        self.scene.add_sprite_list(name="Trap")
         self.scene.add_sprite_list(name="River Sounds")
         self.current_level_id = 0
         self.player.left = 1024
@@ -54,6 +56,8 @@ class GameSection(arcade.Section):
             ambient_player = AmbientPlayer(scene=self.scene, sound=self.river_sound, center_x=x, center_y=y, filename="resources/spritesheets/cat.png")
             self.scene.add_sprite("River Sounds", ambient_player)
             ambient_player.play()
+        slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024)
+        self.scene.add_sprite("Trap", slime)
         self.camera = HKUCamera(self.width, self.height)
         self.player.setup()
 
@@ -64,7 +68,7 @@ class GameSection(arcade.Section):
         self.current_level.update_respawn_enemies()
 
     def on_draw(self):
-        self.scene.draw()
+        self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Kitty", "Enemy", "Player", "Projectile"])
         active_moves = self.player.get_active_moves()
         for move in active_moves:
             move.draw()

@@ -9,10 +9,13 @@ class Slime(arcade.Sprite):
         self.scene = scene
         self.player = self.scene.get_sprite_list("Player")[0]
         self.timer = 0
-        self.lifetime = 30
+        self.lifetime = 5
 
     def update(self, delta_time=DELTA_TIME):
         self.player = self.scene.get_sprite_list("Player")[0]
         self.timer += DELTA_TIME
         if self.timer >= self.lifetime:
-            self.timer = 0
+            time_over = self.timer-self.lifetime
+            self.rescale_relative_to_point(point=[self.center_x, self.center_y], factor=0.8)
+            if self.height < 2:
+                self.kill()
