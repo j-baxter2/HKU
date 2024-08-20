@@ -15,7 +15,6 @@ class Slime(arcade.Sprite):
         self.player = self.scene.get_sprite_list("Player")[0]
         self.timer += DELTA_TIME
         if self.timer >= self.lifetime:
-            time_over = self.timer-self.lifetime
             self.rescale_relative_to_point(point=[self.center_x, self.center_y], factor=0.8)
             if self.height < 2:
                 self.kill()
