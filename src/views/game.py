@@ -2,6 +2,7 @@ import arcade
 import arcade.color
 from src.views.pause import PauseView
 from src.sprites.player import Player
+from src.sprites.sound_player import AmbientPlayer
 from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
@@ -30,10 +31,11 @@ class GameSection(arcade.Section):
         self.player = Player(id=1, scene=self.scene)
         self.scene.add_sprite_list(name="Player", use_spatial_hash=True)
         self.scene.add_sprite("Player", self.player)
-        self.scene.add_sprite_list(name = "Kitty")
-        self.scene.add_sprite_list(name = "Enemy")
+        self.scene.add_sprite_list(name="Kitty")
+        self.scene.add_sprite_list(name="Enemy")
         self.scene.add_sprite_list(name="Treat")
         self.scene.add_sprite_list(name="Projectile")
+        self.scene.add_sprite_list(name="River Sounds")
         self.current_level_id = 0
         self.player.left = 1024
         self.player.bottom = 1024
@@ -45,6 +47,13 @@ class GameSection(arcade.Section):
                 self.scene["Wall"]
             ]
         )
+        self.river_sound = load_sound("river1", source="hku")
+        for point in self.tile_map.object_lists["river noise"]:
+            x = point.shape[0]
+            y = point.shape[1]
+            ambient_player = AmbientPlayer(scene=self.scene, sound=self.river_sound, center_x=x, center_y=y, filename="resources/spritesheets/cat.png")
+            self.scene.add_sprite("River Sounds", ambient_player)
+            ambient_player.play()
         self.camera = HKUCamera(self.width, self.height)
         self.player.setup()
 
@@ -153,7 +162,6 @@ class GameSection(arcade.Section):
         elif key == controls.ALT_MODIFIER:
             self.player.alt_pressed = False
 
-
     def update_camera(self):
         if self.player.is_alive:
             player_position_for_cam = Vec2(self.player.center_x-(self.width//2), self.player.center_y-(self.height//2))
@@ -164,7 +172,7 @@ class GameSection(arcade.Section):
 
     def load_map(self, map_path):
         layer_options = {
-            "Walls": {
+            "Wall": {
                 "use_spatial_hash": True
             }
         }
