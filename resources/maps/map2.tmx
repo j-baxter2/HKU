@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="48" height="32" tilewidth="48" tileheight="48" infinite="0" nextlayerid="5" nextobjectid="15">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="48" tilewidth="48" tileheight="48" infinite="0" nextlayerid="7" nextobjectid="24">
  <editorsettings>
   <export target="map2.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="terrain5.tsx"/>
- <layer id="1" name="Floor" width="48" height="32">
+ <layer id="1" name="Floor" width="64" height="48">
   <data encoding="base64" compression="zlib">
-   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
+   eJztmTtvFEEQhBuQkHhLPgECJFICiOwAMiIC8DnAEsIXEBhMyp1D8Do0r1/NjJgS39TNybZuTLQttXbP+5rqqa7uGUeMNtpoo4022mij1bYJ30h+mHyR/LicH+J8Uq4N5Vyua0Pjmt41lHP9XuBdCzz/Lvl7/Nb9U4xniufXtV3gf5z8SfmuxqijxsOYCKPfO9g1YlG8FuXocSH+id03LffMkh+Uv69rb6PmwFbU86NxtTggPOSKx0HvaMWNHMj+Ovk94J/imWnUvFQ81jVi3y34OU7OEcc9RD0/fp34HTf9GO/Kc38t+Sd7zw7ezzzowf/NaGsA81pjJM/5d/KAvPFnlD/MKcYt47+b/E3y7ai5NSu/D6LOr574cy5sAZPG6/PlmI6jnsdF43lqxyGeIc/2k39Mfr3EYRvPMp6MfU/8yn+NR9znvIl3g91DHMx5asGw4vrEzvdLDKQDfH4Wddx74c+5fzX5y1jWNP0W9zwOC9wnbMwfYmZN83cMOFcubJfvct4V8x76/yHq3Cc+8ZmcH6LOa8fsuuk1Ll+bRc0HrynZWxzQOA7wjXVN2HMclPvMZ89j1jLX+5a+c+yHdqRm5ONnfFN6yFo4abyjF35yn3PvvHQdIs+zX0p++RS/Esva4b2T94Jea1QLeuFX78deh/z13k99GMefx3Qr+e1T/E7UWub6oLh7L6wYTOMfH3rh1/x7bWIPSD0gN6gF58HP3phH8p91UHmwV8a50xH/VtQaxPWM80Cxd01fnBO/r4c8n6SBigFrpp7vhV/89zUb65trHzVZc3dW/N4PH9t39HevA9439cKv+sfc957O+z3WecXprPg9nv4uxoY6IN4rFj3xiwMcm8e71cOwPzwr/smKb3jdcfzZc51UT9QTP2PAdQ57OF+3eTzOg5/9gXOA623vBRXvHvXvWSMGWgNwjtkHuz4yHg+SP0z+sxzp+tujqPtMatrQ+JZrAOvFuvYi6j2glha6Pnmfq/HvAdOv5F/Mf8dybW31kK184NqYvq69ipoDigW1gHro+yEeE107Sf49+c3k35LfSP4jlnPc13506qDWxvTrHfA/j78c4D6Y1kQeA18XsjcmDubzSYnBUdQ5zf0Q3yPz3sPrpL613xG/a0BrT5TcbK3viIXr1a/J7yefx7K2r1pDt/p9ckbHXvhdA5gLG4arVffdiUMcyDFwTZDPYzm3mBN7+Bvj1wO/awD3BFwPyVv2xL4342sW6UHLGZu5vYN7yt4r9sLfisGqPODam70gf5PL7KH9Hjm1UnmidzDvuM5W/HvhVwyeFs+xoCY6D7z/p2aTF1zjMU7kue6nVs6Al1zz+tsTP32VJmYt0H68673zwPdNWj2D1xJqpe8ZeZ25SPyr+oKNWF77ex1zfuv/Vr7X5+71Mt8rHnCNQS5dFH7ngPcErNe+J+faxXPGgHPJ9ZXXS3Le+6f/hd9zoIWJmqej12vup4onzJV8D+vlPGoN9P2yi8QvPfS6wByg1rXWidl3cL/GP42a+95bZw7kvvkoat33vmC00UYbbbTRRhvN7Q8RE+r6
   </data>
  </layer>
- <objectgroup id="4" name="river noise">
-  <object id="13" x="1872.01" y="340.953">
-   <point/>
-  </object>
-  <object id="14" x="2015.08" y="756.878">
+ <objectgroup id="5" name="player spawn">
+  <object id="15" x="843.969" y="1700.29">
    <point/>
   </object>
  </objectgroup>
- <layer id="2" name="Wall" width="48" height="32" visible="0">
+ <objectgroup id="6" name="map bounds">
+  <object id="23" x="384" y="384" width="2304" height="1536"/>
+ </objectgroup>
+ <objectgroup id="4" name="river noise">
+  <object id="13" x="2256.01" y="724.953">
+   <point/>
+  </object>
+  <object id="14" x="2399.08" y="1140.88">
+   <point/>
+  </object>
+ </objectgroup>
+ <layer id="2" name="Wall" width="64" height="48">
   <data encoding="base64" compression="zlib">
-   eJztzjEKgDAURMHcWa3F2nhnU2hjExFkFWZgIXxSvFIAgL8b2sbOplhd33zjz/J6xXP6s/Rn6c9a2+rxrpedty3QBQDAN+xAKw/p
+   eJztzzEKgDAQBMD8Wa3F2vhnU2hjcykMgWMGFsKRYrcUAAAAAPjP0rIG2aa1G2/v+HMMbzGP/TH787I/Zn9eZ0t93vWT93ZN6AUAAAAAkM0NYrYP6Q==
   </data>
  </layer>
 </map>
