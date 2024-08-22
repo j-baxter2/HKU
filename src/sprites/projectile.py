@@ -15,9 +15,9 @@ class Projectile(MovingSprite):
         super().__init__(self.projectile_data)
         self.scene = scene
         self.origin_move = origin_move
-        self.being = False
-        self.being_time = (self.origin_move.range / self.base_speed) * DELTA_TIME
-        self.being_timer = 0
+        self.active = False
+        self.active_time = (self.origin_move.range / self.base_speed) * DELTA_TIME
+        self.active_timer = 0
         self.hit_sprites = None
         self.start_x = start[0]
         self.start_y = start[1]
@@ -40,19 +40,19 @@ class Projectile(MovingSprite):
         self.angle -= angle
         self.center_x = self.start_x
         self.center_y = self.start_y
-        self.being = True
+        self.active = True
+        self.face((self.target_x, self.target_y))
         self.play_animation(0, 1, looping=True)
 
     def update_activity(self):
-        if self.being:
-            self.being_timer += DELTA_TIME
+        if self.active:
+            self.active_timer += DELTA_TIME
             self.get_hit_sprites()
             if self.hit_sprites is not None:
                 for sprite in self.hit_sprites:
-                    print("executing damage sprite")
                     self.damage_sprite(sprite)
-            if self.being_timer >= self.being_time:
-                self.being = False
+            if self.active_timer >= self.active_time:
+                self.active = False
                 self.kill()
 
     def get_hit_sprites(self):
@@ -62,8 +62,6 @@ class Projectile(MovingSprite):
             if not (sprite.fading or sprite.faded):
                 potential_hit_sprites_alive.append(sprite)
         hit_sprites = arcade.check_for_collision_with_list(self, potential_hit_sprites_alive)
-        if len(hit_sprites) > 0:
-            print("Sprites hit")
         self.hit_sprites = hit_sprites
 
     def damage_sprite(self, sprite):
@@ -72,8 +70,7 @@ class Projectile(MovingSprite):
             self.origin_move.origin_sprite.give_xp(sprite.max_hp*sprite.attack)
 
     def update_movement_direction(self):
-        arcade.get_angle_degrees(self.start_x, self.start_y, self.target_x, self.target_y)
-        self.velocity = Vec2(self.target_x-self.start_x, self.target_y-self.start_y)
+        pass
 
     def update_movement_speed(self):
         self.speed = self.base_speed
@@ -89,5 +86,5 @@ class Projectile(MovingSprite):
 
     def draw_debug(self):
         super().draw_debug()
-        kitty_debug_text = arcade.Text(f"being: {self.being}\ntimer:{round(self.being_timer/self.being_time,2)}", start_x=self.center_x+self.width, start_y=self.center_y, color=arcade.color.BLACK, font_size=12, width=self.width, anchor_x="left", anchor_y="center", multiline=True)
+        kitty_debug_text = arcade.Text(f"active: {self.active}\ntimer:{round(self.active_timer/self.active_time,2)}", start_x=self.center_x+self.width, start_y=self.center_y, color=arcade.color.BLACK, font_size=12, width=self.width, anchor_x="left", anchor_y="center", multiline=True)
         kitty_debug_text.draw()

@@ -1,7 +1,7 @@
 import arcade
 import random
 from pyglet.math import Vec2
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL
+from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, TILE_SIZE, M
 from src.utils.sound import load_sound, play_sound
 
 class MovingSprite(arcade.Sprite):
@@ -10,14 +10,18 @@ class MovingSprite(arcade.Sprite):
         sprite_data = data["spritesheet"]
 
         sheet_path = sprite_data["path"]
-        scale = sprite_data["scale"]
+        tile_scale = sprite_data["scale"]
 
-        super().__init__(sheet_path, scale)
 
         columns = sprite_data["columns"]
         count = sprite_data["count"]
         width = sprite_data["width"]
         height = sprite_data["height"]
+
+        # Calculate scale using the formula
+        true_scale = (tile_scale * M) / max(width, height)
+
+        super().__init__(sheet_path, true_scale)
 
         self.textures = arcade.load_spritesheet(
             sheet_path,
@@ -85,6 +89,7 @@ class MovingSprite(arcade.Sprite):
         super().update()
 
     def start_fade(self):
+        self.paralyze()
         if self.fade_texture_index:
             self.set_texture(self.fade_texture_index)
         self.fading = True
@@ -116,19 +121,18 @@ class MovingSprite(arcade.Sprite):
         self.speed = self.base_speed
 
     def handle_out_of_bounds(self):
-        if self.center_x < 0 or self.center_x > MAP_WIDTH:
+        if self.center_x < 0 or self.center_x > MAP_WIDTH-1:
             self.velocity = [self.velocity[0] * -1, self.velocity[1]]
-        elif self.center_y < 0 or self.center_y > MAP_HEIGHT:
+        elif self.center_y < 0 or self.center_y > MAP_HEIGHT-1:
             self.velocity = [self.velocity[0], self.velocity[1] * -1]
-        self.center_x = max(1, min(self.center_x, MAP_WIDTH-1))
-        self.center_y = max(1, min(self.center_y, MAP_HEIGHT-1))
+        self.center_x = max(self.width//2, min(self.center_x, MAP_WIDTH-self.width//2))
+        self.center_y = max(self.height//2, min(self.center_y, MAP_HEIGHT-self.height//2))
 
-    @property
-    def stationary(self):
-        if self.velocity == [0, 0] or self.velocity == Vec2(0, 0):
-            return True
-        else:
-            return False
+    def face(self, position):
+        self.velocity = Vec2(position[0] - self.center_x, position[1] - self.center_y)
+
+    def face_away(self, position):
+        self.velocity = Vec2(self.center_x - position[0], self.center_y - position[1])
 
     def randomize_velocity(self):
         if isinstance(self.velocity, list):
@@ -148,6 +152,13 @@ class MovingSprite(arcade.Sprite):
     def paralyze(self):
         self.stop_moving()
         self.able_to_move = False
+
+    @property
+    def stationary(self):
+        if self.velocity == [0, 0] or self.velocity == Vec2(0, 0):
+            return True
+        else:
+            return False
 
     @property
     def should_turn(self):

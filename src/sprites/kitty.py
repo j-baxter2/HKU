@@ -2,6 +2,7 @@ import arcade
 import json
 from src.sprites.following_sprite import FollowingSprite
 from src.sprites.player import Player
+from src.sprites.treat import Treat
 from pyglet.math import Vec2
 import random
 import math
@@ -40,10 +41,14 @@ class Kitty(FollowingSprite):
         self.fleeing_timer = 0
         self.fleeing_time = 3
 
+        self.need_second_timer = 0
+        self.need_second_time = 3
+
         self.fade_texture_index = self.kitty_data["spritesheet"]["fade texture"]
         self.sitting_frames = self.kitty_data["animation"]["sitting"]
 
     def take_damage(self, damage):
+        self.stop_eating(success=False)
         self.start_fleeing()
 
     @property
@@ -60,11 +65,29 @@ class Kitty(FollowingSprite):
             self.handle_treat_collision()
         self.update_fleeing()
         self.update_treats()
+        self.update_need_second()
         if self.target_treat:
             self.update_eating()
 
     def update_treats(self):
         self.treats = self.scene.get_sprite_list("Treat")
+
+    def update_need_second(self):
+        if self.treats_eaten == 1:
+            self.need_second_timer += DELTA_TIME
+            red = 255*(self.need_second_timer/self.need_second_time)
+            self.color = [min(red, 255), 255, 255]
+            if self.need_second_timer >= self.need_second_time:
+                self.color = arcade.color.WHITE
+                self.treats_eaten = 0
+                edge_margin = 64
+                x = random.uniform(edge_margin+1304, MAP_WIDTH - edge_margin)
+                y = random.uniform(edge_margin+1823, MAP_HEIGHT - edge_margin)
+
+                treat = Treat("resources/spritesheets/treat.png", 4, decayed=True)
+                treat.position = (x, y)
+                self.scene.add_sprite("Treat", treat)
+                self.need_second_timer = 0
 
     def update_meow(self):
         self.meow_timer += DELTA_TIME
@@ -108,19 +131,6 @@ class Kitty(FollowingSprite):
         self.stop_animation()
         self.target_treat = None
 
-    def start_fleeing(self):
-        self.stop_eating(success=False)
-        self.fleeing = True
-        self.fleeing_timer = 0
-        #play scared sound
-
-    def update_fleeing(self):
-        if self.fleeing:
-            self.fleeing_timer += DELTA_TIME
-            if self.fleeing_timer >= self.fleeing_time:
-                self.fleeing = False
-                self.fleeing_timer = 0
-
     def locate_treat(self):
         for treat in self.treats:
             if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and treat.edible:
@@ -133,39 +143,15 @@ class Kitty(FollowingSprite):
             if arcade.check_for_collision(self, self.target_treat) and not self.eating:
                 self.start_eating()
 
-    def face_treat(self):
-        self.velocity = Vec2(self.target_treat.center_x - self.center_x, self.target_treat.center_y - self.center_y)
-
-    def face_away_from_treat(self):
-        self.velocity = Vec2(self.center_x - self.target_treat.center_x, self.center_y - self.target_treat.center_y)
-
     def update_movement_direction(self):
         if self.target_treat and not self.fleeing:
-            self.face_treat()
+            self.face(self.target_treat.position)
         elif self.should_turn:
             self.randomize_velocity()
             self.random_movement_timer = 0
 
-    @property
-    def animation_direction(self):
-        self.velocity = Vec2(self.velocity[0], self.velocity[1])
-        angle = self.velocity.heading
-        angle = math.degrees(angle)
-        if angle < 135 and angle >= 45:
-            return "up"
-        elif angle < 45 and angle >= -45:
-            return "right"
-        elif angle < -45 and angle >= -135:
-            return "down"
-        else:
-            return "left"
-
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
-
-    @property
-    def should_turn(self):
-        return self.random_movement_timer >= (self.random_movement_time+random.uniform(-0.1, 5))
 
     @property
     def should_sprint(self):
@@ -174,20 +160,6 @@ class Kitty(FollowingSprite):
     @property
     def should_meow(self):
         return self.meow_timer >= (self.meow_time+random.uniform(-self.meow_time*0.5, self.meow_time*3))
-
-
-    def get_volume_from_player_pos(self):
-        distance = arcade.get_distance_between_sprites(self, self.player)
-        distance_in_m = distance / 128
-        if distance == 0:
-            volume = 1
-        else:
-            volume = 1/(distance_in_m)
-        return min(max(volume, 0), 1)
-
-    def get_pan_from_player_pos(self):
-        angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
-        return math.sin(angle)
 
     def draw_debug(self):
         super().draw_debug()

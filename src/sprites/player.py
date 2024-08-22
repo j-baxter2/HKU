@@ -8,11 +8,14 @@ from src.moves.move import Move
 from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.moves.move_radial_fireball import RadialProjectile
+from src.moves.move_custom_fire import MoveCustomFire
+from src.moves.move_mouse_aim import MoveMouseAim
+from src.moves.move_arrow_aim import MoveArrowAim
+
 from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
 class Player(LivingSprite):
-
     def __init__(self, id: int, scene: arcade.Scene):
         with open("resources/data/player.json", "r") as file:
             player_dict = json.load(file)
@@ -64,7 +67,7 @@ class Player(LivingSprite):
         self.footstep_sound = load_sound(self.footstep_name, source="hku")
         self.footstep_handler = FootstepSoundHandler(self.footstep_sound, self)
 
-        self.treat_amount = 0
+        self.treat_amount = 10
         self.treat_sprite_list = None
 
         self.picking_up_treat = False
@@ -85,6 +88,8 @@ class Player(LivingSprite):
         self.fade_in_timer = 0
         self.fade_in_time = 2
 
+        self.attack = 0
+
     def setup(self):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
         self.load_ranking_data()
@@ -94,11 +99,17 @@ class Player(LivingSprite):
         scare = AffectAllMove(3, self.scene, self)
         ranged = TargetArrowKey(4, self.scene, self)
         radial = RadialProjectile(5, self.scene, self)
+        custom_fire = MoveCustomFire(8, self.scene, self)
+        mouse_aim = MoveMouseAim(7, self.scene, self)
+        arrow_aim = MoveArrowAim(7, self.scene, self)
         self.unlock_moves(basic_attack)
         self.unlock_moves(basic_heal)
         self.unlock_moves(scare)
         self.unlock_moves(radial)
+        self.unlock_moves(custom_fire)
+        self.unlock_moves(arrow_aim)
         self.equip_move("quick attack", basic_attack)
+        self.equip_move("special", arrow_aim)
 
     def update(self):
         super().update()
@@ -149,7 +160,6 @@ class Player(LivingSprite):
                 for move in self.all_moves:
                     if move.name in current_rank_data["unlock"]:
                         self.unlock_moves(move)
-                        print(f"unlocked {move.name}")
 
 
     def get_xp_to_next_level(self):
@@ -206,7 +216,7 @@ class Player(LivingSprite):
         self.advance_animation()
 
     def drop_treat(self):
-        treat = Treat("resources/textures/map_tiles/default_apple.png", 1)
+        treat = Treat("resources/spritesheets/treat.png", 4)
         treat.center_x = self.left
         treat.center_y = self.center_y
         self.scene.add_sprite("Treat", treat)
@@ -344,12 +354,21 @@ class Player(LivingSprite):
     def fade_in_fraction(self):
         return self.fade_in_timer/self.fade_in_time
 
+    @property
+    def in_battle(self):
+        tuple = arcade.get_closest_sprite(self, self.scene.get_sprite_list("Enemy"))
+        if tuple is not None:
+            distance = tuple[1]
+            return distance <= 1024 or self.just_been_hit
+        else:
+            return False
+
     def draw_debug(self):
         index = 0
         for slot, move in self.equipped_moves.items():
             if move:
                 move.draw_debug(index)
                 index += 1
-        xp_text = arcade.Text(f"xp: {self.xp}", start_x=self.center_x, start_y=self.top+LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
+        xp_text = arcade.Text(f"xp: {self.xp}\nIB: {self.in_battle}", start_x=self.center_x, start_y=self.top+LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
         xp_text.draw()
         super().draw_debug()

@@ -1,7 +1,10 @@
 import arcade
 import arcade.color
+import math
 from src.views.pause import PauseView
 from src.sprites.player import Player
+from src.sprites.sound_player import AmbientPlayer
+from src.sprites.slime import Slime
 from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
@@ -10,7 +13,8 @@ from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import load_sound, play_sound
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
+import src.data.color as color
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -23,36 +27,56 @@ class GameSection(arcade.Section):
         self.tile_map = None
         self.physics_engine = None
         self.camera = None
+        self.mouse_pos = (0,0)
+        self.timer = 0
 
     def setup(self):
-        self.load_map("resources/maps/map.json")
+        self.load_map("resources/maps/map2.json")
         self.player = Player(id=1, scene=self.scene)
         self.scene.add_sprite_list(name="Player", use_spatial_hash=True)
         self.scene.add_sprite("Player", self.player)
-        self.scene.add_sprite_list(name = "Kitty")
-        self.scene.add_sprite_list(name = "Enemy")
+        self.scene.add_sprite_list(name="Kitty")
+        self.scene.add_sprite_list(name="Enemy")
         self.scene.add_sprite_list(name="Treat")
         self.scene.add_sprite_list(name="Projectile")
+        self.scene.add_sprite_list(name="Trap")
+        self.scene.add_sprite_list(name="River Sounds")
         self.current_level_id = 0
+        spawn = self.tile_map.object_lists["player spawn"][0]
+        self.player.left = spawn.shape[0]
+        self.player.bottom = spawn.shape[1]
         self.load_level()
         self.level_list = self.current_level.get_level_list()
-        self.current_level.spawn_player()
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player,
             walls=[
                 self.scene["Wall"]
             ]
         )
+        self.river_sound = load_sound("river1", source="hku")
+        for point in self.tile_map.object_lists["river noise"]:
+            x = point.shape[0]
+            y = point.shape[1]
+            ambient_player = AmbientPlayer(scene=self.scene, sound=self.river_sound, center_x=x, center_y=y, filename="resources/spritesheets/cat.png")
+            self.scene.add_sprite("River Sounds", ambient_player)
+            ambient_player.play()
+        slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024, scale=3)
+        self.scene.add_sprite("Trap", slime)
+        map_bounds = self.tile_map.object_lists["map bounds"]
+        print(map_bounds)
         self.camera = HKUCamera(self.width, self.height)
         self.player.setup()
 
     def on_update(self):
+        self.timer += DELTA_TIME
         self.physics_engine.update()
         self.update_camera()
         self.scene.update()
+        self.current_level.update_respawn_enemies()
 
     def on_draw(self):
-        self.scene.draw()
+        self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Kitty", "Enemy", "Player", "Projectile"])
+        self.draw_border()
         active_moves = self.player.get_active_moves()
         for move in active_moves:
             move.draw()
@@ -150,7 +174,6 @@ class GameSection(arcade.Section):
         elif key == controls.ALT_MODIFIER:
             self.player.alt_pressed = False
 
-
     def update_camera(self):
         if self.player.is_alive:
             player_position_for_cam = Vec2(self.player.center_x-(self.width//2), self.player.center_y-(self.height//2))
@@ -161,11 +184,12 @@ class GameSection(arcade.Section):
 
     def load_map(self, map_path):
         layer_options = {
-            "Walls": {
+            "Wall": {
                 "use_spatial_hash": True
             }
         }
-        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options)
+        scaling = M / TILE_SIZE
+        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options, scaling=scaling, offset=(-1024,-1024))
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
     def load_level(self):
@@ -176,7 +200,27 @@ class GameSection(arcade.Section):
             kitty.setup()
         for enemy in self.scene.get_sprite_list("Enemy"):
             enemy.setup()
-        self.current_level.give_player_treats()
+        self.current_level.spawn_treats()
+
+    def draw_border(self):
+        border_trigger = 256
+        border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+16]
+        border_width=10+math.sin(self.timer*5)*5
+        length = 128
+        nlayers=10
+        if self.player.center_x < border_trigger:
+            for i in range(nlayers):
+                arcade.draw_line(0, min(MAP_HEIGHT, self.player.center_y+length*(1+i)/nlayers), 0, max(0, self.player.center_y-length*(1+i)/nlayers), color=border_color, line_width=border_width)
+        if self.player.center_y < border_trigger:
+            for i in range(nlayers):
+                arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), 0, max(0, self.player.center_x-length*(1+i)/nlayers), 0, color=border_color, line_width=border_width)
+        if self.player.center_x > MAP_WIDTH-border_trigger:
+            for i in range(nlayers):
+                arcade.draw_line(MAP_WIDTH, min(MAP_HEIGHT, self.player.center_y+length*(1+i)/nlayers), MAP_WIDTH, max(0, self.player.center_y-length*(1+i)/nlayers), color=border_color, line_width=border_width)
+        if self.player.center_y > MAP_HEIGHT-border_trigger:
+            for i in range(nlayers):
+                arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), MAP_HEIGHT, max(0, self.player.center_x-length*(1+i)/nlayers), MAP_HEIGHT, color=border_color, line_width=border_width)
+
 
     @property
     def more_levels(self):
@@ -188,7 +232,11 @@ class GameSection(arcade.Section):
 
     @property
     def any_kitties(self):
-        return len(self.scene.get_sprite_list("Kitty")) > 0
+        kitties = self.scene.get_sprite_list("Kitty")
+        for kitty in kitties:
+            if not (kitty.fading or kitty.faded):
+                return True
+        return False
 
     def draw_debug(self):
         self.camera.use()
@@ -337,7 +385,7 @@ class UISection(arcade.Section):
             max_rank_text = arcade.Text(f"MAX RANK", start_x=self.width // 2, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE*1.5, font_name=UI_FONT)
             max_rank_text.draw()
         else:
-            filled_width = (self.player.get_xp_fraction()) * 300
+            filled_width = max(0,(self.player.get_xp_fraction()) * 300)
             arcade.draw_rectangle_filled(center_x=self.width // 2,
                                                 center_y=self.top - 70,
                                                 width=300,
@@ -361,7 +409,7 @@ class UISection(arcade.Section):
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
-
+        self.window.views["game"] = self
         self.game_section = GameSection(0, 0,
                                        self.window.width, self.window.height, accept_keyboard_events=True)
         self.ui_section = UISection(0, 0,
@@ -371,22 +419,48 @@ class GameView(arcade.View):
         self.sectionManager.add_section(self.game_section)
         self.sectionManager.add_section(self.ui_section)
 
-        self.player = None
-
         self.between_levels = True
         self.between_levels_timer = 0
-        self.between_levels_time = 1
+        self.between_levels_time = 5
 
         self.debug = False
         self.loaded_sound = load_sound("upgrade1")
+
+        self.media_player = None
+        self.songs = {
+            "normal": "resources/sounds/music/hkusong1.wav",
+            "battle": "resources/sounds/music/battlemusic1.wav"
+        }
+
+        self.curr_song_key = "normal"
+
+        self.my_music = arcade.load_sound(self.songs[self.curr_song_key])
+
+        self.crossfade_time = 2  # Crossfade duration in seconds
+        self.crossfade_timer = 0
+        self.new_media_player = None
+
+        self.out_of_battle_timer = 0
+        self.time_out_of_battle = 3
+
+        self.mouse_pos = (0,0)
 
     def setup(self):
         self.game_section.setup()
         self.ui_section.setup()
 
     def on_show_view(self):
+        self.window.set_mouse_visible(False)
         play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
         arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
+        self.play_music(self.curr_song_key)
+
+    def on_hide_view(self):
+        self.window.set_mouse_visible()
+        if self.media_player:
+            self.media_player.pause()
+            if self.new_media_player:
+                self.new_media_player.pause()
 
     def on_draw(self):
         self.clear()
@@ -407,10 +481,64 @@ class GameView(arcade.View):
         self.ui_section.on_update()
         self.handle_gamestate()
         self.update_between_levels()
+        self.update_music()
+
+    def update_music(self, delta_time=DELTA_TIME):
+        if self.game_section.player.in_battle:
+            self.out_of_battle_timer = 0
+            new_song_key = "battle"
+        else:
+            if self.curr_song_key == "battle":
+                self.out_of_battle_timer += delta_time
+                if self.out_of_battle_timer >= self.time_out_of_battle:
+                    new_song_key = "normal"
+                else:
+                    new_song_key = self.curr_song_key
+            else:
+                new_song_key = "normal"
+
+        if new_song_key != self.curr_song_key:
+            self.curr_song_key = new_song_key
+            self.crossfade_to_new_music(new_song_key)
+
+        # Handle crossfade if in progress
+        if self.crossfade_timer > 0:
+            self.crossfade_timer -= delta_time
+            progress = (self.crossfade_time - self.crossfade_timer) / self.crossfade_time
+            if self.media_player:
+                self.media_player.volume = max(0, 1 - progress)
+            if self.new_media_player:
+                self.new_media_player.volume = min(1, progress)
+
+            if self.crossfade_timer <= 0:
+                if self.media_player:
+                    self.media_player.pause()
+                self.media_player = self.new_media_player
+                self.new_media_player = None
+
+    def crossfade_to_new_music(self, song_key):
+        self.crossfade_timer = self.crossfade_time
+        self.new_music = arcade.load_sound(self.songs[song_key])
+        self.new_media_player = self.new_music.play(volume=0)
+        if self.media_player:
+            self.media_player.volume = 1  # Ensure current music is at full volume
+
+    def play_music(self, song_key):
+        if self.media_player:
+            self.media_player.pause()
+        self.my_music = arcade.load_sound(self.songs[song_key])
+        self.media_player = self.my_music.play()
 
     def start_between_levels(self):
         self.between_levels = True
         self.between_levels_timer = 0
+        enemies = self.game_section.scene.get_sprite_list("Enemy")
+        for enemy in enemies:
+            enemy.start_fade()
+        treats = self.game_section.scene.get_sprite_list("Treat")
+        for treat in treats:
+            treat.kill()
+
 
     def update_between_levels(self):
         if self.between_levels:
@@ -419,6 +547,11 @@ class GameView(arcade.View):
                 self.between_levels = False
                 self.handle_level_completion()
                 self.between_levels_timer = 0
+
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
+        a_x = x+self.game_section.camera.position.x
+        a_y = y+self.game_section.camera.position.y
+        self.mouse_pos = (a_x, a_y)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.APOSTROPHE:
@@ -439,7 +572,7 @@ class GameView(arcade.View):
         projectile_count = len(self.game_section.scene.get_sprite_list("Projectile"))
         player_pos = self.game_section.player.get_integer_position()
 
-        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nProjectiles: {projectile_count}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
+        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nMouse: {self.mouse_pos}\nProjectiles: {projectile_count}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
         debug_text.draw()
         if self.between_levels:
             between_levels_text = arcade.Text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", start_x=20, start_y=self.window.height - 20 - LINE_HEIGHT*4, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top")
@@ -478,8 +611,8 @@ class GameView(arcade.View):
 
     @property
     def should_change_level(self):
-        return not self.game_section.any_enemies and not self.between_levels and not self.game_section.any_kitties
+        return not self.between_levels and not self.game_section.any_kitties
 
     @property
     def completed(self):
-        return not self.game_section.more_levels and not self.game_section.any_enemies and not self.game_section.any_kitties
+        return not self.game_section.more_levels and not self.game_section.any_kitties

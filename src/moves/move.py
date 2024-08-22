@@ -1,4 +1,5 @@
 import arcade
+import math
 from src.sprites.living_sprite import LivingSprite
 import json
 from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
@@ -15,10 +16,7 @@ class Move:
 
         self.name = self.move_data["name"]
         self.type = self.move_data["type"]
-        self.slot = self.move_data["slot"]
         self.damage = self.move_data["damage"]
-        self.damage_resist = self.move_data["damage resist"]
-        self.cost = self.move_data["cost"]
         self.active_time = self.move_data["active time"]
         self.refresh_time = self.move_data["refresh time"]
         self.range = self.move_data["range"]
@@ -50,7 +48,6 @@ class Move:
         self.start_sound = load_sound(self.start_sound_name)
 
         self.stop_sound = load_sound(self.stop_sound_name)
-        self.origin_sprite.all_moves.append(self)
 
     def on_update(self, delta_time: float):
         self.update_affectees()
@@ -91,9 +88,7 @@ class Move:
         self.active = True
         self.active_timer = 0
         self.get_affectees()
-        self.start_damage_resist()
         play_sound(self.start_sound, volume=SOUND_EFFECT_VOL)
-        self.origin_sprite.stamina -= self.cost
 
     def update_activity(self):
         if self.active:
@@ -107,7 +102,6 @@ class Move:
         self.active = False
         self.refreshing = True
         self.charged = False if self.charge_time else True
-        self.stop_damage_resist()
         self.stop_activity_mobility()
         play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL)
         self.origin_sprite.color = arcade.color.WHITE
@@ -132,21 +126,7 @@ class Move:
                 affectee.take_damage(self.damage)
                 affectee.just_healed = True
             elif self.damage >= 0:
-                affectee.take_damage(self.damage * self.origin_sprite.strength)
-                affectee.just_been_hit = True
-                if affectee.is_dead:
-                    self.origin_sprite.give_xp(affectee.max_hp * affectee.attack)
-
-    def start_damage_resist(self):
-        if self.damage_resist:
-            self.origin_sprite.damage_resist += self.damage_resist
-
-    def stop_damage_resist(self):
-        if self.damage_resist:
-            if self.origin_sprite.damage_resist > 0:
-                self.origin_sprite.damage_resist -= self.damage_resist
-            else:
-                self.origin_sprite.damage_resist = 0
+                affectee.take_damage(self.damage)
 
     def update_activity_mobility(self):
         if not self.origin_mobile_while_active:
@@ -197,7 +177,7 @@ class Move:
 
     @property
     def executable(self):
-        return not self.active and self.origin_sprite.stamina >= self.cost and not (self.origin_sprite.fading or self.origin_sprite.faded) and self.charged and not self.refreshing
+        return not self.active and not (self.origin_sprite.fading or self.origin_sprite.faded) and self.charged and not self.refreshing
 
     @property
     def refresh_fraction(self):
