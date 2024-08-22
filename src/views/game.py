@@ -1,5 +1,6 @@
 import arcade
 import arcade.color
+import math
 from src.views.pause import PauseView
 from src.sprites.player import Player
 from src.sprites.sound_player import AmbientPlayer
@@ -13,6 +14,7 @@ from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import load_sound, play_sound
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
+import src.data.color as color
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,
@@ -26,6 +28,7 @@ class GameSection(arcade.Section):
         self.physics_engine = None
         self.camera = None
         self.mouse_pos = (0,0)
+        self.timer = 0
 
     def setup(self):
         self.load_map("resources/maps/map2.json")
@@ -39,8 +42,9 @@ class GameSection(arcade.Section):
         self.scene.add_sprite_list(name="Trap")
         self.scene.add_sprite_list(name="River Sounds")
         self.current_level_id = 0
-        self.player.left = 1024
-        self.player.bottom = 1024
+        spawn = self.tile_map.object_lists["player spawn"][0]
+        self.player.left = spawn.shape[0]
+        self.player.bottom = spawn.shape[1]
         self.load_level()
         self.level_list = self.current_level.get_level_list()
         self.physics_engine = arcade.PhysicsEngineSimple(
@@ -58,10 +62,13 @@ class GameSection(arcade.Section):
             ambient_player.play()
         slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024, scale=3)
         self.scene.add_sprite("Trap", slime)
+        map_bounds = self.tile_map.object_lists["map bounds"]
+        print(map_bounds)
         self.camera = HKUCamera(self.width, self.height)
         self.player.setup()
 
     def on_update(self):
+        self.timer += DELTA_TIME
         self.physics_engine.update()
         self.update_camera()
         self.scene.update()
@@ -69,6 +76,8 @@ class GameSection(arcade.Section):
 
     def on_draw(self):
         self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Kitty", "Enemy", "Player", "Projectile"])
+        border_color = color.PINK[:3] + [int(0.25*(1+math.sin(self.timer))*255)+127]
+        arcade.draw_lrtb_rectangle_outline(0, MAP_WIDTH, MAP_HEIGHT, 0, border_color, border_width=10+math.sin(self.timer)*5)
         active_moves = self.player.get_active_moves()
         for move in active_moves:
             move.draw()
@@ -181,7 +190,7 @@ class GameSection(arcade.Section):
             }
         }
         scaling = M / TILE_SIZE
-        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options, scaling=scaling)
+        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options, scaling=scaling, offset=(-1024,-1024))
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
     def load_level(self):

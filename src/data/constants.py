@@ -10,6 +10,12 @@ M = 128
 TILE_SIZE = map_dict['tilewidth']
 MAP_WIDTH = map_dict['width'] * M
 MAP_HEIGHT = map_dict['height'] * M
+layers = map_dict['layers']
+for layer in layers:
+    if layer['name']=="map bounds":
+        MAP_HEIGHT = layer['objects'][0]['height'] * M/TILE_SIZE
+        MAP_WIDTH = layer['objects'][0]['width'] * M/TILE_SIZE
+
 
 DELTA_TIME = 1/60
 
