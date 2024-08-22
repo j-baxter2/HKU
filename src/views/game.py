@@ -1,7 +1,7 @@
 import arcade
 import arcade.color
 import math
-from src.views.pause import PauseView
+from src.views.pause import PauseView, MoveView
 from src.sprites.player import Player
 from src.sprites.sound_player import AmbientPlayer
 from src.sprites.slime import Slime

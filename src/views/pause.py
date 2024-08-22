@@ -76,7 +76,6 @@ class PauseView(arcade.View):
             self.window.show_view(self.game_view)
 
     def on_show_view(self):
-        arcade.set_background_color(color.LIGHT_BLUE)
         self.manager.enable()
 
     def on_hide_view(self):
@@ -84,6 +83,10 @@ class PauseView(arcade.View):
 
     def on_draw(self):
         self.clear()
+        self.game_view.game_section.update_camera()
+        self.game_view.game_section.on_draw()
+        self.game_view.ui_section.camera.use()
+        arcade.draw_lrtb_rectangle_filled(0, self.window.width, self.window.height, 0, arcade.color.BLACK[:3] + (128,))
         self.manager.draw()
 
 class MoveView(arcade.View):
@@ -162,7 +165,6 @@ class MoveView(arcade.View):
             self.window.show_view(self.game_view)
 
     def on_show_view(self):
-        arcade.set_background_color(color.LIGHT_BLUE)
         self.manager.enable()
 
     def on_hide_view(self):
@@ -170,4 +172,8 @@ class MoveView(arcade.View):
 
     def on_draw(self):
         self.clear()
+        self.game_view.game_section.update_camera()
+        self.game_view.game_section.on_draw()
+        self.game_view.ui_section.camera.use()
+        arcade.draw_lrtb_rectangle_filled(0, self.window.width, self.window.height, 0, arcade.color.BLACK[:3] + (128,))
         self.manager.draw()

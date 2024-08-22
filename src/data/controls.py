@@ -4,6 +4,7 @@ UP = arcade.key.W
 DOWN = arcade.key.S
 LEFT = arcade.key.A
 RIGHT = arcade.key.D
+INTERACT = arcade.key.E
 SPRINT = arcade.key.LSHIFT
 ATTACK = arcade.key.SPACE
 HEAL = arcade.key.H
