@@ -1,4 +1,5 @@
 import arcade
+from pyglet.math import Vec2
 import math
 from src.data.constants import M, DELTA_TIME, SOUND_EFFECT_VOL
 from src.utils.sound import play_sound
@@ -11,10 +12,27 @@ class Slime(arcade.Sprite):
         self.timer = 0
         self.lifetime = 5
 
+        self.affecting = False
+        self.effect_timer = 0
+        self.effect_time = 3
+
     def update(self, delta_time=DELTA_TIME):
         self.player = self.scene.get_sprite_list("Player")[0]
         self.timer += DELTA_TIME
-        if self.timer >= self.lifetime:
-            self.rescale_relative_to_point(point=[self.center_x, self.center_y], factor=0.8)
-            if self.height < 2:
-                self.kill()
+        if not self.affecting:
+            if arcade.check_for_collision(self, self.player):
+                self.affecting = True
+            if self.timer >= self.lifetime:
+                self.rescale_relative_to_point(point=[self.center_x, self.center_y], factor=0.8)
+                if self.height < 2:
+                    self.kill()
+        else:
+            self.effect_timer += DELTA_TIME
+            component = min(max(0,255*(self.effect_timer/self.effect_time)),255)
+            self.player.color = [component,component,component]
+            self.player.velocity = Vec2(self.player.velocity[0], self.player.velocity[1])
+            self.player.velocity = self.player.velocity.scale(0.3)
+            if self.effect_timer >= self.effect_time:
+                self.affecting = False
+                self.player.color = arcade.color.WHITE
+                self.effect_timer = 0

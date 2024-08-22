@@ -56,7 +56,7 @@ class GameSection(arcade.Section):
             ambient_player = AmbientPlayer(scene=self.scene, sound=self.river_sound, center_x=x, center_y=y, filename="resources/spritesheets/cat.png")
             self.scene.add_sprite("River Sounds", ambient_player)
             ambient_player.play()
-        slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024)
+        slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024, scale=3)
         self.scene.add_sprite("Trap", slime)
         self.camera = HKUCamera(self.width, self.height)
         self.player.setup()
