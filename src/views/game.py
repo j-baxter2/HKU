@@ -76,8 +76,7 @@ class GameSection(arcade.Section):
 
     def on_draw(self):
         self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Kitty", "Enemy", "Player", "Projectile"])
-        if self.should_draw_border:
-            self.draw_border()
+        self.draw_border()
         active_moves = self.player.get_active_moves()
         for move in active_moves:
             move.draw()
@@ -204,8 +203,24 @@ class GameSection(arcade.Section):
         self.current_level.spawn_treats()
 
     def draw_border(self):
-        border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer))*255)+32]
-        arcade.draw_lrtb_rectangle_outline(0, MAP_WIDTH, MAP_HEIGHT, 0, border_color, border_width=10+math.sin(self.timer)*5)
+        border_trigger = 256
+        border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+16]
+        border_width=10+math.sin(self.timer*5)*5
+        length = 128
+        nlayers=10
+        if self.player.center_x < border_trigger:
+            for i in range(nlayers):
+                arcade.draw_line(0, min(MAP_HEIGHT, self.player.center_y+length*(1+i)/nlayers), 0, max(0, self.player.center_y-length*(1+i)/nlayers), color=border_color, line_width=border_width)
+        if self.player.center_y < border_trigger:
+            for i in range(nlayers):
+                arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), 0, max(0, self.player.center_x-length*(1+i)/nlayers), 0, color=border_color, line_width=border_width)
+        if self.player.center_x > MAP_WIDTH-border_trigger:
+            for i in range(nlayers):
+                arcade.draw_line(MAP_WIDTH, min(MAP_HEIGHT, self.player.center_y+length*(1+i)/nlayers), MAP_WIDTH, max(0, self.player.center_y-length*(1+i)/nlayers), color=border_color, line_width=border_width)
+        if self.player.center_y > MAP_HEIGHT-border_trigger:
+            for i in range(nlayers):
+                arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), MAP_HEIGHT, max(0, self.player.center_x-length*(1+i)/nlayers), MAP_HEIGHT, color=border_color, line_width=border_width)
+
 
     @property
     def more_levels(self):
@@ -222,11 +237,6 @@ class GameSection(arcade.Section):
             if not (kitty.fading or kitty.faded):
                 return True
         return False
-
-    @property
-    def should_draw_border(self):
-        border_trigger = 256
-        return (self.player.center_x < border_trigger) or (self.player.center_x > MAP_WIDTH-border_trigger) or (self.player.center_y < border_trigger) or (self.player.center_y > MAP_HEIGHT-border_trigger)
 
     def draw_debug(self):
         self.camera.use()
