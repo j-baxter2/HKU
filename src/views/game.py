@@ -76,8 +76,8 @@ class GameSection(arcade.Section):
 
     def on_draw(self):
         self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Kitty", "Enemy", "Player", "Projectile"])
-        border_color = color.PINK[:3] + [int(0.25*(1+math.sin(self.timer))*255)+127]
-        arcade.draw_lrtb_rectangle_outline(0, MAP_WIDTH, MAP_HEIGHT, 0, border_color, border_width=10+math.sin(self.timer)*5)
+        if self.should_draw_border:
+            self.draw_border()
         active_moves = self.player.get_active_moves()
         for move in active_moves:
             move.draw()
@@ -203,6 +203,10 @@ class GameSection(arcade.Section):
             enemy.setup()
         self.current_level.spawn_treats()
 
+    def draw_border(self):
+        border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer))*255)+32]
+        arcade.draw_lrtb_rectangle_outline(0, MAP_WIDTH, MAP_HEIGHT, 0, border_color, border_width=10+math.sin(self.timer)*5)
+
     @property
     def more_levels(self):
         return len(self.level_list) > self.current_level_id + 1
@@ -218,6 +222,11 @@ class GameSection(arcade.Section):
             if not (kitty.fading or kitty.faded):
                 return True
         return False
+
+    @property
+    def should_draw_border(self):
+        border_trigger = 256
+        return (self.player.center_x < border_trigger) or (self.player.center_x > MAP_WIDTH-border_trigger) or (self.player.center_y < border_trigger) or (self.player.center_y > MAP_HEIGHT-border_trigger)
 
     def draw_debug(self):
         self.camera.use()
