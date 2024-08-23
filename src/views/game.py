@@ -68,7 +68,6 @@ class GameSection(arcade.Section):
         self.scene.add_sprite("Trap", slime)
         map_bounds = self.tile_map.object_lists["map bounds"]
         for point in self.tile_map.object_lists["workbench"]:
-            print(point)
             x = point.shape[0]
             y = point.shape[1] + 90
             bench = arcade.Sprite(center_x=x, center_y=y, filename="resources/spritesheets/bench.png", scale=3)
@@ -83,6 +82,7 @@ class GameSection(arcade.Section):
         self.scene.update()
         self.current_level.update_respawn_enemies()
         self.monitor_player_workbench()
+        self.monitor_player_inside()
 
     def on_draw(self):
         self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Workbench", "Kitty", "Enemy", "Player", "Projectile"])
@@ -197,6 +197,17 @@ class GameSection(arcade.Section):
                 self.player_by_bench = True
             else:
                 self.player_by_bench = False
+
+    def monitor_player_inside(self):
+        left = 2648
+        top = 2757
+        right = 3757
+        bottom = 1792
+        # print(f"left:{left}\ntop:{top}\nright:{right}\nbottom:{bottom}")
+        if self.player.center_x > left and self.player.center_x < right and self.player.center_y < top and self.player.center_y > bottom:
+            self.player.inside = True
+        else:
+            self.player.inside = False
 
     def update_camera(self):
         if self.player.is_alive:

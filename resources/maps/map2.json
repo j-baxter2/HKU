@@ -133,12 +133,12 @@
         }, 
         {
          "draworder":"topdown",
-         "id":10,
+         "id":11,
          "name":"inside",
          "objects":[
                 {
                  "height":336,
-                 "id":46,
+                 "id":49,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -146,17 +146,6 @@
                  "width":384,
                  "x":1392,
                  "y":912
-                }, 
-                {
-                 "height":0,
-                 "id":47,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1008,
-                 "y":480
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -621,8 +610,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":11,
- "nextobjectid":48,
+ "nextlayerid":12,
+ "nextobjectid":50,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

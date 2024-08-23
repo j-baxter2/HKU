@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="48" tilewidth="48" tileheight="48" infinite="0" nextlayerid="11" nextobjectid="49">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="48" tilewidth="48" tileheight="48" infinite="0" nextlayerid="12" nextobjectid="50">
  <editorsettings>
   <export target="map2.json" format="json"/>
  </editorsettings>
@@ -33,10 +33,8 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="10" name="inside">
-  <object id="46" x="1392" y="912" width="384" height="336"/>
-  <object id="47" x="1008" y="480"/>
-  <object id="48" x="1584" y="768"/>
+ <objectgroup id="11" name="inside">
+  <object id="49" x="1392" y="912" width="384" height="336"/>
  </objectgroup>
  <layer id="2" name="Wall" width="64" height="48">
   <data encoding="base64" compression="zlib">

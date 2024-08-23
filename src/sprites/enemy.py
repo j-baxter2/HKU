@@ -24,7 +24,7 @@ class BaseEnemy(FollowingSprite):
 
     @property
     def in_range(self):
-        return arcade.get_distance_between_sprites(self, self.player) < self.follow_distance
+        return arcade.get_distance_between_sprites(self, self.player) < self.follow_distance and not self.player.inside
 
     @property
     def should_sprint(self):

@@ -90,6 +90,8 @@ class Player(LivingSprite):
 
         self.attack = 0
 
+        self.inside = False
+
     def setup(self):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
         self.load_ranking_data()
@@ -371,4 +373,6 @@ class Player(LivingSprite):
                 index += 1
         xp_text = arcade.Text(f"xp: {self.xp}\nIB: {self.in_battle}", start_x=self.center_x, start_y=self.top+LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
         xp_text.draw()
+        inside_text = arcade.Text(f"inside: {self.inside}", start_x=self.center_x, start_y=self.top+2*LINE_HEIGHT, color=arcade.color.WHITE, font_size=20, anchor_x="center", anchor_y="bottom")
+        inside_text.draw()
         super().draw_debug()
