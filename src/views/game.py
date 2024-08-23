@@ -336,12 +336,12 @@ class UISection(arcade.Section):
         self.sprite_lists = [self.players, self.kitties, self.enemies]
 
     def draw_level_id(self):
-        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+        level_text = arcade.Text(f"Level: {self.view.game_section.current_level_id}", start_x=self.right-10, start_y=self.top-100, color=arcade.color.BLACK[:3] + (128,), anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         level_text.draw()
 
     def draw_treat_count(self):
         treat_count = self.player.treat_amount
-        treat_count_text = arcade.Text(f"Treats: {treat_count}", start_x=self.right-10, start_y=self.top-140, color=arcade.color.BLACK, anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+        treat_count_text = arcade.Text(f"Treats: {treat_count}", start_x=self.right-10, start_y=self.top-140, color=arcade.color.BLACK[:3] + (128,), anchor_x="right", font_size=UI_FONT_SIZE, font_name=UI_FONT)
         treat_count_text.draw()
 
     def draw_stamina_bar(self):
@@ -356,7 +356,7 @@ class UISection(arcade.Section):
                                          center_y=self.bottom + 70,
                                          width=filled_width,
                                          height=10,
-                                         color=arcade.color.GREEN)
+                                         color=arcade.color.GREEN[:3] + (200,))
 
     def draw_hp_bar(self):
         if self.player:
@@ -373,7 +373,7 @@ class UISection(arcade.Section):
                                          center_y=self.bottom + 120,
                                          width=filled_width,
                                          height=10,
-                                         color=arcade.color.RED)
+                                         color=arcade.color.RED[:3] + (200,))
 
 
 
@@ -425,16 +425,16 @@ class UISection(arcade.Section):
                                                 center_y=self.top - 70,
                                                 width=300,
                                                 height=20,
-                                                color=arcade.color.BLACK)
+                                                color=arcade.color.BLACK[:3] + (128,))
 
             arcade.draw_rectangle_filled(center_x=self.width // 2 - 150 + filled_width / 2,
                                         center_y=self.top - 70,
                                         width=filled_width,
                                         height=20,
-                                        color=arcade.color.YELLOW)
+                                        color=arcade.color.YELLOW[:3] + (128,))
 
-            current_rank_text = arcade.Text(f"{self.player.current_rank}", start_x=self.width // 2 - 175, start_y=self.top - 70, color=arcade.color.BLACK,anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
-            next_rank_text = arcade.Text(f"{self.player.current_rank+1}", start_x=self.width // 2 + 175, start_y=self.top - 70, color=arcade.color.BLACK, anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+            current_rank_text = arcade.Text(f"{self.player.current_rank}", start_x=self.width // 2 - 175, start_y=self.top - 70, color=arcade.color.BLACK[:3] + (128,),anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
+            next_rank_text = arcade.Text(f"{self.player.current_rank+1}", start_x=self.width // 2 + 175, start_y=self.top - 70, color=arcade.color.BLACK[:3] + (128,), anchor_x="center", anchor_y="center", font_size=UI_FONT_SIZE, font_name=UI_FONT)
             current_rank_text.draw()
             next_rank_text.draw()
 

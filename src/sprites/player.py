@@ -67,7 +67,7 @@ class Player(LivingSprite):
         self.footstep_sound = load_sound(self.footstep_name, source="hku")
         self.footstep_handler = FootstepSoundHandler(self.footstep_sound, self)
 
-        self.treat_amount = 10
+        self.treat_amount = 0
         self.treat_sprite_list = None
 
         self.picking_up_treat = False
