@@ -77,8 +77,8 @@ class GameSection(arcade.Section):
 
     def on_update(self):
         self.timer += DELTA_TIME
-        self.physics_engine.update()
         self.update_camera()
+        self.physics_engine.update()
         self.scene.update()
         self.current_level.update_respawn_enemies()
         self.monitor_player_workbench()
