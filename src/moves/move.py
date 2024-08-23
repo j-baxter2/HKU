@@ -189,4 +189,6 @@ class Move:
 
     @property
     def charge_fraction(self):
+        if self.charge_time is None:
+            return 0
         return self.charge_timer / self.charge_time
