@@ -29,6 +29,7 @@ class GameSection(arcade.Section):
         self.camera = None
         self.mouse_pos = (0,0)
         self.timer = 0
+        self.player_by_bench = False
 
     def setup(self):
         self.load_map("resources/maps/map2.json")
@@ -41,6 +42,7 @@ class GameSection(arcade.Section):
         self.scene.add_sprite_list(name="Projectile")
         self.scene.add_sprite_list(name="Trap")
         self.scene.add_sprite_list(name="River Sounds")
+        self.scene.add_sprite_list(name="Workbench")
         self.current_level_id = 0
         spawn = self.tile_map.object_lists["player spawn"][0]
         self.player.left = spawn.shape[0]
@@ -63,7 +65,12 @@ class GameSection(arcade.Section):
         slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024, scale=3)
         self.scene.add_sprite("Trap", slime)
         map_bounds = self.tile_map.object_lists["map bounds"]
-        print(map_bounds)
+        for point in self.tile_map.object_lists["workbench"]:
+            print(point)
+            x = point.shape[0]
+            y = point.shape[1] + 90
+            bench = arcade.Sprite(center_x=x, center_y=y, filename="resources/spritesheets/bench.png", scale=3)
+            self.scene.add_sprite("Workbench", bench)
         self.camera = HKUCamera(self.width, self.height)
         self.player.setup()
 
@@ -73,10 +80,12 @@ class GameSection(arcade.Section):
         self.update_camera()
         self.scene.update()
         self.current_level.update_respawn_enemies()
+        self.monitor_player_workbench()
 
     def on_draw(self):
-        self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Kitty", "Enemy", "Player", "Projectile"])
+        self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Workbench", "Kitty", "Enemy", "Player", "Projectile"])
         self.draw_border()
+        self.draw_button_hints()
         active_moves = self.player.get_active_moves()
         for move in active_moves:
             move.draw()
@@ -93,6 +102,9 @@ class GameSection(arcade.Section):
             self.player.left_pressed = True
         elif key == controls.RIGHT:
             self.player.right_pressed = True
+        elif key == controls.INTERACT and self.player_by_bench:
+            pause_view = PauseView(self.view)
+            self.window.show_view(pause_view)
         elif key == controls.SPRINT:
             self.player.sprint_pressed = True
         elif key == controls.ATTACK:
@@ -174,6 +186,16 @@ class GameSection(arcade.Section):
         elif key == controls.ALT_MODIFIER:
             self.player.alt_pressed = False
 
+    def monitor_player_workbench(self):
+        tuple = arcade.get_closest_sprite(self.player, self.scene.get_sprite_list("Workbench"))
+        bench = tuple[0]
+        distance = tuple[1]
+        if bench is not None:
+            if distance <= 256 and (self.player.bottom<=bench.top):
+                self.player_by_bench = True
+            else:
+                self.player_by_bench = False
+
     def update_camera(self):
         if self.player.is_alive:
             player_position_for_cam = Vec2(self.player.center_x-(self.width//2), self.player.center_y-(self.height//2))
@@ -220,6 +242,12 @@ class GameSection(arcade.Section):
         if self.player.center_y > MAP_HEIGHT-border_trigger:
             for i in range(nlayers):
                 arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), MAP_HEIGHT, max(0, self.player.center_x-length*(1+i)/nlayers), MAP_HEIGHT, color=border_color, line_width=border_width)
+
+    def draw_button_hints(self):
+        if self.player_by_bench:
+            e_text = arcade.Text("E", anchor_x="center", anchor_y="bottom", start_x=self.player.center_x, start_y=self.player.top+16, font_size=24, width=256, font_name=UI_FONT, color=arcade.color.BLACK)
+            e_text.draw()
+
 
 
     @property
