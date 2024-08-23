@@ -13,6 +13,7 @@ from src.moves.move_affect_all_in_range import AffectAllMove
 from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import load_sound, play_sound
+from src.utils.physics_engine import HKUEngine
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
 import src.data.color as color
 
@@ -49,8 +50,9 @@ class GameSection(arcade.Section):
         self.player.bottom = spawn.shape[1]
         self.load_level()
         self.level_list = self.current_level.get_level_list()
-        self.physics_engine = arcade.PhysicsEngineSimple(
-            self.player,
+        colliding_sprites = [self.scene.get_sprite_list("Player"), self.scene.get_sprite_list("Enemy"), self.scene.get_sprite_list("Kitty")]
+        self.physics_engine = HKUEngine(
+            colliding_sprites=colliding_sprites,
             walls=[
                 self.scene["Wall"]
             ]
