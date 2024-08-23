@@ -245,7 +245,8 @@ class GameSection(arcade.Section):
 
     def draw_button_hints(self):
         if self.player_by_bench:
-            e_text = arcade.Text("E", anchor_x="center", anchor_y="bottom", start_x=self.player.center_x, start_y=self.player.top+16, font_size=24, width=256, font_name=UI_FONT, color=arcade.color.BLACK)
+            e_text = arcade.Text("E", anchor_x="center", anchor_y="center", start_x=self.player.center_x, start_y=self.player.top+32, font_size=24, width=256, font_name=UI_FONT, color=arcade.color.WHITE)
+            arcade.draw_circle_filled(center_x=e_text.x, center_y=e_text.y, radius=e_text.content_width, color=arcade.color.BLACK[:3]+(128,))
             e_text.draw()
 
 
