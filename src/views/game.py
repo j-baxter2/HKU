@@ -239,27 +239,31 @@ class GameSection(arcade.Section):
     def draw_border(self):
         border_trigger = 256
         border_width=10+math.sin(self.timer*5)*5
-        nlayers=10
+        nlayers = 10
         if self.player.center_x < border_trigger:
             for i in range(nlayers):
-                border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+64*((256-self.player.center_x)/256)]
-                length = 32+96*((256-self.player.center_x)/256)
-                arcade.draw_line(0, min(MAP_HEIGHT, self.player.center_y+length*(1+i)/nlayers), 0, max(0, self.player.center_y-length*(1+i)/nlayers), color=border_color, line_width=border_width*((256-self.player.center_x)/256))
+                ratio = ((256-self.player.center_x)/256)
+                border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+64*ratio]
+                length = 32+96*ratio
+                arcade.draw_line(0, min(MAP_HEIGHT, self.player.center_y+length*(1+i)/nlayers), 0, max(0, self.player.center_y-length*(1+i)/nlayers), color=border_color, line_width=border_width*ratio)
         if self.player.center_y < border_trigger:
             for i in range(nlayers):
-                border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+64*((256-self.player.center_y)/256)]
-                length = 32+96*((256-self.player.center_y)/256)
-                arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), 0, max(0, self.player.center_x-length*(1+i)/nlayers), 0, color=border_color, line_width=border_width*((256-self.player.center_y)/256))
+                ratio = ((256-self.player.center_y)/256)
+                border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+64*ratio]
+                length = 32+96*ratio
+                arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), 0, max(0, self.player.center_x-length*(1+i)/nlayers), 0, color=border_color, line_width=border_width*ratio)
         if self.player.center_x > MAP_WIDTH-border_trigger:
             for i in range(nlayers):
-                border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+64*((256-(MAP_WIDTH-self.player.center_x))/256)]
-                length = 32+96*((256-(MAP_WIDTH-self.player.center_x))/256)
-                arcade.draw_line(MAP_WIDTH, min(MAP_HEIGHT, self.player.center_y+length*(1+i)/nlayers), MAP_WIDTH, max(0, self.player.center_y-length*(1+i)/nlayers), color=border_color, line_width=border_width*((256-(MAP_WIDTH-self.player.center_x))/256))
+                ratio = ((256-(MAP_WIDTH-self.player.center_x))/256)
+                border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+64*ratio]
+                length = 32+96*ratio
+                arcade.draw_line(MAP_WIDTH, min(MAP_HEIGHT, self.player.center_y+length*(1+i)/nlayers), MAP_WIDTH, max(0, self.player.center_y-length*(1+i)/nlayers), color=border_color, line_width=border_width*ratio)
         if self.player.center_y > MAP_HEIGHT-border_trigger:
             for i in range(nlayers):
-                border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+64*((256-(MAP_HEIGHT-self.player.center_y))/256)]
-                length = 32+96*((256-(MAP_HEIGHT-self.player.center_y))/256)
-                arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), MAP_HEIGHT, max(0, self.player.center_x-length*(1+i)/nlayers), MAP_HEIGHT, color=border_color, line_width=border_width*((256-(MAP_HEIGHT-self.player.center_y))/256))
+                ratio = ((256-(MAP_HEIGHT-self.player.center_y))/256)
+                border_color = color.PINK[:3] + [int(0.1*(1+math.sin(self.timer*5))*255)+64*ratio]
+                length = 32+96*ratio
+                arcade.draw_line(min(MAP_WIDTH, self.player.center_x+length*(1+i)/nlayers), MAP_HEIGHT, max(0, self.player.center_x-length*(1+i)/nlayers), MAP_HEIGHT, color=border_color, line_width=border_width*ratio)
 
     def draw_button_hints(self):
         if self.player_by_bench:
