@@ -116,5 +116,5 @@ class Level:
         while True:
             x = random.uniform(edge_margin, MAP_WIDTH-edge_margin)
             y = random.uniform(edge_margin, MAP_HEIGHT-edge_margin)
-            if not ((x > 2688-edge_margin and x < 3712+edge_margin and y > 1792-edge_margin and y < 2688+edge_margin) and (arcade.get_distance(x, y, player.center_x, player.center_y) < 1024)):
+            if not ((x > 2688-edge_margin and x < 3712+edge_margin and y > 1792-edge_margin and y < 2688+edge_margin) or (arcade.get_distance(x, y, player.center_x, player.center_y) < 1024)):
                 return x, y
