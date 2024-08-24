@@ -64,7 +64,7 @@ class GameSection(arcade.Section):
             ambient_player = AmbientPlayer(scene=self.scene, sound=self.river_sound, center_x=x, center_y=y, filename="resources/spritesheets/cat.png")
             self.scene.add_sprite("River Sounds", ambient_player)
             ambient_player.play()
-        slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024, scale=3)
+        slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024, scale=3, finite=True)
         self.scene.add_sprite("Trap", slime)
         map_bounds = self.tile_map.object_lists["map bounds"]
         for point in self.tile_map.object_lists["workbench"]:
