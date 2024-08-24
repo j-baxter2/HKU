@@ -27,9 +27,9 @@ class AmbientPlayer(arcade.Sprite):
     def get_volume_from_player_pos(self):
         distance = arcade.get_distance_between_sprites(self, self.player)
         if distance == 0:
-            volume = 1
+            volume = 0.5
         elif distance < 1024:
-            volume = (1024-distance)/1024 * 1
+            volume = (1024-distance)/1024 * 0.5
         elif distance >= 1024:
             volume = 0
         return min(max(volume, 0), 1)
