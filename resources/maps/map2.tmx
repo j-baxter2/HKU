@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="48" tilewidth="48" tileheight="48" infinite="0" nextlayerid="12" nextobjectid="50">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="48" tilewidth="48" tileheight="48" infinite="0" nextlayerid="13" nextobjectid="52">
  <editorsettings>
   <export target="map2.json" format="json"/>
  </editorsettings>
@@ -33,9 +33,6 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="11" name="inside">
-  <object id="49" x="1392" y="912" width="384" height="336"/>
- </objectgroup>
  <layer id="2" name="Wall" width="64" height="48">
   <data encoding="base64" compression="zlib">
    eJzlmjlvFEEQhTsCcUQecUSkBBDZwTrCEQH2boJkex0Q4CMEzwoIkGeECMAB5j/TLfppvy712uvxeFfuHelpjj6mX1V19VXrzrn1G+Kex5bHyOPAo/KoPRqP1mMS33UfIV13pSn/rseewX5MV72qU2hjuf3YDqU3Jo/ubQ/cAzbivypzV1uF40w7yL9F+iz+Tay/jXflb1Duice2x06sv0beKuYdxeeu+n7jcT9iC/KkrqmryqX2oHszI+2jx6HHw8j9gceRm9pMbcqpHpajHMRdsgvlxx35r7nUVvX/Y8ghvB8YnY5dare0Db23yCN73otcduK3Y3BvXNq3pGcrB5Vlua76X0P5UeQVnodoA/WrO2UmHU4in9p8G8YyOR7UP+ucuLRvqHwoK9/BPll34C5fV7lUlrR/2vUEd+q+cqnOK5QRhigjHpSB+jF9Z4v6JJ9dlLPt6co9Z8d81r/ZT2kX+k6O9Gm2b8snSJc16mTdJ0YHdaZcyKu+2sXP05Zt22nH4kp5D11qt9LTGPWNjDzJR+Ob9T1V5p16oQ1QD5bje/N+1y/pizbAPpbjXBJ/O6egH8jpvzT+gaPmOrSBece/u37JH8jvyX/IL5TOX/1fMhD/VbF/zRE01tAHhLTLuH9YQnv7vjjf4hxCa4PXrmz9a80Z+Ie5keZDhxGbrmz+mp/Z+ZD8wirw53qKa43wbdH8v3h8vQLfevzfrLm5sGj+P+bI87PH/3E9bLmH76vAn2tFjfvyCW9dOgbc9vpn0fzJ1e61hXnBwF1uA31fy+DPtXEYDwN/rbcD/2ADr1x+LtD3tWj+2lM4cVOdcwwYADk59H0tg7/1e1wPDTKgHPq+ltX/NQfQelDfc/wph76vPx4X8fnCQN/+9vg/zXO4DrxK/8Rdv7ZdegZi96VL52/PDuX3NB6Uzj93BsTzotL5271fnZ1pXCydv85YeC7Oc6JV4B84i789XyqdP/f+Zf88qyydv+Y74q854DiidP7y9Tw3XCX/xzgK7ftzDVw6f3vuIXnILkrnb+3fxiatAn/qn/th88z/rgPtpW24NL7FxoEwRoSxK+GuWCDu0StmkHr75fHY45nHZ49T/IMxFO/c//XPU5ee+6oNffIP2Iz8GcvCOEfLfeymvkhxVIwvOUEdXMuPogx+Qw6nqJ+8Q+xcWAccGbnO4/+68H/h8dKl8wy778A2cDziPrWNZWKcFc9ycrawa3g35p/zjn9d+4BkQC60ARu/Ko5co1MeNlbMnmfRFs5c2t/t3u91/N9N/YD2nTjvtv2bsXGK2w35PkV9Wpy61DYkw5D/Ofgz3snGms67/9FHP2AbbUws+wd9grg8inoVaOcWyn/uZscLcj+8b/8/ywaoe7sfbW1f6d/BheOA7HwWzt00ptTG/fF/er8t/rIBxQzm/D/X4npWWuB/hnT2f46ZjP+lnSvuw8Z8WT/8D7Zb6ig=
@@ -50,6 +47,14 @@
   </object>
   <object id="30" x="0" y="1056">
    <polygon points="0,0 48,0 48,48 48,96 144,96 144,144 240,144 240,192 336,192 336,240 384,240 384,336 432,336 432,528 480,528 480,576 528,576 528,624 672,624 672,720 720,720 720,864 912,864 912,912 960,912 960,1056 1008,1056 1008,1104 1056,1104 1056,1200 1104,1200 1104,1248 0,1248"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="12" name="inside">
+  <object id="50" x="1392" y="912">
+   <point/>
+  </object>
+  <object id="51" x="1776" y="1248">
+   <point/>
   </object>
  </objectgroup>
 </map>
