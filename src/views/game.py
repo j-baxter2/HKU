@@ -199,11 +199,13 @@ class GameSection(arcade.Section):
                 self.player_by_bench = False
 
     def monitor_player_inside(self):
-        left = 2648
-        top = 2757
-        right = 3757
-        bottom = 1792
-        # print(f"left:{left}\ntop:{top}\nright:{right}\nbottom:{bottom}")
+        left = self.tile_map.object_lists["inside"][0].shape[0]
+        top = self.tile_map.object_lists["inside"][0].shape[1]
+        right = self.tile_map.object_lists["inside"][1].shape[0]
+        bottom = self.tile_map.object_lists["inside"][1].shape[1]
+        for i in range(len(self.tile_map.object_lists["inside"])):
+            print(f"inside{i}: {self.tile_map.object_lists['inside'][i]}")
+        #print(f"left:{left}\ntop:{top}\nright:{right}\nbottom:{bottom}")
         if self.player.center_x > left and self.player.center_x < right and self.player.center_y < top and self.player.center_y > bottom:
             self.player.inside = True
         else:
