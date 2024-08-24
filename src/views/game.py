@@ -568,7 +568,7 @@ class GameView(arcade.View):
         if self.media_player:
             self.media_player.pause()
         self.my_music = arcade.load_sound(self.songs[song_key])
-        self.media_player = self.my_music.play()
+        self.media_player = self.my_music.play(loop=True)
 
     def start_between_levels(self):
         self.between_levels = True
