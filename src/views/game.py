@@ -230,6 +230,7 @@ class GameSection(arcade.Section):
         self.current_level = Level(level_id=self.current_level_id, scene=self.scene)
         self.current_level.load_enemies()
         self.current_level.load_kitties()
+        self.current_level.load_traps()
         for kitty in self.scene.get_sprite_list("Kitty"):
             kitty.setup()
         for enemy in self.scene.get_sprite_list("Enemy"):

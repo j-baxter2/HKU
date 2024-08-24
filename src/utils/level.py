@@ -7,6 +7,7 @@ from src.sprites.shooting_enemy import ShootingEnemy
 from src.sprites.player import Player
 from src.sprites.treat import Treat
 from src.sprites.kitty import Kitty
+from src.sprites.slime import Slime
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT
 
 class Level:
@@ -23,6 +24,8 @@ class Level:
 
         self.kitty_amount = self.kitty_data["kitty amount"]
         self.kitty_ratio = self.kitty_data["kitty ratio"]
+
+        self.trap_amount = self.load_level_data(level_id)["traps"]
 
         self.treat_amount = 0
 
@@ -62,6 +65,15 @@ class Level:
                 x, y = self._generate_xy()
                 kitty.position = (x,y)
                 self.scene.add_sprite("Kitty", kitty)
+
+    def load_traps(self):
+        map_bounds = [MAP_WIDTH, MAP_HEIGHT]
+        traps_to_replace = self.trap_amount - len(self.scene.get_sprite_list("Trap"))
+        for i in range(traps_to_replace):
+            trap = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", scale=3)
+            x, y = self._generate_xy()
+            trap.position = (x,y)
+            self.scene.add_sprite("Trap", trap)
 
     def get_level_list(self):
         return self.level_list
