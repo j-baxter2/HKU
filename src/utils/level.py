@@ -48,11 +48,7 @@ class Level:
         elif enemy_id == "2":
             enemy = ShootingEnemy(id=int(enemy_id), scene=self.scene)
 
-        while True:
-            x = random.uniform(0, map_bounds[0])
-            y = random.uniform(0, map_bounds[1])
-            if not (0 <= x <= 1024 and 0 <= y <= 1024):
-                break
+        x, y = self._generate_xy()
         enemy.position = (x, y)
         self.scene.add_sprite("Enemy", enemy)
         enemy.setup()
@@ -63,11 +59,7 @@ class Level:
         for kitty_id, ratio in self.kitty_ratio.items():
             for _ in range(int(ratio * self.kitty_amount)):
                 kitty = Kitty(id=int(kitty_id), scene=self.scene)
-                while True:
-                    x = random.uniform(0, map_bounds[0])
-                    y = random.uniform(0, map_bounds[1])
-                    if not (0 <= x <= 1024 and 0 <= y <= 1024):
-                        break
+                x, y = self._generate_xy()
                 kitty.position = (x,y)
                 self.scene.add_sprite("Kitty", kitty)
 
@@ -100,10 +92,17 @@ class Level:
         edge_margin = 64  # Avoid spawning too close to the edge
 
         for i in range(self.treat_amount):
-            x = random.uniform(edge_margin+1304, MAP_WIDTH - edge_margin)
-            y = random.uniform(edge_margin+1823, MAP_HEIGHT - edge_margin)
-
+            x, y = self._generate_xy()
             # Create and place the treat
             treat = Treat("resources/spritesheets/treat.png", 4, decayed=True)
             treat.position = (x, y)
             self.scene.add_sprite("Treat", treat)
+
+    def _generate_xy(self):
+        player = self.scene.get_sprite_list("Player")[0]
+        edge_margin = 64
+        while True:
+            x = random.uniform(edge_margin, MAP_WIDTH-edge_margin)
+            y = random.uniform(edge_margin, MAP_HEIGHT-edge_margin)
+            if not ((x > 2688-edge_margin and x < 3712+edge_margin and y > 1792-edge_margin and y < 2688+edge_margin) and (arcade.get_distance(x, y, player.center_x, player.center_y) < 1024)):
+                return x, y
