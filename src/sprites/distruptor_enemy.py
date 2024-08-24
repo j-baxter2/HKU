@@ -6,6 +6,7 @@ import random
 import math
 import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
+from src.utils.sound import load_sound, play_sound
 
 class DistruptorEnemy(BaseEnemy):
     def __init__(self, id : int, scene: arcade.Scene):
@@ -16,6 +17,7 @@ class DistruptorEnemy(BaseEnemy):
         self.just_attacked = False
         self.attack_refresh_time = 0
         self.target_kitty = None
+        self.scare_sound = load_sound("gobu_cackle", source = "hku")
 
     def setup(self):
         super().setup()
@@ -62,6 +64,7 @@ class DistruptorEnemy(BaseEnemy):
 
     def handle_player_collision(self):
        if self.can_attack and arcade.check_for_collision(self, self.player):
+           play_sound(random.choice(self.attack_sounds), volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
            self.player.take_damage(self.attack)
            self.just_attacked = True
            self.paralyze()
@@ -70,7 +73,7 @@ class DistruptorEnemy(BaseEnemy):
         if self.target_kitty:
             if self.can_attack and arcade.check_for_collision(self, self.target_kitty):
                 self.target_kitty.take_damage(0)
-                #play roar
+                play_sound(self.scare_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
                 self.just_attacked = True
                 self.paralyze()
 

@@ -64,15 +64,16 @@ class Player(LivingSprite):
         self.current_rank = 0
 
         self.footstep_name = self.player_data["footstep name"]
-        self.footstep_sound = load_sound(self.footstep_name, source="hku")
-        self.footstep_handler = FootstepSoundHandler(self.footstep_sound, self)
 
         self.treat_amount = 0
         self.treat_sprite_list = None
 
         self.picking_up_treat = False
 
-        self.drop_treat_sound = load_sound("upgrade1")
+        self.footstep_sound = load_sound(self.footstep_name, source="hku")
+        self.footstep_handler = FootstepSoundHandler(self.footstep_sound, self)
+        self.drop_treat_sound = load_sound("hit5")
+        self.pick_up_treat_sound = load_sound("coin5")
         self.no_treat_sound = load_sound("error1")
 
         self.up_pressed = False
@@ -238,6 +239,7 @@ class Player(LivingSprite):
 
 
     def pick_up_treat(self, treat):
+        play_sound(self.pick_up_treat_sound, volume=SOUND_EFFECT_VOL)
         self.treat_amount += 1
         treat.picked_up = True
         treat.kill()

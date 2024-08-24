@@ -6,6 +6,7 @@ import random
 import math
 import json
 from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
+from src.utils.sound import load_sound, play_sound
 
 class BaseEnemy(FollowingSprite):
     def __init__(self, id : int, scene: arcade.Scene):
@@ -15,12 +16,18 @@ class BaseEnemy(FollowingSprite):
         super().__init__(self.enemy_data, self.scene)
         self.max_hp = self.enemy_data["hp"]
         self.hp = self.max_hp
+        self.death_sound = load_sound("gobu_scream", source="hku")
+        self.attack_sounds = [load_sound("gobu_attack01", source="hku"), load_sound("gobu_attack02", source="hku")]
 
     def setup(self):
         super().setup()
 
     def update_while_alive(self):
         pass
+
+    def start_fade(self):
+        play_sound(self.death_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
+        super().start_fade()
 
     @property
     def in_range(self):

@@ -29,11 +29,12 @@ class Kitty(FollowingSprite):
         self.meow_sound = load_sound(self.meow_name, source="hku")
         self.meow_speed = random.uniform(0.5, 1.5)
 
-        self.eating_sound = load_sound("coin5")
-
-        self.fed_sound = load_sound("upgrade5")
-
-        self.stop_eating_sound = load_sound("lose1")
+        self.fed_sound = load_sound("yay", source="hku")
+        self.swallow_sound = load_sound("cat_swallow", source="hku")
+        self.stop_eating_sound = load_sound("cat_dissapointed", source="hku")
+        self.stop_eating_sound2 = load_sound("lose4")
+        self.eating_sound = load_sound("nom", source="hku")
+        self.yelp_sound = load_sound("cat_yelp", source="hku")
 
         self.target_treat = None
 
@@ -54,6 +55,7 @@ class Kitty(FollowingSprite):
         self.sitting_frames = self.kitty_data["animation"]["sitting"]
 
     def take_damage(self, damage):
+        play_sound(self.yelp_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
         self.stop_eating(success=False)
         self.start_fleeing()
 
@@ -84,7 +86,8 @@ class Kitty(FollowingSprite):
             blue = 255*(self.need_second_timer/self.need_second_time)
             self.color = [255, 255, min(blue, 255)]
             if self.need_second_timer >= self.need_second_time:
-                play_sound(self.fed_sound)
+                play_sound(self.stop_eating_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
+                play_sound(self.stop_eating_sound2, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
                 self.color = arcade.color.WHITE
                 self.treats_eaten = 0
                 edge_margin = 64
@@ -104,6 +107,7 @@ class Kitty(FollowingSprite):
 
     def start_eating(self):
         self.eating = True
+        play_sound(self.eating_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
         self.play_animation(*self.sitting_frames, looping=True)
         self.paralyze()
         self.eating_timer = 0
@@ -112,7 +116,6 @@ class Kitty(FollowingSprite):
         if self.eating:
             if self.target_treat.picked_up or self.target_treat.decayed:
                 self.stop_eating(success=False)
-                play_sound(self.stop_eating_sound)
                 return
             self.eating_timer += DELTA_TIME
             self.target_treat.being_eaten = True
@@ -127,10 +130,12 @@ class Kitty(FollowingSprite):
         if self.target_treat:
             self.target_treat.being_eaten = False
         if success:
+            if self.treats_eaten < (self.hunger-1):
+                play_sound(self.swallow_sound, volume=self.get_volume_from_player_pos()*0.5, pan=self.get_pan_from_player_pos())
             self.target_treat.kill()
             self.treats_eaten += 1
-            play_sound(self.eating_sound)
         if self.treats_eaten >= self.hunger:
+            play_sound(self.fed_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
             self.paralyze()
             self.start_fade()
             self.player.give_xp(self.hunger)

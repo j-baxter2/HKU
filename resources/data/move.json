@@ -15,9 +15,9 @@
         "affects": "Enemy",
         "charge time": null,
         "color": "PURPLE",
-        "draw lines": true,
+        "draw lines": false,
         "draw circle": true,
-        "start sound": "laser1",
+        "start sound": "laser3",
         "stop sound": null
     },
     "1": {
