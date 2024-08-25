@@ -3,16 +3,13 @@ import arcade.gui
 import json
 from src.data import controls
 from src.data import color
-from src.data.constants import UI_FONT, UI_FONT_PATH
+from src.data.constants import UI_FONT, UI_FONT_PATH, SOUND_EFFECT_VOL
+from src.utils.sound import load_sound, play_sound
 
 class PauseView(arcade.View):
     def __init__(self, game_view):
         super().__init__()
         self.game_view = game_view
-        self.quick_attack_view = MoveView(self.game_view, self, "quick attack")
-        self.special_view = MoveView(self.game_view, self, "special")
-        self.heal_view = MoveView(self.game_view, self, "heal")
-        self.scare_view = MoveView(self.game_view, self, "scare")
 
         self.manager = arcade.gui.UIManager()
         self.setup_ui()
@@ -38,7 +35,7 @@ class PauseView(arcade.View):
         resume_button = arcade.gui.UIFlatButton(text="Resume", width=200, style=style)
         vbox.add(resume_button.with_space_around(bottom=20))
 
-        quit_button = arcade.gui.UIFlatButton(text="Save & Quit", width=200, style=style)
+        quit_button = arcade.gui.UIFlatButton(text="Quit", width=200, style=style)
         vbox.add(quit_button.with_space_around(bottom=20))
 
         self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=vbox))
@@ -49,7 +46,6 @@ class PauseView(arcade.View):
 
         @quit_button.event("on_click")
         def on_click_quit(event):
-            self.save_game_view()
             self.window.show_view(self.game_view.main_menu)
 
     def on_key_press(self, key: int, modifiers: int):
@@ -70,10 +66,6 @@ class PauseView(arcade.View):
         arcade.draw_lrtb_rectangle_filled(0, self.window.width, self.window.height, 0, arcade.color.BLACK[:3] + (128,))
         self.manager.draw()
 
-    def save_game_view(self):
-        with open('resources/saves/savegame.json', 'w') as json_file:
-            json.dump(self.game_view.to_dict(), json_file, indent=4)
-
 class MoveSelectView(arcade.View):
     def __init__(self, game_view):
         super().__init__()
@@ -82,6 +74,10 @@ class MoveSelectView(arcade.View):
         self.special_view = MoveView(self.game_view, self, "special")
         self.heal_view = MoveView(self.game_view, self, "heal")
         self.scare_view = MoveView(self.game_view, self, "scare")
+
+        self.game_saved = False
+
+        self.save_sound = load_sound("coin1")
 
         self.manager = arcade.gui.UIManager()
         self.setup_ui()
@@ -104,6 +100,10 @@ class MoveSelectView(arcade.View):
                 "bg": color.DARK_GREEN
             }
         }
+
+        self.save_button = arcade.gui.UIFlatButton(text="save", width=200, style=style)
+        vbox.add(self.save_button.with_space_around(bottom=20))
+
         quick_attack_button = arcade.gui.UIFlatButton(text="Quick Attack", width=200, style=style)
         vbox.add(quick_attack_button.with_space_around(bottom=20))
 
@@ -120,6 +120,11 @@ class MoveSelectView(arcade.View):
         vbox.add(back_button.with_space_around(bottom=20))
 
         self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=vbox))
+
+        @self.save_button.event("on_click")
+        def on_click_save(event):
+            play_sound(self.save_sound, volume=SOUND_EFFECT_VOL)
+            self.save_game_view()
 
         @quick_attack_button.event("on_click")
         def on_click_quick_attack(event):
@@ -141,11 +146,18 @@ class MoveSelectView(arcade.View):
         def on_click_back(event):
             self.window.show_view(self.game_view)
 
+
+    def save_game_view(self):
+        with open('resources/saves/savegame.json', 'w') as json_file:
+            json.dump(self.game_view.to_dict(), json_file, indent=4)
+        self.game_saved = True
+
     def on_key_press(self, key: int, modifiers: int):
         if key == controls.PAUSE:
             self.window.show_view(self.game_view)
 
     def on_show_view(self):
+        self.game_saved = False
         self.manager.enable()
 
     def on_hide_view(self):
@@ -153,10 +165,12 @@ class MoveSelectView(arcade.View):
 
     def on_draw(self):
         self.clear()
-        self.game_view.game_section.update_camera()
         self.game_view.game_section.on_draw()
         self.game_view.ui_section.camera.use()
         arcade.draw_lrtb_rectangle_filled(0, self.window.width, self.window.height, 0, arcade.color.BLACK[:3] + (128,))
+        if self.game_saved == True:
+            saved_text = arcade.Text("SAVED!", start_x=self.save_button.right+20, start_y=self.save_button.center_y, anchor_y="center", font_name=UI_FONT, font_size=20,)
+            saved_text.draw()
         self.manager.draw()
 
 class MoveView(arcade.View):
@@ -228,7 +242,7 @@ class MoveView(arcade.View):
 
     def on_click_move(self, event, move, slot):
         self.player.equip_move(slot=slot, move=move)
-        self.window.show_view(self.pause_view)
+        self.window.show_view(self.move_select_view)
 
     def on_key_press(self, key: int, modifiers: int):
         if key == controls.PAUSE:

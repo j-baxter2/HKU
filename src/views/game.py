@@ -80,7 +80,6 @@ class GameSection(arcade.Section):
 
     def on_update(self):
         self.timer += DELTA_TIME
-        self.update_camera()
         self.physics_engine.update()
         self.scene.update()
         self.current_level.update_respawn_enemies()
@@ -88,6 +87,7 @@ class GameSection(arcade.Section):
         self.monitor_player_inside()
 
     def on_draw(self):
+        self.update_camera()
         self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Workbench", "Kitty", "Enemy", "Player", "Projectile"])
         self.draw_border()
         self.draw_button_hints()

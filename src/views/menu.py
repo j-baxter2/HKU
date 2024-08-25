@@ -43,7 +43,7 @@ class MenuView(arcade.View):
 
         self.v_box.add(play_button.with_space_around(bottom=20))
 
-        resume_button = arcade.gui.UIFlatButton(text="Resume", width=200)
+        resume_button = arcade.gui.UIFlatButton(text="Load", width=200)
         if self.save_detected:
             self.v_box.add(resume_button.with_space_around(bottom=20))
 
