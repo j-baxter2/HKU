@@ -42,6 +42,7 @@ class MenuView(arcade.View):
         @play_button.event("on_click")
         def on_click_play(event):
             game_view = GameView()
+            game_view.main_menu = self
             game_view.setup()
             self.window.show_view(game_view)
 

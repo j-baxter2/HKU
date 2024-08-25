@@ -3,7 +3,7 @@ import arcade.color
 import math
 import json
 import xml.etree.ElementTree as ET
-from src.views.pause import PauseView, MoveView
+from src.views.pause import PauseView, MoveSelectView, MoveView
 from src.sprites.player import Player
 from src.sprites.sound_player import AmbientPlayer
 from src.sprites.slime import Slime
@@ -108,8 +108,8 @@ class GameSection(arcade.Section):
         elif key == controls.RIGHT:
             self.player.right_pressed = True
         elif key == controls.INTERACT and self.player_by_bench:
-            pause_view = PauseView(self.view)
-            self.window.show_view(pause_view)
+            move_select_view = MoveSelectView(self.view)
+            self.window.show_view(move_select_view)
         elif key == controls.SPRINT:
             self.player.sprint_pressed = True
         elif key == controls.ATTACK:
@@ -457,6 +457,7 @@ class GameView(arcade.View):
     def __init__(self):
         super().__init__()
         self.window.views["game"] = self
+        self.main_menu = None
         self.game_section = GameSection(0, 0,
                                        self.window.width, self.window.height, accept_keyboard_events=True)
         self.ui_section = UISection(0, 0,
