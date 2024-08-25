@@ -36,11 +36,11 @@ class Slime(arcade.Sprite):
             self.effect_timer += DELTA_TIME
             component = min(max(0,255*(self.effect_timer/self.effect_time)),255)
             self.player.color = [255,255,component]
-            self.player.velocity = Vec2(self.player.velocity[0], self.player.velocity[1])
-            self.player.velocity = self.player.velocity.scale(0.3)
+            self.player.speed_multiplier = 0.3
             if self.effect_timer >= self.effect_time:
                 self.affecting = False
                 self.player.color = arcade.color.WHITE
+                self.player.speed_multiplier = 1
                 self.effect_timer = 0
         if self.finite:
                 if self.timer >= self.lifetime:

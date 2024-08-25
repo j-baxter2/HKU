@@ -1,6 +1,7 @@
 import arcade
 import arcade.color
 import math
+import json
 import xml.etree.ElementTree as ET
 from src.views.pause import PauseView, MoveView
 from src.sprites.player import Player
@@ -73,6 +74,7 @@ class GameSection(arcade.Section):
             y = point.shape[1] + 90
             bench = arcade.Sprite(center_x=x, center_y=y, filename="resources/spritesheets/bench.png", scale=3)
             self.scene.add_sprite("Workbench", bench)
+        self.create_tile_terrain_mapping()
         self.camera = HKUCamera(self.width, self.height)
         self.player.setup()
 
@@ -84,7 +86,6 @@ class GameSection(arcade.Section):
         self.current_level.update_respawn_enemies()
         self.monitor_player_workbench()
         self.monitor_player_inside()
-        self.monitor_player_terrain()
 
     def on_draw(self):
         self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Workbench", "Kitty", "Enemy", "Player", "Projectile"])
@@ -210,19 +211,13 @@ class GameSection(arcade.Section):
         else:
             self.player.inside = False
 
-    def monitor_player_terrain(self):
-        floor_list = self.tile_map.sprite_lists.get("Floor", arcade.SpriteList())
-        tiles_hit = arcade.check_for_collision_with_list(self.player, floor_list)
-
-        if tiles_hit:
-            current_tile = tiles_hit[0]
-            tile_id = current_tile.properties['tile_id']
-            tile_data = self.tile_map.tiled_map.tilesets[1].tiles[tile_id]
-            terrain_type = tile_data.properties.get("Terrain", "unknown")
-
-            self.player.walking_on = terrain_type
-        else:
-            return
+    def create_tile_terrain_mapping(self):
+        terrain_dict = {}
+        tile_data = self.tile_map.tiled_map.tilesets[1].tiles
+        for integer, tile in tile_data.items():
+            terrain_dict[tile.id] = tile.properties.get("Terrain", "unknown")
+        with open('resources/maps/terrain_mapping.json', 'w') as json_file:
+            json.dump(terrain_dict, json_file, indent=4)
 
     def update_camera(self):
         if self.player.is_alive:
@@ -288,8 +283,6 @@ class GameSection(arcade.Section):
             arcade.draw_circle_filled(center_x=e_text.x, center_y=e_text.y, radius=e_text.content_width, color=arcade.color.BLACK[:3]+(128,))
             e_text.draw()
 
-
-
     @property
     def more_levels(self):
         return len(self.level_list) > self.current_level_id + 1
@@ -309,10 +302,6 @@ class GameSection(arcade.Section):
     def draw_debug(self):
         self.camera.use()
         self.player.draw_debug()
-        # for enemy in self.scene.get_sprite_list("Enemy"):
-        #     arcade.draw_line(self.player.center_x, self.player.center_y, enemy.center_x, enemy.center_y, arcade.color.AMARANTH_PINK, 5)
-        # for kitty in self.scene.get_sprite_list("Kitty"):
-        #     arcade.draw_line(self.player.center_x, self.player.center_y, kitty.center_x, kitty.center_y, arcade.color.ORANGE, 5)
         for treat in self.scene.get_sprite_list("Treat"):
             treat.draw_debug()
         for projectile in self.scene.get_sprite_list("Projectile"):

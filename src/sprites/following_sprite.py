@@ -14,7 +14,7 @@ class FollowingSprite(LivingSprite):
         self.follow_distance = data["follow radius"]
         self.random_movement_time = data["random movement time"]
         self.random_movement_timer = 0
-        super().__init__(data)
+        super().__init__(scene, data)
 
     def setup(self):
         self.randomize_velocity()

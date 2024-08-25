@@ -21,7 +21,7 @@ class Player(LivingSprite):
             player_dict = json.load(file)
         self.player_data = player_dict[str(id)]
 
-        super().__init__(self.player_data)
+        super().__init__(scene, self.player_data)
 
         self.scene = scene
 
@@ -64,7 +64,6 @@ class Player(LivingSprite):
         self.current_rank = 0
 
         self.footstep_name = self.player_data["footstep name"]
-        self.walking_on = None
 
         self.treat_amount = 0
         self.treat_sprite_list = None
@@ -93,6 +92,9 @@ class Player(LivingSprite):
         self.attack = 0
 
         self.inside = False
+
+        with open("resources/maps/terrain_mapping.json", "r") as file:
+            self.terrain_mapping = json.load(file)
 
     def setup(self):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
@@ -125,6 +127,7 @@ class Player(LivingSprite):
             self.update_level_up()
         if self.fading_in:
             self.update_fade_in()
+        self.update_terrain()
         self.update_from_terrain()
         self.update_animation()
         self.update_sound()
@@ -179,12 +182,23 @@ class Player(LivingSprite):
         else:
             return min(self.get_xp_from_previous_level() / self.get_xp_to_next_level(), 1)
 
+    def update_terrain(self):
+        floor = self.scene.get_sprite_list("Floor")
+        hit_tiles = arcade.check_for_collision_with_list(self, floor)
+        print("update_terrain")
+        if hit_tiles:
+            current_tile = hit_tiles[0]
+            tile_id = current_tile.properties['tile_id']
+            terrain = self.terrain_mapping[str(tile_id)]
+            self.walking_on = terrain
+            print(f"hit tiles \nid:{tile_id}\nterrain:{terrain}")
+
     def update_from_terrain(self):
         if self.walking_on == "water":
-            self.velocity = Vec2(self.velocity[0], self.velocity[1])
-            self.velocity = self.velocity.scale(0.35)
+            self.speed_multiplier = 0.3
             self.current_movement_frames = self.swim_cycle_frames
         else:
+            self.speed_multiplier = 1
             self.current_movement_frames = self.walk_cycle_frames
 
     def update_stamina(self, delta_time):
