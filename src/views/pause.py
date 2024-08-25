@@ -1,5 +1,6 @@
 import arcade
 import arcade.gui
+import json
 from src.data import controls
 from src.data import color
 from src.data.constants import UI_FONT, UI_FONT_PATH
@@ -37,7 +38,7 @@ class PauseView(arcade.View):
         resume_button = arcade.gui.UIFlatButton(text="Resume", width=200, style=style)
         vbox.add(resume_button.with_space_around(bottom=20))
 
-        quit_button = arcade.gui.UIFlatButton(text="Quit", width=200, style=style)
+        quit_button = arcade.gui.UIFlatButton(text="Save & Quit", width=200, style=style)
         vbox.add(quit_button.with_space_around(bottom=20))
 
         self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=vbox))
@@ -48,6 +49,7 @@ class PauseView(arcade.View):
 
         @quit_button.event("on_click")
         def on_click_quit(event):
+            self.save_game_view()
             self.window.show_view(self.game_view.main_menu)
 
     def on_key_press(self, key: int, modifiers: int):
@@ -67,6 +69,10 @@ class PauseView(arcade.View):
         self.game_view.ui_section.camera.use()
         arcade.draw_lrtb_rectangle_filled(0, self.window.width, self.window.height, 0, arcade.color.BLACK[:3] + (128,))
         self.manager.draw()
+
+    def save_game_view(self):
+        with open('resources/saves/savegame.json', 'w') as json_file:
+            json.dump(self.game_view.to_dict(), json_file, indent=4)
 
 class MoveSelectView(arcade.View):
     def __init__(self, game_view):

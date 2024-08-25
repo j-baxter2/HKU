@@ -493,6 +493,8 @@ class GameView(arcade.View):
 
         self.mouse_pos = (0,0)
 
+        self.player_xp_at_start = 0
+
     def setup(self):
         self.game_section.setup()
         self.ui_section.setup()
@@ -665,3 +667,39 @@ class GameView(arcade.View):
     @property
     def completed(self):
         return not self.game_section.more_levels and not self.game_section.any_kitties
+
+    def to_dict(self):
+        unlocked_moves = []
+        for move in self.game_section.player.unlocked_moves:
+            unlocked_moves.append(move.name)
+        equipped_moves = {}
+        for slot, move in self.game_section.player.equipped_moves.items():
+            if move is not None:
+                equipped_moves[slot] = move.name
+
+        return {
+            "xp": self.player_xp_at_start,
+            "level": self.game_section.current_level_id,
+            "unlocked_moves": unlocked_moves,
+            "equipped_moves": equipped_moves,
+            "position": self.game_section.player.position
+        }
+
+    def from_dict(self, data):
+        self.game_section.player.give_xp(data.get("xp", 0))
+        if 'level' in data:
+            self.game_section.current_level_id = data["level"] - 1
+            self.between_levels = True
+        if 'unlocked moves' in data:
+            for move_name in data['unlocked moves']:
+                for move in self.game_section.player.all_moves:
+                    if move.name == move_name:
+                        self.game_section.player.unlock_moves(move)
+        if 'equipped moves' in data:
+            for slot, move_name in data['equipped moves']:
+                for move in self.game_section.player.unlocked_moves:
+                    if move.name == move_name:
+                        self.game_section.player.equip_move(slot, move)
+        if 'position' in data:
+            self.game_section.player.center_x = data['position'][0]
+            self.game_section.player.center_y = data['position'][1]

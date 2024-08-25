@@ -1,4 +1,5 @@
 import arcade.gui
+import json
 from views.game import GameView
 from src.data.constants import UI_FONT, UI_FONT_PATH
 from src.data import color
@@ -7,6 +8,15 @@ class MenuView(arcade.View):
     def __init__(self):
         super().__init__()
         self.window.views["menu"] = self
+        try:
+            with open("resources/saves/savegame.json", "r") as file:
+                self.savegame_dict = json.load(file)
+            if len(self.savegame_dict) > 0:
+                self.save_detected = True
+            else:
+                self.save_detected = False
+        except FileNotFoundError:
+            self.save_detected = False
 
         self.background = arcade.load_texture("resources/textures/ui/landscape.png")
 
@@ -33,6 +43,10 @@ class MenuView(arcade.View):
 
         self.v_box.add(play_button.with_space_around(bottom=20))
 
+        resume_button = arcade.gui.UIFlatButton(text="Resume", width=200)
+        if self.save_detected:
+            self.v_box.add(resume_button.with_space_around(bottom=20))
+
         self.manager.add(
             arcade.gui.UIAnchorWidget(
                 anchor_x="center_x", anchor_y="center_y", child=self.v_box
@@ -44,6 +58,14 @@ class MenuView(arcade.View):
             game_view = GameView()
             game_view.main_menu = self
             game_view.setup()
+            self.window.show_view(game_view)
+
+        @resume_button.event("on_click")
+        def on_click_resume(event):
+            game_view = GameView()
+            game_view.main_menu = self
+            game_view.setup()
+            game_view.from_dict(self.savegame_dict)
             self.window.show_view(game_view)
 
     def on_update(self,delta_time):

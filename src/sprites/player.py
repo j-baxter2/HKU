@@ -300,10 +300,6 @@ class Player(LivingSprite):
         if move in self.unlocked_moves:
             self.equipped_moves[slot] = move
 
-    def equip_secondary_move(self, slot, move):
-        if move in self.unlocked_moves:
-            self.equipped_secondary_moves[slot] = move
-
     def do_move(self, move):
         if move.type == "basic":
             move.execute()
