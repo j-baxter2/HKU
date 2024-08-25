@@ -1,5 +1,5 @@
 {
-    "xp": 0,
+    "xp": 20,
     "level": 2,
     "unlocked moves": [
         "basic pat",
@@ -16,7 +16,7 @@
         "special": "fire stream"
     },
     "position": [
-        2173.578284825162,
-        2640.85
+        4054.5197692596084,
+        1644.22
     ]
 }

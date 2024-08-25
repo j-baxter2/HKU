@@ -484,16 +484,14 @@ class GameView(arcade.View):
 
         self.my_music = arcade.load_sound(self.songs[self.curr_song_key])
 
-        self.crossfade_time = 2  # Crossfade duration in seconds
+        self.crossfade_time = 1  # Crossfade duration in seconds
         self.crossfade_timer = 0
         self.new_media_player = None
 
         self.out_of_battle_timer = 0
-        self.time_out_of_battle = 3
+        self.time_out_of_battle = 2
 
         self.mouse_pos = (0,0)
-
-        self.player_xp_at_start = 0
 
     def setup(self):
         self.game_section.setup()
@@ -582,6 +580,7 @@ class GameView(arcade.View):
     def start_between_levels(self):
         self.between_levels = True
         self.between_levels_timer = 0
+        self.game_section.player.give_xp(10*self.game_section.current_level_id)
         enemies = self.game_section.scene.get_sprite_list("Enemy")
         for enemy in enemies:
             enemy.start_fade()
@@ -656,7 +655,6 @@ class GameView(arcade.View):
     def handle_level_completion(self):
         if not self.between_levels:
             if self.game_section.more_levels:
-                self.game_section.player.give_xp(10*self.game_section.current_level_id)
                 self.game_section.current_level_id += 1
                 self.game_section.load_level()
 
@@ -677,7 +675,7 @@ class GameView(arcade.View):
             if move is not None:
                 equipped_moves[slot] = move.name
         return {
-            "xp": self.player_xp_at_start,
+            "xp": self.game_section.player.xp,
             "level": self.game_section.current_level_id,
             "unlocked moves": unlocked_moves,
             "equipped moves": equipped_moves,
@@ -691,7 +689,10 @@ class GameView(arcade.View):
             self.game_section.player.give_xp(data['xp'])
         if 'level' in data:
             print(f"level:{data['level']}")
-            self.game_section.current_level_id = data['level']
+            if data['level'] == 0:
+                self.game_section.current_level_id = data['level']
+            else:
+                self.game_section.current_level_id = data['level'] - 1
             self.between_levels = True
         if 'unlocked moves' in data:
             for move_name in data['unlocked moves']:
