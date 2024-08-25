@@ -48,7 +48,7 @@ class ShootingEnemy(BaseEnemy):
             self.speed = self.base_speed
 
     def update_shooting(self):
-        if self.in_range_to_shoot:
+        if self.in_range_to_shoot and self.player.is_alive:
             self.shoot_move.start()
 
     def update_monitor_player_proximity(self):

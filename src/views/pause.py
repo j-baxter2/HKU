@@ -224,7 +224,7 @@ class MoveView(arcade.View):
 
         @back_button.event("on_click")
         def on_click_back(event):
-            self.window.show_view(self.pause_view)
+            self.window.show_view(self.move_select_view)
 
     def on_click_move(self, event, move, slot):
         self.player.equip_move(slot=slot, move=move)

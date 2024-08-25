@@ -23,7 +23,8 @@ class Slime(arcade.Sprite):
         self.shrink = load_sound("fall3")
 
     def update(self, delta_time=DELTA_TIME):
-        self.player = self.scene.get_sprite_list("Player")[0]
+        if len(self.scene.get_sprite_list("Player")) > 0:
+            self.player = self.scene.get_sprite_list("Player")[0]
         self.timer += DELTA_TIME
         if not self.affecting:
             if arcade.check_for_collision(self, self.player):

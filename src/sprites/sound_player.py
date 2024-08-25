@@ -13,7 +13,8 @@ class AmbientPlayer(arcade.Sprite):
         self.timer = 0
 
     def update(self, delta_time=DELTA_TIME):
-        self.player = self.scene.get_sprite_list("Player")[0]
+        if len(self.scene.get_sprite_list("Player")) > 0:
+            self.player = self.scene.get_sprite_list("Player")[0]
         self.timer += DELTA_TIME
         self.music_player.volume = self.get_volume_from_player_pos()*SOUND_EFFECT_VOL
         self.music_player.pan = self.get_pan_from_player_pos()

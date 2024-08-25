@@ -65,6 +65,8 @@ class MenuView(arcade.View):
             game_view = GameView()
             game_view.main_menu = self
             game_view.setup()
+            with open("resources/saves/savegame.json", "r") as file:
+                self.savegame_dict = json.load(file)
             game_view.from_dict(self.savegame_dict)
             self.window.show_view(game_view)
 

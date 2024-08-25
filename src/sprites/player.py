@@ -109,7 +109,6 @@ class Player(LivingSprite):
         ranged = TargetArrowKey(4, self.scene, self)
         radial = RadialProjectile(5, self.scene, self)
         custom_fire = MoveCustomFire(8, self.scene, self)
-        mouse_aim = MoveMouseAim(7, self.scene, self)
         arrow_aim = MoveArrowAim(7, self.scene, self)
         self.unlock_moves(basic_attack)
         self.unlock_moves(basic_heal)
@@ -188,13 +187,11 @@ class Player(LivingSprite):
     def update_terrain(self):
         floor = self.scene.get_sprite_list("Floor")
         hit_tiles = arcade.check_for_collision_with_list(self, floor)
-        print("update_terrain")
         if hit_tiles:
             current_tile = hit_tiles[0]
             tile_id = current_tile.properties['tile_id']
             terrain = self.terrain_mapping[str(tile_id)]
             self.walking_on = terrain
-            print(f"hit tiles \nid:{tile_id}\nterrain:{terrain}")
 
     def update_from_terrain(self):
         self.speed_multiplier = 1
@@ -294,7 +291,8 @@ class Player(LivingSprite):
         return (int(self.center_x), int(self.center_y))
 
     def unlock_moves(self, move):
-        self.unlocked_moves.append(move)
+        if move not in self.unlocked_moves:
+            self.unlocked_moves.append(move)
 
     def equip_move(self, slot, move):
         if move in self.unlocked_moves:

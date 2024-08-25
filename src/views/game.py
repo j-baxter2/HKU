@@ -676,30 +676,36 @@ class GameView(arcade.View):
         for slot, move in self.game_section.player.equipped_moves.items():
             if move is not None:
                 equipped_moves[slot] = move.name
-
         return {
             "xp": self.player_xp_at_start,
             "level": self.game_section.current_level_id,
-            "unlocked_moves": unlocked_moves,
-            "equipped_moves": equipped_moves,
+            "unlocked moves": unlocked_moves,
+            "equipped moves": equipped_moves,
             "position": self.game_section.player.position
         }
 
     def from_dict(self, data):
-        self.game_section.player.give_xp(data.get("xp", 0))
+        print("\nLOADING_SAVE\n======")
+        if 'xp' in data:
+            print(f"xp:{data['xp']}")
+            self.game_section.player.give_xp(data['xp'])
         if 'level' in data:
-            self.game_section.current_level_id = data["level"] - 1
+            print(f"level:{data['level']}")
+            self.game_section.current_level_id = data['level']
             self.between_levels = True
         if 'unlocked moves' in data:
             for move_name in data['unlocked moves']:
+                print(f"{move_name.upper()}")
                 for move in self.game_section.player.all_moves:
                     if move.name == move_name:
+                        print(f"UNLOCKED")
                         self.game_section.player.unlock_moves(move)
         if 'equipped moves' in data:
-            for slot, move_name in data['equipped moves']:
+            for slot, move_name in data['equipped moves'].items():
                 for move in self.game_section.player.unlocked_moves:
                     if move.name == move_name:
+                        print(f"{move.name} EQUIPPED")
                         self.game_section.player.equip_move(slot, move)
         if 'position' in data:
-            self.game_section.player.center_x = data['position'][0]
-            self.game_section.player.center_y = data['position'][1]
+            print(f"xy:{data['position']}")
+            self.game_section.player.position = data['position']
