@@ -10,6 +10,11 @@ class LivingSprite(MovingSprite):
         self.data = data
         super().__init__(self.data)
         self.walk_cycle_frames = self.animation_data["walk"]
+        try:
+            self.swim_cycle_frames = self.animation_data["swim"]
+        except KeyError:
+            pass
+        self.current_movement_frames = self.walk_cycle_frames
 
         self.sprint_multiplier = data["sprint multiplier"]
 
@@ -38,13 +43,13 @@ class LivingSprite(MovingSprite):
 
     def start_walk_cycle(self, direction: str):
         if direction == "up":
-            self.play_animation(*self.walk_cycle_frames["up"])
+            self.play_animation(*self.current_movement_frames["up"])
         elif direction == "down":
-            self.play_animation(*self.walk_cycle_frames["down"])
+            self.play_animation(*self.current_movement_frames["down"])
         elif direction == "left":
-            self.play_animation(*self.walk_cycle_frames["left"])
+            self.play_animation(*self.current_movement_frames["left"])
         elif direction == "right":
-            self.play_animation(*self.walk_cycle_frames["right"])
+            self.play_animation(*self.current_movement_frames["right"])
 
     def start_just_been_hit(self):
         self.just_been_hit = True

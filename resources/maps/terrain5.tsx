@@ -1,15 +1,416 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.11.0" name="terrain5" tilewidth="48" tileheight="48" tilecount="144" columns="12">
  <image source="../spritesheets/terrain_spritesheet.png" width="576" height="576"/>
- <tile id="75" probability="0.095"/>
- <tile id="76" probability="0.095"/>
- <tile id="80" probability="0.01"/>
- <tile id="81" probability="0.01"/>
- <tile id="87" probability="0.08"/>
- <tile id="88" probability="0.08"/>
- <tile id="92" probability="0.01"/>
- <tile id="99" probability="0.08"/>
- <tile id="100" probability="0.05"/>
+ <tile id="0">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="1">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="2">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="5">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="6">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="7">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="8">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="9">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="10">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="11">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="12">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="13">
+  <properties>
+   <property name="Terrain" value="wood"/>
+  </properties>
+ </tile>
+ <tile id="14">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="17">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="18">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="19">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="20">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="21">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="22">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="23">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="24">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="25">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="26">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="29">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="30">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="31">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="36">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="37">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="38">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="41">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="42">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="43">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="48">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="49">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="50">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="53">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="54">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="55">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="56">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="57">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="60">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="61">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="62">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="65">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="66">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="67">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="68">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="69">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="72">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="73">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="74">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="75" probability="0.095">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="76" probability="0.095">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="80" probability="0.01">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="81" probability="0.01">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="84">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="85">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="86">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="87" probability="0.08">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="88" probability="0.08">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="92" probability="0.01">
+  <properties>
+   <property name="Terrain" value="sand"/>
+  </properties>
+ </tile>
+ <tile id="96">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="97">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="98">
+  <properties>
+   <property name="Terrain" value="water"/>
+  </properties>
+ </tile>
+ <tile id="99" probability="0.08">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="100" probability="0.05">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="108">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="109">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="110">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="111">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="112">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="120">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="121">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="122">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="123">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="124">
+  <properties>
+   <property name="Terrain" value="grass"/>
+  </properties>
+ </tile>
+ <tile id="132">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="133">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="134">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="135">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="136">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
+ <tile id="137">
+  <properties>
+   <property name="Terrain" value="stone"/>
+  </properties>
+ </tile>
  <wangsets>
   <wangset name="terrain set" type="corner" tile="-1">
    <wangcolor name="grass" color="#ff0000" tile="-1" probability="0.8"/>

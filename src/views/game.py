@@ -1,6 +1,7 @@
 import arcade
 import arcade.color
 import math
+import xml.etree.ElementTree as ET
 from src.views.pause import PauseView, MoveView
 from src.sprites.player import Player
 from src.sprites.sound_player import AmbientPlayer
@@ -83,6 +84,7 @@ class GameSection(arcade.Section):
         self.current_level.update_respawn_enemies()
         self.monitor_player_workbench()
         self.monitor_player_inside()
+        self.monitor_player_terrain()
 
     def on_draw(self):
         self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Workbench", "Kitty", "Enemy", "Player", "Projectile"])
@@ -207,6 +209,20 @@ class GameSection(arcade.Section):
             self.player.inside = True
         else:
             self.player.inside = False
+
+    def monitor_player_terrain(self):
+        floor_list = self.tile_map.sprite_lists.get("Floor", arcade.SpriteList())
+        tiles_hit = arcade.check_for_collision_with_list(self.player, floor_list)
+
+        if tiles_hit:
+            current_tile = tiles_hit[0]
+            tile_id = current_tile.properties['tile_id']
+            tile_data = self.tile_map.tiled_map.tilesets[1].tiles[tile_id]
+            terrain_type = tile_data.properties.get("Terrain", "unknown")
+
+            self.player.walking_on = terrain_type
+        else:
+            return
 
     def update_camera(self):
         if self.player.is_alive:
@@ -613,11 +629,12 @@ class GameView(arcade.View):
         treat_count = len(self.game_section.scene.get_sprite_list("Treat"))
         projectile_count = len(self.game_section.scene.get_sprite_list("Projectile"))
         player_pos = self.game_section.player.get_integer_position()
+        terrain = self.game_section.player.walking_on
 
-        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nMouse: {self.mouse_pos}\nProjectiles: {projectile_count}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
+        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nMouse: {self.mouse_pos}\nProjectiles: {projectile_count}\nTerrain: {terrain}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
         debug_text.draw()
         if self.between_levels:
-            between_levels_text = arcade.Text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", start_x=20, start_y=self.window.height - 20 - LINE_HEIGHT*4, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top")
+            between_levels_text = arcade.Text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", start_x=20, start_y=self.window.height - 20 - LINE_HEIGHT*12, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top")
             between_levels_text.draw()
 
 

@@ -64,6 +64,7 @@ class Player(LivingSprite):
         self.current_rank = 0
 
         self.footstep_name = self.player_data["footstep name"]
+        self.walking_on = None
 
         self.treat_amount = 0
         self.treat_sprite_list = None
@@ -124,6 +125,7 @@ class Player(LivingSprite):
             self.update_level_up()
         if self.fading_in:
             self.update_fade_in()
+        self.update_from_terrain()
         self.update_animation()
         self.update_sound()
         self.update_sprinting_flag()
@@ -176,6 +178,14 @@ class Player(LivingSprite):
             return 1
         else:
             return min(self.get_xp_from_previous_level() / self.get_xp_to_next_level(), 1)
+
+    def update_from_terrain(self):
+        if self.walking_on == "water":
+            self.velocity = Vec2(self.velocity[0], self.velocity[1])
+            self.velocity = self.velocity.scale(0.35)
+            self.current_movement_frames = self.swim_cycle_frames
+        else:
+            self.current_movement_frames = self.walk_cycle_frames
 
     def update_stamina(self, delta_time):
         if self.sprinting:
