@@ -24,8 +24,7 @@ def play_sound(sound, volume = 1.0, pan = 0.0, speed = 1.0, looping = False, ret
         pass
 
 class FootstepSoundHandler:
-    def __init__(self, sound: arcade.Sound, origin_sprite: arcade.Sprite):
-        self.footstep_sound = sound
+    def __init__(self, origin_sprite: arcade.Sprite):
         self.origin_sprite = origin_sprite
 
         self.sound_update_timer = 0
@@ -42,10 +41,10 @@ class FootstepSoundHandler:
             self.sound_update_timer += DELTA_TIME
 
         if self.sound_update_timer >= self.sound_update_time * self.swung_8th_notes_multipliers[self.current_multiplier_index]:
-            play_sound(self.footstep_sound, volume=SOUND_EFFECT_VOL)
+            play_sound(self.origin_sprite.footstep_sounds[self.origin_sprite.cur_footstep_key], volume=SOUND_EFFECT_VOL*0.5)
             self.sound_update_timer = 0
             self.current_multiplier_index = (self.current_multiplier_index + 1) % len(self.swung_8th_notes_multipliers)
 
     @property
     def sound_update_time(self):
-        return 0.25 / (1+int(self.origin_sprite.should_sprint))
+        return 0.3 / (1+int(self.origin_sprite.should_sprint)) / self.origin_sprite.speed_multiplier

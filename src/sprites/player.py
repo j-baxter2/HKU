@@ -63,15 +63,18 @@ class Player(LivingSprite):
         self.ranking_data = None
         self.current_rank = 0
 
-        self.footstep_name = self.player_data["footstep name"]
-
         self.treat_amount = 0
         self.treat_sprite_list = None
 
         self.picking_up_treat = False
-
-        self.footstep_sound = load_sound(self.footstep_name, source="hku")
-        self.footstep_handler = FootstepSoundHandler(self.footstep_sound, self)
+        #footstepsounds
+        self.footstep_sounds = {}
+        self.footstep_sounds["grass"] = load_sound("grass_step", source="hku")
+        self.footstep_sounds["sand"] = load_sound("sand_step", source="hku")
+        self.footstep_sounds["water"] = load_sound("water_step", source="hku")
+        self.footstep_sounds["wood"] = load_sound("wood_step", source="hku")
+        self.cur_footstep_key = "grass"
+        self.footstep_handler = FootstepSoundHandler(self)
         self.drop_treat_sound = load_sound("hit5")
         self.pick_up_treat_sound = load_sound("coin5")
         self.no_treat_sound = load_sound("error1")
@@ -194,12 +197,22 @@ class Player(LivingSprite):
             print(f"hit tiles \nid:{tile_id}\nterrain:{terrain}")
 
     def update_from_terrain(self):
+        self.speed_multiplier = 1
+        self.current_movement_frames = self.walk_cycle_frames
         if self.walking_on == "water":
             self.speed_multiplier = 0.3
             self.current_movement_frames = self.swim_cycle_frames
-        else:
-            self.speed_multiplier = 1
-            self.current_movement_frames = self.walk_cycle_frames
+            self.cur_footstep_key = "water"
+        elif self.walking_on == "sand":
+            self.cur_footstep_key = "sand"
+        elif self.walking_on == "stone":
+            self.cur_footstep_key = "sand"
+        elif self.walking_on == "wood":
+            self.cur_footstep_key = "wood"
+        elif self.walking_on == "grass":
+            self.cur_footstep_key = "grass"
+
+
 
     def update_stamina(self, delta_time):
         if self.sprinting:
