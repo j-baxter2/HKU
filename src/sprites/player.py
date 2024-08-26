@@ -296,6 +296,11 @@ class Player(LivingSprite):
 
     def equip_move(self, slot, move):
         if move in self.unlocked_moves:
+            if slot[0:4] == "alt ":
+                primary = slot[4:]
+                if self.equipped_moves[primary] == move:
+                    self.equipped_moves[primary] = None
+                    print("unequipped move from primary slot")
             self.equipped_moves[slot] = move
 
     def do_move(self, move):
