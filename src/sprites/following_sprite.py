@@ -14,6 +14,7 @@ class FollowingSprite(LivingSprite):
         self.follow_distance = data["follow radius"]
         self.random_movement_time = data["random movement time"]
         self.random_movement_timer = 0
+        self.in_ocean = False
         super().__init__(scene, data)
 
     def setup(self):
@@ -52,9 +53,11 @@ class FollowingSprite(LivingSprite):
     def update_ocean(self):
         ocean = self.scene.get_sprite_list("Ocean")
         if arcade.check_for_collision_with_list(self, sprite_list=ocean):
+            self.in_ocean = True
             self.speed_multiplier = 0.5
             self.current_movement_frames = self.swim_cycle_frames
         else:
+            self.in_ocean = False
             self.speed_multiplier = 1
             self.current_movement_frames = self.walk_cycle_frames
 

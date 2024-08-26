@@ -3,8 +3,9 @@ from src.data.constants import DELTA_TIME
 import math
 
 class Treat(arcade.Sprite):
-    def __init__(self, image_file, scale=1, decayed=False):
+    def __init__(self, scene, image_file, scale=1, decayed=False):
         super().__init__(image_file, scale)
+        self.scene = scene
         self.being_eaten = False
         self.picked_up = False
 
@@ -58,4 +59,4 @@ class Treat(arcade.Sprite):
 
     @property
     def edible(self):
-        return not self.decayed and not self.being_eaten
+        return not self.decayed and not self.being_eaten and not arcade.check_for_collision_with_list(self, self.scene.get_sprite_list("Ocean"))

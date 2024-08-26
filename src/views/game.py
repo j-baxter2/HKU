@@ -529,6 +529,7 @@ class GameView(arcade.View):
         self.update_music()
 
     def update_music(self, delta_time=DELTA_TIME):
+        self.media_player.volume = MUSIC_VOL*arcade.get_window().music_vol
         if self.game_section.player.in_battle:
             self.out_of_battle_timer = 0
             new_song_key = "battle"

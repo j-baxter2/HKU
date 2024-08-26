@@ -106,7 +106,7 @@ class Level:
         for i in range(self.treat_amount):
             x, y = self._generate_xy()
             # Create and place the treat
-            treat = Treat("resources/spritesheets/treat.png", 4, decayed=True)
+            treat = Treat(scene=self.scene, image_file="resources/spritesheets/treat.png", scale=4, decayed=True)
             treat.position = (x, y)
             self.scene.add_sprite("Treat", treat)
 

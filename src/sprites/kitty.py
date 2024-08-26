@@ -94,7 +94,7 @@ class Kitty(FollowingSprite):
                 x = random.uniform(edge_margin+1304, MAP_WIDTH - edge_margin)
                 y = random.uniform(edge_margin+1823, MAP_HEIGHT - edge_margin)
 
-                treat = Treat("resources/spritesheets/treat.png", 4, decayed=True)
+                treat = Treat(scene=self.scene, image_file="resources/spritesheets/treat.png", scale=4, decayed=True)
                 treat.position = (x, y)
                 self.scene.add_sprite("Treat", treat)
                 self.need_second_timer = 0

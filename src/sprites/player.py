@@ -188,12 +188,23 @@ class Player(LivingSprite):
 
     def update_terrain(self):
         floor = self.scene.get_sprite_list("Floor")
+        water = self.scene.get_sprite_list("Ocean")
         hit_tiles = arcade.check_for_collision_with_list(self, floor)
         if hit_tiles:
             current_tile = hit_tiles[0]
             tile_id = current_tile.properties['tile_id']
-            terrain = self.terrain_mapping[str(tile_id)]
+            try:
+                terrain = self.terrain_mapping[str(tile_id)]
+            except KeyError:
+                terrain = "unknown"
             self.walking_on = terrain
+
+        hit_water = arcade.check_for_collision_with_list(self, water)
+        if hit_water:
+            for water_tile in hit_water:
+                if (water_tile.left <= self.center_x <= water_tile.right and
+                water_tile.bottom <= self.bottom <= water_tile.top):
+                    self.walking_on = "water"
 
     def update_from_terrain(self):
         self.speed_multiplier = 1
@@ -263,7 +274,7 @@ class Player(LivingSprite):
         self.advance_animation()
 
     def drop_treat(self):
-        treat = Treat("resources/spritesheets/treat.png", 4)
+        treat = Treat(scene=self.scene, image_file="resources/spritesheets/treat.png", scale=4)
         treat.center_x = self.left
         treat.center_y = self.center_y
         self.scene.add_sprite("Treat", treat)
