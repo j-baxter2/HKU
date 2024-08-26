@@ -1,12 +1,9 @@
 import arcade
-import math
 from pyglet.math import Vec2
-import time
 from src.sprites.living_sprite import LivingSprite
 from src.sprites.projectile_specify import ProjectileSpecify
 from src.moves.move_by_player import MoveByPlayer
-import json
-from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
+from src.data.constants import DELTA_TIME
 from src.utils.sound import load_sound, play_sound
 
 class MoveArrowAim(MoveByPlayer):

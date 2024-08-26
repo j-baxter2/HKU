@@ -1,12 +1,8 @@
 import arcade
-import math
-import time
 from src.sprites.living_sprite import LivingSprite
 from src.sprites.projectile import Projectile
 from src.moves.move_by_player import MoveByPlayer
-import json
-from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
-from src.utils.sound import load_sound, play_sound
+from src.data.constants import DELTA_TIME
 
 class MoveCustomFire(MoveByPlayer):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):

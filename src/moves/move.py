@@ -1,5 +1,4 @@
 import arcade
-import math
 from src.sprites.living_sprite import LivingSprite
 import json
 from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT

@@ -1,7 +1,4 @@
 import arcade
-import random
-import json
-from pyglet.math import Vec2
 from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL
 from src.utils.sound import load_sound, play_sound
 from src.sprites.moving_sprite import MovingSprite

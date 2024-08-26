@@ -8,12 +8,9 @@ class MyWindow(arcade.Window):
         self.center_window()
         self.set_mouse_visible(True)
         self.views = {}
-
-    def setup_cursor(self):
-        cursor_texture = arcade.load_texture("resources/textures/cursor_image.png")
-        self.set_mouse_cursor(cursor_texture)
+        self.music_vol = 0.5
+        self.sfx_vol = 0.5
 
     def setup(self):
         super().setup()
-        self.setup_cursor()
         self.set_update_rate(DELTA_TIME)
