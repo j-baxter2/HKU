@@ -236,6 +236,14 @@ class Player(LivingSprite):
     def update_moves(self):
         for move in self.unlocked_moves:
             move.on_update(DELTA_TIME)
+        if self.inside:
+            if not hasattr(self, '_original_do_move'):
+                self._original_do_move = self.do_move
+            self.do_move = lambda dummy: None
+        else:
+            if hasattr(self, '_original_do_move'):
+                self.do_move = self._original_do_move
+                del self._original_do_move
 
     def update_sprinting_flag(self):
         self.sprinting = (self.sprint_pressed and not self.stationary)

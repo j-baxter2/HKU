@@ -694,19 +694,21 @@ class GameView(arcade.View):
             else:
                 self.game_section.current_level_id = data['level'] - 1
             self.between_levels = True
+        print("======")
         if 'unlocked moves' in data:
             for move_name in data['unlocked moves']:
-                print(f"{move_name.upper()}")
                 for move in self.game_section.player.all_moves:
                     if move.name == move_name:
-                        print(f"UNLOCKED")
+                        print(f"{move.name.upper()} UNLOCKED")
                         self.game_section.player.unlock_moves(move)
+        print("======")
         if 'equipped moves' in data:
             for slot, move_name in data['equipped moves'].items():
                 for move in self.game_section.player.unlocked_moves:
                     if move.name == move_name:
-                        print(f"{move.name} EQUIPPED")
+                        print(f"{move.name.upper()} EQUIPPED")
                         self.game_section.player.equip_move(slot, move)
+        print("======")
         if 'position' in data:
             print(f"xy:{data['position']}")
             self.game_section.player.position = data['position']
