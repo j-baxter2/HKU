@@ -16,14 +16,14 @@ class AmbientPlayer(arcade.Sprite):
         if len(self.scene.get_sprite_list("Player")) > 0:
             self.player = self.scene.get_sprite_list("Player")[0]
         self.timer += DELTA_TIME
-        self.music_player.volume = self.get_volume_from_player_pos()*SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol)
+        self.music_player.volume = self.get_volume_from_player_pos()
         self.music_player.pan = self.get_pan_from_player_pos()
         if self.timer >= self.sound.get_length():
             self.play()
             self.timer = 0
 
     def play(self):
-        self.music_player = play_sound(self.sound, volume=self.get_volume_from_player_pos()*SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol), pan=self.get_pan_from_player_pos(), return_player=True)
+        self.music_player = play_sound(self.sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos(), return_player=True)
 
     def get_volume_from_player_pos(self):
         distance = arcade.get_distance_between_sprites(self, self.player)
@@ -33,7 +33,7 @@ class AmbientPlayer(arcade.Sprite):
             volume = (1024-distance)/1024 * 0.5
         elif distance >= 1024:
             volume = 0
-        return min(max(volume, 0), 1)
+        return min(max(volume, 0)*SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol), 1)
 
     def get_pan_from_player_pos(self):
         angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)

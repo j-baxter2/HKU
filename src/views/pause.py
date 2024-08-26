@@ -1,4 +1,6 @@
 import arcade
+import arcade.experimental
+import arcade.experimental.uislider
 import arcade.gui
 import json
 from src.data import controls
@@ -35,10 +37,32 @@ class PauseView(arcade.View):
         resume_button = arcade.gui.UIFlatButton(text="Resume", width=200, style=style)
         vbox.add(resume_button.with_space_around(bottom=20))
 
+        music_slider = arcade.experimental.uislider.UISlider(value=arcade.get_window().music_vol*100, width=300, height=50, max_value=100)
+        music_label = arcade.gui.UILabel(text=f"MUSIC VOL: {music_slider.value:02.0f} %")
+        vbox.add(music_label.with_space_around(bottom=20))
+        vbox.add(music_slider.with_space_around(bottom=20))
+
+        sfx_slider = arcade.experimental.uislider.UISlider(value=arcade.get_window().sfx_vol*100, width=300, height=50, max_value=100)
+        sfx_label = arcade.gui.UILabel(text=f"SFX VOL: {sfx_slider.value:02.0f} %")
+        vbox.add(sfx_label.with_space_around(bottom=20))
+        vbox.add(sfx_slider.with_space_around(bottom=20))
+
         quit_button = arcade.gui.UIFlatButton(text="Quit", width=200, style=style)
         vbox.add(quit_button.with_space_around(bottom=20))
 
         self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=vbox))
+
+        @music_slider.event()
+        def on_change(event: arcade.gui.UIOnChangeEvent):
+            arcade.get_window().music_vol = music_slider.value / 100
+            music_label.text = f"MUSIC VOL: {100*arcade.get_window().music_vol:02.0f} %"
+            music_label.fit_content()
+
+        @sfx_slider.event()
+        def on_change(event: arcade.gui.UIOnChangeEvent):
+            arcade.get_window().sfx_vol = sfx_slider.value / 100
+            sfx_label.text = f"SFX VOL: {100*arcade.get_window().sfx_vol:02.0f} %"
+            sfx_label.fit_content()
 
         @resume_button.event("on_click")
         def on_click_resume(event):

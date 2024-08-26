@@ -5,7 +5,7 @@ from pyglet.math import Vec2
 import random
 import math
 import json
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, SOUND_EFFECT_VOL
 from src.utils.sound import load_sound, play_sound
 
 class DistruptorEnemy(BaseEnemy):

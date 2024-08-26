@@ -59,7 +59,7 @@ class Slime(arcade.Sprite):
             volume = 1
         else:
             volume = 1/(distance_in_m)
-        return min(max(volume, 0), 1)
+        return min(max(volume, 0)*SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol), 1)
 
     def get_pan_from_player_pos(self):
         angle = arcade.get_angle_radians(self.player.center_x, self.player.center_y, self.center_x, self.center_y)
