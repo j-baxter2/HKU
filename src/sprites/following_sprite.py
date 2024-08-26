@@ -29,6 +29,7 @@ class FollowingSprite(LivingSprite):
             self.random_movement_timer += DELTA_TIME
             self.update_animation(delta_time = DELTA_TIME)
             self.update_player()
+            self.update_ocean()
             self.update_while_alive()
 
     def update_player(self):
@@ -47,6 +48,15 @@ class FollowingSprite(LivingSprite):
         if self.should_turn:
             self.randomize_velocity()
             self.random_movement_timer = 0
+
+    def update_ocean(self):
+        ocean = self.scene.get_sprite_list("Ocean")
+        if arcade.check_for_collision_with_list(self, sprite_list=ocean):
+            self.speed_multiplier = 0.5
+            self.current_movement_frames = self.swim_cycle_frames
+        else:
+            self.speed_multiplier = 1
+            self.current_movement_frames = self.walk_cycle_frames
 
     @property
     def animation_direction(self):

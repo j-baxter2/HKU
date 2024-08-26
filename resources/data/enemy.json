@@ -11,7 +11,7 @@
         "spritesheet": {
             "path": "resources/spritesheets/gobu.png",
             "columns": 6,
-            "count": 18,
+            "count": 36,
             "width": 32,
             "height": 32,
             "scale": 1
@@ -22,7 +22,13 @@
                 "up": [12, 17],
                 "down": [0, 5],
                 "left": [6, 11],
-                "right": [6, 11]
+                "right": [18, 23]
+            },
+            "swim": {
+                "up": [28, 29],
+                "down": [24, 25],
+                "left": [26, 27],
+                "right": [30, 31]
             }
         }
     },
@@ -64,7 +70,7 @@
         "spritesheet": {
             "path": "resources/spritesheets/gobu.png",
             "columns": 6,
-            "count": 18,
+            "count": 24,
             "width": 32,
             "height": 32,
             "scale": 1
@@ -75,7 +81,13 @@
                 "up": [12, 17],
                 "down": [0, 5],
                 "left": [6, 11],
-                "right": [6, 11]
+                "right": [18, 23]
+            },
+            "swim": {
+                "up": [28, 29],
+                "down": [24, 25],
+                "left": [26, 27],
+                "right": [30, 31]
             }
         }
     }
