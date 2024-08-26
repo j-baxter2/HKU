@@ -77,7 +77,9 @@ class MoveSelectView(arcade.View):
 
         self.game_saved = False
 
+        self.press_sound = load_sound("coin5")
         self.save_sound = load_sound("coin1")
+
 
         self.manager = arcade.gui.UIManager()
         self.setup_ui()
@@ -126,24 +128,30 @@ class MoveSelectView(arcade.View):
             play_sound(self.save_sound, volume=SOUND_EFFECT_VOL)
             self.save_game_view()
 
+
         @quick_attack_button.event("on_click")
         def on_click_quick_attack(event):
+            play_sound(self.press_sound, volume=SOUND_EFFECT_VOL)
             self.window.show_view(self.quick_attack_view)
 
         @special_button.event("on_click")
         def on_click_special(event):
+            play_sound(self.press_sound, volume=SOUND_EFFECT_VOL)
             self.window.show_view(self.special_view)
 
         @heal_button.event("on_click")
         def on_click_heal(event):
+            play_sound(self.press_sound, volume=SOUND_EFFECT_VOL)
             self.window.show_view(self.heal_view)
 
         @scare_button.event("on_click")
         def on_click_scare(event):
+            play_sound(self.press_sound, volume=SOUND_EFFECT_VOL)
             self.window.show_view(self.scare_view)
 
         @back_button.event("on_click")
         def on_click_back(event):
+            play_sound(self.press_sound, volume=SOUND_EFFECT_VOL)
             self.window.show_view(self.game_view)
 
 
@@ -185,6 +193,8 @@ class MoveView(arcade.View):
         self.unlocked_slot_moves = []
         self.move_buttons = {}
         self.alt_move_buttons = {}
+        self.press_sound = load_sound("coin5")
+        self.error_sound = load_sound("error5")
         self.setup_ui()
 
     def setup_ui(self):
@@ -236,10 +246,15 @@ class MoveView(arcade.View):
 
         @back_button.event("on_click")
         def on_click_back(event):
+            play_sound(self.press_sound, volume=SOUND_EFFECT_VOL)
             self.window.show_view(self.move_select_view)
 
     def on_click_move(self, event, move, slot):
-        self.player.equip_move(slot=slot, move=move)
+        if self.player.equipped_moves[slot] == move:
+            play_sound(self.error_sound, volume=SOUND_EFFECT_VOL)
+        else:
+            play_sound(self.press_sound, volume=SOUND_EFFECT_VOL)
+            self.player.equip_move(slot=slot, move=move)
 
     def on_key_press(self, key: int, modifiers: int):
         if key == controls.PAUSE:

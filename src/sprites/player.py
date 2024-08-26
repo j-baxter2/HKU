@@ -99,6 +99,8 @@ class Player(LivingSprite):
         with open("resources/maps/terrain_mapping.json", "r") as file:
             self.terrain_mapping = json.load(file)
 
+        self.color = self.color[:3]+(0,)
+
     def setup(self):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")
         self.load_ranking_data()
@@ -309,6 +311,11 @@ class Player(LivingSprite):
                 if self.equipped_moves[primary] == move:
                     self.equipped_moves[primary] = None
                     print("unequipped move from primary slot")
+            else:
+                alt = f"alt {slot}"
+                if self.equipped_moves[alt] == move:
+                    self.equipped_moves[alt] = None
+                    print("unequipped move from alt slot")
             self.equipped_moves[slot] = move
 
     def do_move(self, move):

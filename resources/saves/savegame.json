@@ -1,20 +1,22 @@
 {
-    "xp": 0,
-    "level": 1,
+    "xp": 20,
+    "level": 0,
     "unlocked moves": [
         "basic pat",
         "basic heal",
         "scare kitty",
         "radial",
         "fire spiral",
-        "fire stream"
+        "fire stream",
+        "shock",
+        "ranged"
     ],
     "equipped moves": {
-        "quick attack": "basic pat",
-        "special": "fire stream"
+        "alt quick attack": "basic pat",
+        "special": "fire spiral"
     },
     "position": [
-        3168.998861350448,
-        2609.63
+        3228.475774560362,
+        2596.62
     ]
 }
