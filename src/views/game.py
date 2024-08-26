@@ -390,41 +390,42 @@ class UISection(arcade.Section):
 
 
     def draw_move_status(self):
-        moves = 0
         bar_height = 10
         y_offset = 96
+        slot_index = {
+            "quick attack": 1,
+            "alt quick attack": 1,
+            "special": 2,
+            "alt special": 2,
+            "heal": 3,
+            "alt heal": 3,
+            "scare": 4,
+            "alt scare": 4,
+            "drop treat": 5,
+            "alt drop treat": 5,
+            "pickup treat": 6,
+            "alt pickup treat": 6,
+        }
         for slot, move in self.player.equipped_moves.items():
             if move is not None:
-                moves+=1
-                self._draw_rectangle_filled(moves, move.progress_fraction, move.color, y_offset, (100, bar_height))
-                self._draw_rectangle_filled(moves, move.refresh_fraction, move.color, y_offset+bar_height, (100, bar_height))
-                self._draw_rectangle_filled(moves, move.charge_fraction, move.color, y_offset+2*bar_height, (100, bar_height))
+                self._draw_rectangle_filled(slot_index[slot], slot, move.progress_fraction, move.color, y_offset, (100, bar_height))
+                self._draw_rectangle_filled(slot_index[slot], slot, move.refresh_fraction, move.color, y_offset+bar_height, (100, bar_height))
+                self._draw_rectangle_filled(slot_index[slot], slot, move.charge_fraction, move.color, y_offset+2*bar_height, (100, bar_height))
 
-    def _draw_rectangle_filled(self, move_index, progress_fraction, color, center_y_offset, size):
+    def _draw_rectangle_filled(self, slot_index, slot, progress_fraction, color, center_y_offset, size):
         filled_width = progress_fraction * size[0]
-        arcade.draw_rectangle_filled(center_x=self.left + 100,
-                                    center_y=self.bottom + center_y_offset + (move_index * BAR_SPACING),
+        alt = int(slot[0:4] == "alt ")
+        arcade.draw_rectangle_filled(center_x=self.left + 100 + (size[0]+10)*alt,
+                                    center_y=self.bottom + center_y_offset + (slot_index * BAR_SPACING),
                                     width=size[0],
                                     height=size[1],
                                     color=arcade.color.BLACK[:3]+(128,))
 
-        arcade.draw_rectangle_filled(center_x=self.left + 100 - (size[0] / 2 - filled_width / 2),
-                                    center_y=self.bottom + center_y_offset + (move_index * BAR_SPACING),
+        arcade.draw_rectangle_filled(center_x=self.left + 100 + (size[0]+10)*alt - (size[0] / 2 - filled_width / 2),
+                                    center_y=self.bottom + center_y_offset + (slot_index * BAR_SPACING),
                                     width=filled_width,
                                     height=size[1],
                                     color=color)
-
-    def _draw_circle_filled(self, move_index, refresh_fraction, color, center_y_offset, size):
-        filled_radius = refresh_fraction * size[0]
-        arcade.draw_circle_filled(center_x=self.left + 100,
-                                center_y=self.bottom + center_y_offset + (move_index * BAR_SPACING),
-                                radius=size[0],
-                                color=arcade.color.BLACK)
-
-        arcade.draw_circle_filled(center_x=self.left + 100,
-                                center_y=self.bottom + center_y_offset + (move_index * BAR_SPACING),
-                                radius=filled_radius,
-                                color=color)
 
 
     def draw_xp_bar(self):

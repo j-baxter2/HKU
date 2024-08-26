@@ -1,6 +1,6 @@
 {
     "xp": 20,
-    "level": 0,
+    "level": 1,
     "unlocked moves": [
         "basic pat",
         "basic heal",
@@ -12,11 +12,11 @@
         "ranged"
     ],
     "equipped moves": {
-        "alt quick attack": "basic pat",
+        "quick attack": "basic pat",
         "special": "fire spiral"
     },
     "position": [
-        3228.475774560362,
-        2596.62
+        3232.191862250366,
+        2611.67
     ]
 }
