@@ -133,7 +133,7 @@ class GameSection(arcade.Section):
             if self.player.has_treats:
                 self.player.drop_treat()
             else:
-                play_sound(self.player.no_treat_sound, volume=SOUND_EFFECT_VOL)
+                play_sound(self.player.no_treat_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
         elif key == controls.PICKUP_TREAT:
             self.player.picking_up_treat = True
         elif key == controls.SCARE:
@@ -500,7 +500,7 @@ class GameView(arcade.View):
 
     def on_show_view(self):
         self.window.set_mouse_visible(False)
-        play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL)
+        play_sound(self.loaded_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
         arcade.set_background_color(arcade.color.BLUE_SAPPHIRE)
         self.play_music(self.curr_song_key)
 
@@ -555,9 +555,9 @@ class GameView(arcade.View):
             self.crossfade_timer -= delta_time
             progress = (self.crossfade_time - self.crossfade_timer) / self.crossfade_time
             if self.media_player:
-                self.media_player.volume = max(0, 1 - progress)
+                self.media_player.volume = max(0, 1 - progress) * MUSIC_VOL*(arcade.get_window().music_vol)
             if self.new_media_player:
-                self.new_media_player.volume = min(1, progress)
+                self.new_media_player.volume = min(1, progress) * MUSIC_VOL*(arcade.get_window().music_vol)
 
             if self.crossfade_timer <= 0:
                 if self.media_player:
@@ -570,13 +570,13 @@ class GameView(arcade.View):
         self.new_music = arcade.load_sound(self.songs[song_key])
         self.new_media_player = self.new_music.play(volume=0)
         if self.media_player:
-            self.media_player.volume = 1  # Ensure current music is at full volume
+            self.media_player.volume = 1 * MUSIC_VOL*(arcade.get_window().music_vol)
 
     def play_music(self, song_key):
         if self.media_player:
             self.media_player.pause()
         self.my_music = arcade.load_sound(self.songs[song_key])
-        self.media_player = self.my_music.play(loop=True)
+        self.media_player = self.my_music.play(loop=True, volume=MUSIC_VOL*(arcade.get_window().music_vol))
 
     def start_between_levels(self):
         self.between_levels = True

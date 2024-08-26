@@ -267,7 +267,7 @@ class Player(LivingSprite):
         treat.center_x = self.left
         treat.center_y = self.center_y
         self.scene.add_sprite("Treat", treat)
-        play_sound(self.drop_treat_sound, volume=SOUND_EFFECT_VOL)
+        play_sound(self.drop_treat_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
         self.treat_amount -= 1
 
     def update_treat_list(self):
@@ -283,7 +283,7 @@ class Player(LivingSprite):
 
 
     def pick_up_treat(self, treat):
-        play_sound(self.pick_up_treat_sound, volume=SOUND_EFFECT_VOL)
+        play_sound(self.pick_up_treat_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
         self.treat_amount += 1
         treat.picked_up = True
         treat.kill()

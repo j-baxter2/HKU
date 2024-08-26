@@ -41,7 +41,7 @@ class FootstepSoundHandler:
             self.sound_update_timer += DELTA_TIME
 
         if self.sound_update_timer >= self.sound_update_time * self.swung_8th_notes_multipliers[self.current_multiplier_index]:
-            play_sound(self.origin_sprite.footstep_sounds[self.origin_sprite.cur_footstep_key], volume=SOUND_EFFECT_VOL*0.5)
+            play_sound(self.origin_sprite.footstep_sounds[self.origin_sprite.cur_footstep_key], volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol)*0.5)
             self.sound_update_timer = 0
             self.current_multiplier_index = (self.current_multiplier_index + 1) % len(self.swung_8th_notes_multipliers)
 

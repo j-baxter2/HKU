@@ -49,7 +49,7 @@ class TargetArrowKey(MoveByPlayer):
     def start(self):
         self.active = True
         self.active_timer = 0
-        play_sound(self.start_sound, volume=SOUND_EFFECT_VOL)
+        play_sound(self.start_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
         self.origin_sprite.stamina -= self.cost
 
     def update_activity(self):
@@ -67,7 +67,7 @@ class TargetArrowKey(MoveByPlayer):
         self.hit_sprites = None
         self.stop_damage_resist()
         self.stop_activity_mobility()
-        play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL)
+        play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
         self.origin_sprite.color = arcade.color.WHITE
         self.target = None
         self.active_timer = 0

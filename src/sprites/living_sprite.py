@@ -53,7 +53,7 @@ class LivingSprite(MovingSprite):
     def start_just_been_hit(self):
         self.just_been_hit = True
         self.just_been_hit_timer = 0
-        play_sound(self.hurt_sound, volume=SOUND_EFFECT_VOL)
+        play_sound(self.hurt_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
 
     def update_just_been_hit(self):
         if self.just_been_hit:

@@ -87,7 +87,7 @@ class Move:
         self.active = True
         self.active_timer = 0
         self.get_affectees()
-        play_sound(self.start_sound, volume=SOUND_EFFECT_VOL)
+        play_sound(self.start_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
 
     def update_activity(self):
         if self.active:
@@ -102,7 +102,7 @@ class Move:
         self.refreshing = True
         self.charged = False if self.charge_time else True
         self.stop_activity_mobility()
-        play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL)
+        play_sound(self.stop_sound, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
         self.origin_sprite.color = arcade.color.WHITE
         self.active_timer = 0
 

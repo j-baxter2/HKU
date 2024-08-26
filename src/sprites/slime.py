@@ -29,7 +29,7 @@ class Slime(arcade.Sprite):
         if not self.affecting:
             if arcade.check_for_collision(self, self.player):
                 self.affecting = True
-                play_sound(self.squelch, volume=SOUND_EFFECT_VOL)
+                play_sound(self.squelch, volume=SOUND_EFFECT_VOL*(arcade.get_window().sfx_vol))
                 self.finite = True
                 self.timer = 0
                 self.lifetime = 1
