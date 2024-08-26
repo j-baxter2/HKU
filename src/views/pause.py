@@ -21,29 +21,19 @@ class PauseView(arcade.View):
         vbox = arcade.gui.UIBoxLayout()
 
         arcade.load_font(UI_FONT_PATH)
+        style = arcade.get_window().button_style
+        slider_style = arcade.get_window().slider_style
 
-        style = {
-            "font_name": UI_FONT, "font_size": 20,
-            "normal": {
-                "bg": color.LIGHT_GREEN
-            },
-            "hovered": {
-                "bg": color.MID_GREEN
-            },
-            "pressed": {
-                "bg": color.DARK_GREEN
-            }
-        }
         resume_button = arcade.gui.UIFlatButton(text="Resume", width=200, style=style)
         vbox.add(resume_button.with_space_around(bottom=20))
 
-        music_slider = arcade.experimental.uislider.UISlider(value=arcade.get_window().music_vol*100, width=300, height=50, max_value=100)
-        music_label = arcade.gui.UILabel(text=f"MUSIC VOL: {music_slider.value:02.0f} %")
+        music_slider = arcade.experimental.uislider.UISlider(value=arcade.get_window().music_vol*100, width=300, height=50, max_value=100, style=slider_style)
+        music_label = arcade.gui.UILabel(text=f"MUSIC VOL: {music_slider.value:02.0f} %", font_name=UI_FONT, font_size=20, font_color=color.LIGHT_GREEN)
         vbox.add(music_label.with_space_around(bottom=20))
         vbox.add(music_slider.with_space_around(bottom=20))
 
-        sfx_slider = arcade.experimental.uislider.UISlider(value=arcade.get_window().sfx_vol*100, width=300, height=50, max_value=100)
-        sfx_label = arcade.gui.UILabel(text=f"SFX VOL: {sfx_slider.value:02.0f} %")
+        sfx_slider = arcade.experimental.uislider.UISlider(value=arcade.get_window().sfx_vol*100, width=300, height=50, max_value=100, style=slider_style)
+        sfx_label = arcade.gui.UILabel(text=f"SFX VOL: {sfx_slider.value:02.0f} %", font_name=UI_FONT, font_size=20, font_color=color.LIGHT_GREEN)
         vbox.add(sfx_label.with_space_around(bottom=20))
         vbox.add(sfx_slider.with_space_around(bottom=20))
 
@@ -103,8 +93,6 @@ class MoveSelectView(arcade.View):
 
         self.press_sound = load_sound("coin5")
         self.save_sound = load_sound("coin1")
-
-
         self.manager = arcade.gui.UIManager()
         self.setup_ui()
 
@@ -114,35 +102,24 @@ class MoveSelectView(arcade.View):
 
         arcade.load_font(UI_FONT_PATH)
 
-        style = {
-            "font_name": UI_FONT, "font_size": 20,
-            "normal": {
-                "bg": color.LIGHT_GREEN
-            },
-            "hovered": {
-                "bg": color.MID_GREEN
-            },
-            "pressed": {
-                "bg": color.DARK_GREEN
-            }
-        }
+        style = arcade.get_window().button_style
 
-        self.save_button = arcade.gui.UIFlatButton(text="save", width=200, style=style)
+        self.save_button = arcade.gui.UIFlatButton(text="save", width=256, style=style)
         vbox.add(self.save_button.with_space_around(bottom=20))
 
-        quick_attack_button = arcade.gui.UIFlatButton(text="Quick Attack", width=200, style=style)
+        quick_attack_button = arcade.gui.UIFlatButton(text="Quick Attack", width=256, style=style)
         vbox.add(quick_attack_button.with_space_around(bottom=20))
 
-        special_button = arcade.gui.UIFlatButton(text="Special", width=200, style=style)
+        special_button = arcade.gui.UIFlatButton(text="Special", width=256, style=style)
         vbox.add(special_button.with_space_around(bottom=20))
 
-        heal_button = arcade.gui.UIFlatButton(text="Heal", width=200, style=style)
+        heal_button = arcade.gui.UIFlatButton(text="Heal", width=256, style=style)
         vbox.add(heal_button.with_space_around(bottom=20))
 
-        scare_button = arcade.gui.UIFlatButton(text="Scare", width=200, style=style)
+        scare_button = arcade.gui.UIFlatButton(text="Scare", width=256, style=style)
         vbox.add(scare_button.with_space_around(bottom=20))
 
-        back_button = arcade.gui.UIFlatButton(text="Back", width=200, style=style)
+        back_button = arcade.gui.UIFlatButton(text="Back", width=256, style=style)
         vbox.add(back_button.with_space_around(bottom=20))
 
         self.manager.add(arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=vbox))
@@ -233,7 +210,7 @@ class MoveView(arcade.View):
 
         arcade.load_font(UI_FONT_PATH)
 
-        style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg": color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
+        style = arcade.get_window().button_style
 
         primary_label = arcade.gui.UILabel(text="Primary", anchor_x="left", width=200, font_name=UI_FONT, font_size=20, text_color=arcade.color.WHITE)
         primary_vbox.add(primary_label.with_space_around(bottom=20))
@@ -246,13 +223,13 @@ class MoveView(arcade.View):
                 self.unlocked_slot_moves.append(move)
 
         for move in self.unlocked_slot_moves:
-            primary_button = arcade.gui.UIFlatButton(width=200, style=style)
+            primary_button = arcade.gui.UIFlatButton(width=256, style=style)
             primary_button.text = f"{move.name}"
             primary_vbox.add(primary_button.with_space_around(bottom=20))
             primary_button.on_click = lambda event, move=move: self.on_click_move(event, move, self.slot)
             self.move_buttons[move.name] = primary_button
 
-            alt_button = arcade.gui.UIFlatButton(width=200, style=style)
+            alt_button = arcade.gui.UIFlatButton(width=256, style=style)
             alt_button.text = f"{move.name}"
             alt_vbox.add(alt_button.with_space_around(bottom=20))
             alt_button.on_click = lambda event, move=move: self.on_click_move(event, move, self.alt_slot)

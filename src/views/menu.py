@@ -22,28 +22,20 @@ class MenuView(arcade.View):
 
         arcade.load_font(UI_FONT_PATH)
 
-
         self.manager = arcade.gui.UIManager()
         self.v_box = arcade.gui.UIBoxLayout()
 
-        style = {"font_name": UI_FONT, "font_size": 20, "normal_bg": color.LIGHT_GREEN, "hovered_bg":color.MID_GREEN, "pressed_bg": color.DARK_GREEN}
+        style = arcade.get_window().button_style
 
         title_sprite = arcade.Sprite("resources/textures/ui/title.png")
 
         title_widget = arcade.gui.UISpriteWidget(sprite=title_sprite, width=736, height=256)
         self.v_box.add(title_widget.with_space_around(bottom=40))
 
-        play_texture = arcade.load_texture("resources/textures/ui/play_button.png")
-
-        h_play_texture = arcade.load_texture("resources/textures/ui/hovered_play_button.png")
-
-        p_play_texture = arcade.load_texture("resources/textures/ui/pressed_play_button.png")
-
-        play_button = arcade.gui.UITextureButton(texture=play_texture, texture_hovered=h_play_texture, texture_pressed=p_play_texture, scale=2)
-
+        play_button = arcade.gui.UIFlatButton(text="New", width=256, style=style)
         self.v_box.add(play_button.with_space_around(bottom=20))
 
-        resume_button = arcade.gui.UIFlatButton(text="Load", width=200)
+        resume_button = arcade.gui.UIFlatButton(text="Load", width=256, style=style)
         if self.save_detected:
             self.v_box.add(resume_button.with_space_around(bottom=20))
 
