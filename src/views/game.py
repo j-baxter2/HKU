@@ -2,21 +2,17 @@ import arcade
 import arcade.color
 import math
 import json
-import xml.etree.ElementTree as ET
-from src.views.pause import PauseView, MoveSelectView, MoveView
+from src.views.pause import PauseView, MoveSelectView
 from src.sprites.player import Player
 from src.sprites.sound_player import AmbientPlayer
 from src.sprites.slime import Slime
 from utils.camera import HKUCamera
 from src.data import controls
 from pyglet.math import Vec2
-from src.moves.move import Move
-from src.moves.move_affect_all_in_range import AffectAllMove
-from src.moves.move_target_arrowkey import TargetArrowKey
 from src.utils.level import Level
 from src.utils.sound import load_sound, play_sound
 from src.utils.physics_engine import HKUEngine
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, CIRCLE_RADIUS, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
+from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
 import src.data.color as color
 
 class GameSection(arcade.Section):
@@ -680,7 +676,7 @@ class GameView(arcade.View):
             "level": self.game_section.current_level_id,
             "unlocked moves": unlocked_moves,
             "equipped moves": equipped_moves,
-            "position": self.game_section.player.position
+            "position": self.game_section.player.get_integer_position()
         }
 
     def from_dict(self, data):
