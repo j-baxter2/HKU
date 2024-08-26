@@ -677,7 +677,11 @@ class GameView(arcade.View):
             "level": self.game_section.current_level_id,
             "unlocked moves": unlocked_moves,
             "equipped moves": equipped_moves,
-            "position": self.game_section.player.get_integer_position()
+            "position": self.game_section.player.get_integer_position(),
+            "settings": {
+                "sfx vol": round(arcade.get_window().sfx_vol, 2),
+                "music vol": round(arcade.get_window().music_vol, 2)
+            }
         }
 
     def from_dict(self, data):
@@ -710,3 +714,9 @@ class GameView(arcade.View):
         if 'position' in data:
             print(f"xy:{data['position']}")
             self.game_section.player.position = data['position']
+        print("======")
+        if 'settings' in data:
+            print(f"sfx vol: {data['settings']['sfx vol']}\nmusic vol: {data['settings']['music vol']}")
+            arcade.get_window().sfx_vol = data['settings']['sfx vol']
+            arcade.get_window().music_vol = data['settings']['music vol']
+        print("======")

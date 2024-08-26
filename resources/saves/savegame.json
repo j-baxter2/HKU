@@ -1,5 +1,5 @@
 {
-    "xp": 20,
+    "xp": 42,
     "level": 0,
     "unlocked moves": [
         "basic pat",
@@ -16,7 +16,11 @@
         "special": "fire spiral"
     },
     "position": [
-        3232,
-        2611
-    ]
+        3204,
+        2523
+    ],
+    "settings": {
+        "sfx vol": 0.28,
+        "music vol": 0.19
+    }
 }
