@@ -275,8 +275,8 @@ class MoveView(arcade.View):
         for move in self.unlocked_slot_moves:
             if move == self.player.equipped_moves[self.slot]:
                 button = self.move_buttons[move.name]
-                arcade.draw_circle_filled(center_x=button.left-32, center_y=button.center_y, radius=16, color=arcade.color.RED)
+                arcade.draw_circle_filled(center_x=button.left-32, center_y=button.center_y, radius=16, color=arcade.color.WHITE)
             elif move == self.player.equipped_moves[self.alt_slot]:
                 button = self.alt_move_buttons[move.name]
-                arcade.draw_circle_filled(center_x=button.right+32, center_y=button.center_y, radius=16, color=arcade.color.RED)
+                arcade.draw_circle_filled(center_x=button.right+32, center_y=button.center_y, radius=16, color=arcade.color.WHITE)
         self.manager.draw()
