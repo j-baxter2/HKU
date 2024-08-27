@@ -161,6 +161,12 @@
    <property name="Terrain" value="sand"/>
   </properties>
  </tile>
+ <tile id="66">
+  <animation>
+   <frame tileid="66" duration="500"/>
+   <frame tileid="85" duration="500"/>
+  </animation>
+ </tile>
  <tile id="67">
   <properties>
    <property name="Terrain" value="sand"/>

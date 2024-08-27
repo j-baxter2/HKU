@@ -78,6 +78,7 @@ class GameSection(arcade.Section):
         self.timer += DELTA_TIME
         self.physics_engine.update()
         self.scene.update()
+        self.scene.update_animation(DELTA_TIME, names=["Floor"])
         self.current_level.update_respawn_enemies()
         self.monitor_player_workbench()
         self.monitor_player_inside()
@@ -211,7 +212,8 @@ class GameSection(arcade.Section):
         terrain_dict = {}
         tile_data = self.tile_map.tiled_map.tilesets[1].tiles
         for integer, tile in tile_data.items():
-            terrain_dict[tile.id] = tile.properties.get("Terrain", "unknown")
+            if tile.properties:
+                terrain_dict[tile.id] = tile.properties.get("Terrain", "unknown")
         with open('resources/maps/terrain_mapping.json', 'w') as json_file:
             json.dump(terrain_dict, json_file, indent=4)
 

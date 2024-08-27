@@ -15,6 +15,7 @@ class BaseEnemy(FollowingSprite):
         self.enemy_data = enemy_dict[str(id)]
         super().__init__(self.enemy_data, self.scene)
         self.max_hp = self.enemy_data["hp"]
+        self.fade_texture_index = self.enemy_data["spritesheet"]["fade texture"]
         self.hp = self.max_hp
         self.death_sound = load_sound("gobu_scream", source="hku")
         self.attack_sounds = [load_sound("gobu_attack01", source="hku"), load_sound("gobu_attack02", source="hku")]

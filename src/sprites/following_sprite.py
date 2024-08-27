@@ -13,6 +13,7 @@ class FollowingSprite(LivingSprite):
         self.player = self.scene.get_sprite_list("Player")[0]
         self.follow_distance = data["follow radius"]
         self.random_movement_time = data["random movement time"]
+        self.fade_texture_index = data["spritesheet"]["fade texture"]
         self.random_movement_timer = 0
         self.in_ocean = False
         super().__init__(scene, data)

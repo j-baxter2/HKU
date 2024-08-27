@@ -31,8 +31,6 @@ class MovingSprite(arcade.Sprite):
             count=count,
         )
 
-        self.fade_texture_index = None
-
         if self.textures:
             self.set_texture(0)
 
@@ -55,6 +53,7 @@ class MovingSprite(arcade.Sprite):
         self.fading = False
         self.fade_timer = 0
         self.fade_time = 3
+        self.fade_texture_index = None
 
         self.faded = False
         self.fade_color_key = data["fade color"]
