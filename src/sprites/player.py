@@ -192,8 +192,8 @@ class Player(LivingSprite):
         hit_tiles = arcade.check_for_collision_with_list(self, floor)
         if hit_tiles:
             current_tile = hit_tiles[0]
-            tile_id = current_tile.properties['tile_id']
             try:
+                tile_id = current_tile.properties['tile_id']
                 terrain = self.terrain_mapping[str(tile_id)]
             except KeyError:
                 terrain = "unknown"

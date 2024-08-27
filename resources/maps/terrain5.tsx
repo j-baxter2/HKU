@@ -162,6 +162,9 @@
   </properties>
  </tile>
  <tile id="66">
+  <properties>
+   <property name="tile_id" value="66"/>
+  </properties>
   <animation>
    <frame tileid="66" duration="500"/>
    <frame tileid="85" duration="500"/>

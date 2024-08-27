@@ -2,6 +2,8 @@ import arcade
 import arcade.color
 import math
 import json
+
+import arcade.color
 from src.views.pause import PauseView, MoveSelectView
 from src.sprites.player import Player
 from src.sprites.sound_player import AmbientPlayer
@@ -29,6 +31,7 @@ class GameSection(arcade.Section):
         self.mouse_pos = (0,0)
         self.timer = 0
         self.player_by_bench = False
+        self.animated_pos = []
 
     def setup(self):
         self.load_map("resources/maps/map2.json")
@@ -203,7 +206,7 @@ class GameSection(arcade.Section):
         top = self.tile_map.object_lists["inside"][0].shape[1]
         right = self.tile_map.object_lists["inside"][1].shape[0]
         bottom = self.tile_map.object_lists["inside"][1].shape[1]
-        if self.player.center_x > left and self.player.center_x < right and self.player.center_y < top and self.player.center_y > bottom:
+        if (left <= self.player.center_x <= right) and (bottom <= self.player.center_y <= top):
             self.player.inside = True
         else:
             self.player.inside = False
@@ -232,8 +235,51 @@ class GameSection(arcade.Section):
             }
         }
         scaling = M / TILE_SIZE
-        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options, scaling=scaling, offset=(-1024,-1024))
+        self.tile_map = arcade.load_tilemap(map_path, layer_options=layer_options, scaling=scaling, offset=(-1024, -1024))
+
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
+        self.create_animated_tiles()
+
+    def create_animated_tiles(self):
+        animated_tiles = {}
+
+        tileset = self.tile_map.tiled_map.tilesets[1]
+        tile_data = tileset.tiles
+        tileset_image = tileset.image
+        tile_width = tileset.tile_width
+        tile_height = tileset.tile_height
+        image_width = tileset.image_width
+        columns = image_width // tile_width
+
+        for tile_id, tile in tile_data.items():
+            if tile.animation:
+                frames = []
+                for frame in tile.animation:
+                    frame_tile_id = frame.tile_id
+                    row = frame_tile_id // columns
+                    col = frame_tile_id % columns
+                    x = col * tile_width
+                    y = row * tile_height
+                    texture = arcade.load_texture(tileset_image, x, y, tile_width, tile_height)
+                    keyframe = arcade.AnimationKeyframe(tile_id=frame_tile_id, duration=frame.duration, texture=texture)
+                    frames.append(keyframe)
+                animated_tiles[tile_id] = frames
+
+        for sprite_list in self.scene.sprite_lists:
+            for sprite in sprite_list:
+                tile_id = sprite.properties.get('tile_id')
+                if tile_id in animated_tiles:
+                    animated_sprite = arcade.AnimatedTimeBasedSprite(scale=M/TILE_SIZE)
+                    animated_sprite.frames = animated_tiles[tile_id]
+                    animated_sprite.texture = animated_sprite.frames[0].texture
+
+                    animated_sprite.position = sprite.position
+                    self.animated_pos.append(animated_sprite.position)
+
+                    sprite.kill()
+                    for name, list in self.scene.name_mapping.items():
+                        if list == sprite_list:
+                            self.scene.add_sprite(name, animated_sprite)
 
     def load_level(self):
         self.current_level = Level(level_id=self.current_level_id, scene=self.scene)
@@ -687,38 +733,38 @@ class GameView(arcade.View):
         }
 
     def from_dict(self, data):
-        print("\nLOADING_SAVE\n======")
+        #print("\nLOADING_SAVE\n======")
         if 'xp' in data:
-            print(f"xp:{data['xp']}")
+            #print(f"xp:{data['xp']}")
             self.game_section.player.give_xp(data['xp'])
         if 'level' in data:
-            print(f"level:{data['level']}")
+            #print(f"level:{data['level']}")
             if data['level'] == 0:
                 self.game_section.current_level_id = data['level']
             else:
                 self.game_section.current_level_id = data['level'] - 1
             self.between_levels = True
-        print("======")
+        #print("======")
         if 'unlocked moves' in data:
             for move_name in data['unlocked moves']:
                 for move in self.game_section.player.all_moves:
                     if move.name == move_name:
-                        print(f"{move.name.upper()} UNLOCKED")
+                        #print(f"{move.name.upper()} UNLOCKED")
                         self.game_section.player.unlock_moves(move)
-        print("======")
+        #print("======")
         if 'equipped moves' in data:
             for slot, move_name in data['equipped moves'].items():
                 for move in self.game_section.player.unlocked_moves:
                     if move.name == move_name:
-                        print(f"{move.name.upper()} EQUIPPED")
+                        #print(f"{move.name.upper()} EQUIPPED")
                         self.game_section.player.equip_move(slot, move)
-        print("======")
+        #print("======")
         if 'position' in data:
-            print(f"xy:{data['position']}")
+            #print(f"xy:{data['position']}")
             self.game_section.player.position = data['position']
-        print("======")
+        #print("======")
         if 'settings' in data:
-            print(f"sfx vol: {data['settings']['sfx vol']}\nmusic vol: {data['settings']['music vol']}")
+            #print(f"sfx vol: {data['settings']['sfx vol']}\nmusic vol: {data['settings']['music vol']}")
             arcade.get_window().sfx_vol = data['settings']['sfx vol']
             arcade.get_window().music_vol = data['settings']['music vol']
-        print("======")
+        #print("======")

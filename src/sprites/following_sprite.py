@@ -57,10 +57,12 @@ class FollowingSprite(LivingSprite):
             self.in_ocean = True
             self.speed_multiplier = 0.5
             self.current_movement_frames = self.swim_cycle_frames
+            self.start_walk_cycle(self.animation_direction)
         else:
             self.in_ocean = False
             self.speed_multiplier = 1
             self.current_movement_frames = self.walk_cycle_frames
+            self.start_walk_cycle(self.animation_direction)
 
     @property
     def animation_direction(self):
