@@ -1,11 +1,9 @@
 import arcade
 from src.sprites.living_sprite import LivingSprite
-from src.sprites.player import Player
 from pyglet.math import Vec2
 import random
 import math
-import json
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, M, SOUND_EFFECT_VOL
+from src.data.constants import DELTA_TIME, M, SOUND_EFFECT_VOL
 
 class FollowingSprite(LivingSprite):
     def __init__(self, data: dict, scene: arcade.Scene):

@@ -1,5 +1,5 @@
 {
-    "xp": 184,
+    "xp": 382,
     "level": 1,
     "unlocked moves": [
         "basic pat",
@@ -13,14 +13,17 @@
     ],
     "equipped moves": {
         "quick attack": "basic pat",
-        "special": "fire stream"
+        "special": "fire stream",
+        "alt special": "ranged",
+        "heal": "basic heal",
+        "scare": "scare kitty"
     },
     "position": [
-        3068,
-        2586
+        3163,
+        2495
     ],
     "settings": {
-        "sfx vol": 0.3,
+        "sfx vol": 0.29,
         "music vol": 0.43
     }
 }
