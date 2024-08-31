@@ -147,7 +147,7 @@ class Player(LivingSprite):
     def update_fade_in(self):
         if self.fading_in:
             self.fade_in_timer+=DELTA_TIME
-            self.alpha = min(self.fade_in_fraction * 255, 255)
+            self.alpha = int(min(self.fade_in_fraction * 255, 255))
             if self.fade_in_timer >= self.fade_in_time:
                 self.fading_in = False
                 self.able_to_move = True
@@ -287,7 +287,7 @@ class Player(LivingSprite):
     def update_treat_pickup(self):
         treats = arcade.check_for_collision_with_list(self, self.treat_sprite_list)
         for treat in treats:
-            if treat.decayed:
+            if treat.decayed and not treat.being_held:
                 self.pick_up_treat(treat)
             elif not treat.decayed and self.picking_up_treat:
                 self.pick_up_treat(treat)

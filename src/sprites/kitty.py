@@ -118,7 +118,7 @@ class Kitty(FollowingSprite):
                 self.stop_eating(success=False)
                 return
             self.eating_timer += DELTA_TIME
-            self.target_treat.being_eaten = True
+            self.target_treat.being_held = True
             if self.eating_timer >= self.eating_time:
                 self.stop_eating()
 
@@ -128,7 +128,7 @@ class Kitty(FollowingSprite):
         self.eating_timer = 0
         self.randomize_velocity()
         if self.target_treat:
-            self.target_treat.being_eaten = False
+            self.target_treat.being_held = False
         if success:
             if self.treats_eaten < (self.hunger-1):
                 play_sound(self.swallow_sound, volume=self.get_volume_from_player_pos()*0.5, pan=self.get_pan_from_player_pos())

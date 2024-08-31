@@ -10,6 +10,11 @@ class BloatingEnemy(BaseEnemy):
         super().__init__(id, self.scene)
         self.slime_move = None
 
+        self.treats = self.scene.get_sprite_list("Treat")
+        self.target_treat = None
+        self.treats_held = []
+        self.treat_capacity = 4
+
         self.bloating = False
         self.bloating_color = arcade.color.ORANGE
         self.bloating_timer = 0
@@ -20,22 +25,59 @@ class BloatingEnemy(BaseEnemy):
         self.vulnerable_timer = 0
         self.vulnerable_time = 2
 
+        self.holding_treat = False
+
     def setup(self):
         super().setup()
         self.slime_move = MoveEnemyBloat(id=9, scene=self.scene, origin_sprite=self)
         self.attack = self.slime_move.damage
 
     def update_while_alive(self):
+        if not self.vulnerable and not self.bloating:
+            self.locate_treat()
+            self.handle_treat_collision()
         self.slime_move.on_update(DELTA_TIME)
         self.monitor_player_position()
         self.update_bloating()
         self.update_vulnerable()
+        self.update_treats()
+
+    def update_treats(self):
+        self.treats = self.scene.get_sprite_list("Treat")
+        for treat in self.treats_held:
+            treat.being_held = True
+            treat.position = self.position
+
+    def locate_treat(self):
+        for treat in self.treats:
+            if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and not treat.being_held and not self.full:
+                self.target_treat = treat
+            else:
+                self.target_treat = None
+
+    def handle_treat_collision(self):
+        if self.target_treat:
+            if arcade.check_for_collision(self, self.target_treat) and not self.full:
+                self.grab_treat()
+
+    def grab_treat(self):
+        self.target_treat.being_held = True
+        self.treats_held.append(self.target_treat)
+        print("Treat grabbed")
+
+    def drop_all_treats(self):
+        for treat in self.treats_held:
+            treat.being_held = False
+            print("Treat being held set to false")
+            self.treats_held.remove(treat)
 
     def update_movement_direction(self):
         if self.vulnerable:
             self.face_away(self.apparent_player_position())
         elif self.bloating and not (self.player.fading or self.player.faded):
             self.face(self.apparent_player_position())
+        elif self.target_treat:
+            self.face(self.target_treat.position)
         elif self.should_turn:
             self.randomize_velocity()
             self.random_movement_timer = 0
@@ -45,7 +87,7 @@ class BloatingEnemy(BaseEnemy):
             self.speed = 0
         elif self.vulnerable:
             self.speed = self.sprint_multiplier * self.base_speed
-        elif self.bloating:
+        elif self.bloating or self.target_treat:
             self.speed = (self.sprint_multiplier/2) * self.base_speed
         else:
             self.speed = self.base_speed
@@ -93,6 +135,11 @@ class BloatingEnemy(BaseEnemy):
         else:
             return
 
+    def start_fade(self):
+        self.drop_all_treats()
+        super().start_fade()
+
+
     def oscillate_size(self):
         self.scale += 0.2 * math.sin(self.bloating_timer * 5*2*math.pi / self.bloating_time)
 
@@ -100,10 +147,14 @@ class BloatingEnemy(BaseEnemy):
     def should_stop(self):
         return arcade.get_distance_between_sprites(self, self.player) < 64 and not self.vulnerable
 
+    @property
+    def full(self):
+        return len(self.treats_held) >= self.treat_capacity
+
     def draw_debug(self):
         super().draw_debug()
         self.slime_move.draw_debug(0)
-        debug_text = arcade.Text(f"Bloating: {self.bloating} {round(self.bloating_fraction*100,2)}%\nvulnerable: {self.vulnerable} {round(self.vulnerable_fraction*100,2)}%", start_x=self.center_x, start_y=self.top, color=arcade.color.BLACK, font_size=12, anchor_x="center", anchor_y="bottom", multiline=True, width = 256)
+        debug_text = arcade.Text(f"Bloating: {self.bloating} {round(self.bloating_fraction*100,2)}%\nVulnerable: {self.vulnerable} {round(self.vulnerable_fraction*100,2)}%\nTreat: {len(self.treats_held)}", start_x=self.center_x, start_y=self.top, color=arcade.color.BLACK, font_size=12, anchor_x="center", anchor_y="bottom", multiline=True, width = 256)
         debug_text.draw()
 
     @property

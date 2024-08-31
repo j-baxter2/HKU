@@ -6,7 +6,7 @@ class Treat(arcade.Sprite):
     def __init__(self, scene, image_file, scale=1, decayed=False):
         super().__init__(image_file, scale)
         self.scene = scene
-        self.being_eaten = False
+        self.being_held = False
         self.picked_up = False
 
         self.healthy = True
@@ -36,7 +36,7 @@ class Treat(arcade.Sprite):
         self.update_appearance()
 
     def update_appearance(self):
-        self.visible = not self.being_eaten
+        self.visible = not self.being_held
         if self.decayed:
             self.color = arcade.color.GRANNY_SMITH_APPLE[:3]+(max(0,min(64*math.sin(self.opacity_timer*10)+192,255)),)
         else:
@@ -46,7 +46,7 @@ class Treat(arcade.Sprite):
         self.center_y += math.sin(self.life_timer*4)*0.5
 
     def draw_debug(self):
-        decay_text = arcade.Text(f"Decaying: {self.decaying} {round(self.decay_fraction*100,2)}%\n Decayed: {self.decayed}\n Healthy: {self.healthy}\n Lifetime: {round(self.life_timer,1)}s", start_x=self.center_x, start_y=self.top, color=arcade.color.BLACK, font_size=12, anchor_x="center", anchor_y="bottom", multiline=True, width = 256)
+        decay_text = arcade.Text(f"Decaying: {self.decaying} {round(self.decay_fraction*100,2)}%\n Decayed: {self.decayed}\n Healthy: {self.healthy}\n Lifetime: {round(self.life_timer,1)}s\n Being held: {self.being_held}", start_x=self.center_x, start_y=self.top, color=arcade.color.BLACK, font_size=12, anchor_x="center", anchor_y="bottom", multiline=True, width = 256)
         decay_text.draw()
 
     @property
@@ -59,4 +59,4 @@ class Treat(arcade.Sprite):
 
     @property
     def edible(self):
-        return not self.decayed and not self.being_eaten and not arcade.check_for_collision_with_list(self, self.scene.get_sprite_list("Ocean"))
+        return not self.decayed and not self.being_held and not arcade.check_for_collision_with_list(self, self.scene.get_sprite_list("Ocean"))
