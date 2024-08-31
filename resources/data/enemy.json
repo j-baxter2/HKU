@@ -92,5 +92,38 @@
                 "right": [30, 31]
             }
         }
+    },
+    "3" : {
+        "name": "Bloat",
+        "hp": 2,
+        "follow radius": 2048,
+        "speed": 2,
+        "sprint multiplier": 5,
+        "random movement time": 3,
+        "fade color": "brown",
+        "spritesheet": {
+            "path": "resources/spritesheets/gobu.png",
+            "columns": 6,
+            "count": 24,
+            "width": 32,
+            "height": 32,
+            "scale": 1,
+            "fade texture": 32
+            },
+        "animation": {
+            "fps": 10,
+            "walk": {
+                "up": [12, 17],
+                "down": [0, 5],
+                "left": [6, 11],
+                "right": [18, 23]
+            },
+            "swim": {
+                "up": [28, 29],
+                "down": [24, 25],
+                "left": [26, 27],
+                "right": [30, 31]
+            }
+        }
     }
 }
