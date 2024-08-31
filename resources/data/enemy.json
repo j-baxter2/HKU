@@ -98,7 +98,7 @@
         "hp": 2,
         "follow radius": 2048,
         "speed": 0.7,
-        "sprint multiplier": 5,
+        "sprint multiplier": 10,
         "random movement time": 3,
         "fade color": "black",
         "spritesheet": {

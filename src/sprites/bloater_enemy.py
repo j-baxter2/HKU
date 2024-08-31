@@ -10,7 +10,7 @@ class BloatingEnemy(BaseEnemy):
         super().__init__(id, self.scene)
         self.slime_move = None
 
-        self.bloating = True
+        self.bloating = False
         self.bloating_color = arcade.color.ORANGE
         self.bloating_timer = 0
         self.bloating_time = 4
@@ -30,6 +30,25 @@ class BloatingEnemy(BaseEnemy):
         self.monitor_player_position()
         self.update_bloating()
         self.update_vulnerable()
+
+    def update_movement_direction(self):
+        if self.vulnerable:
+            self.face_away(self.apparent_player_position())
+        elif self.bloating and not (self.player.fading or self.player.faded):
+            self.face(self.apparent_player_position())
+        elif self.should_turn:
+            self.randomize_velocity()
+            self.random_movement_timer = 0
+
+    def update_movement_speed(self):
+        if self.should_stop:
+            self.speed = 0
+        elif self.vulnerable:
+            self.speed = self.sprint_multiplier * self.base_speed
+        elif self.bloating:
+            self.speed = (self.sprint_multiplier/2) * self.base_speed
+        else:
+            self.speed = self.base_speed
 
     def start_bloating(self):
         self.bloating = True
@@ -76,6 +95,10 @@ class BloatingEnemy(BaseEnemy):
 
     def oscillate_size(self):
         self.scale += 0.2 * math.sin(self.bloating_timer * 5*2*math.pi / self.bloating_time)
+
+    @property
+    def should_stop(self):
+        return arcade.get_distance_between_sprites(self, self.player) < 64 and not self.vulnerable
 
     def draw_debug(self):
         super().draw_debug()

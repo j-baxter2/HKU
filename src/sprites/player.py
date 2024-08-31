@@ -99,7 +99,7 @@ class Player(LivingSprite):
         with open("resources/maps/terrain_mapping.json", "r") as file:
             self.terrain_mapping = json.load(file)
 
-        self.color = self.color[:3]+(0,)
+        self.color = self.color[:3]+(int(0),)
 
     def setup(self):
         self.treat_sprite_list = self.scene.get_sprite_list("Treat")

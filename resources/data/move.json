@@ -190,7 +190,7 @@
     "9" : {
         "name": "slimeball",
         "type": "basic",
-        "damage": 5,
+        "damage": 25,
         "damage resist": null,
         "cost": 10,
         "active time": 5,
