@@ -17,7 +17,7 @@
     },
     "1": {
         "enemies": {
-        "enemy amount": 5,
+        "enemy amount": 10,
         "enemy ratio": {
             "0": 0,
             "1": 0,
