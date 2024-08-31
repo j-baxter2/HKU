@@ -35,7 +35,7 @@ class Slime(arcade.Sprite):
                 self.lifetime = 1
         else:
             self.effect_timer += DELTA_TIME
-            component = min(max(0,255*(self.effect_timer/self.effect_time)),255)
+            component = int(min(max(0,255*(self.effect_timer/self.effect_time)),255))
             self.player.color = [255,255,component]
             self.player.speed_multiplier = 0.3
             if self.effect_timer >= self.effect_time:

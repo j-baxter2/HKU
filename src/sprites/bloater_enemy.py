@@ -3,6 +3,7 @@ import math
 from src.sprites.enemy import BaseEnemy
 from src.moves.move_radial_enemy import MoveEnemyBloat
 from src.data.constants import DELTA_TIME
+from pyglet.math import Vec2
 
 class BloatingEnemy(BaseEnemy):
     def __init__(self, id: int, scene: arcade.Scene):
@@ -44,16 +45,30 @@ class BloatingEnemy(BaseEnemy):
 
     def update_treats(self):
         self.treats = self.scene.get_sprite_list("Treat")
-        for treat in self.treats_held:
+        for i, treat in enumerate(self.treats_held):
             treat.being_held = True
-            treat.position = self.position
+            offset = 16 * (i + 1)
+            if self.bloating or self.vulnerable and not (self.player.fading or self.player.faded):
+                vel = Vec2(self.player.center_x - self.center_x, self.player.center_y - self.center_y)
+                angle = vel.heading
+            else:
+                self.velocity = Vec2(self.velocity[0], self.velocity[1])
+                angle = self.velocity.heading
+            treat.center_x = self.center_x - offset * math.cos(angle)
+            treat.center_y = self.center_y - offset * math.sin(angle)
 
     def locate_treat(self):
+        closest_treat = None
+        min_distance = float('inf')
+
         for treat in self.treats:
-            if arcade.get_distance_between_sprites(self, treat) < self.follow_distance and not treat.being_held and not self.full:
-                self.target_treat = treat
-            else:
-                self.target_treat = None
+            distance = arcade.get_distance_between_sprites(self, treat)
+            if distance < self.follow_distance and not treat.being_held and not self.full:
+                if distance < min_distance:
+                    closest_treat = treat
+                    min_distance = distance
+
+        self.target_treat = closest_treat
 
     def handle_treat_collision(self):
         if self.target_treat:
@@ -63,12 +78,10 @@ class BloatingEnemy(BaseEnemy):
     def grab_treat(self):
         self.target_treat.being_held = True
         self.treats_held.append(self.target_treat)
-        print("Treat grabbed")
 
     def drop_all_treats(self):
-        for treat in self.treats_held:
+        for treat in self.treats_held[:]:
             treat.being_held = False
-            print("Treat being held set to false")
             self.treats_held.remove(treat)
 
     def update_movement_direction(self):
@@ -138,7 +151,6 @@ class BloatingEnemy(BaseEnemy):
     def start_fade(self):
         self.drop_all_treats()
         super().start_fade()
-
 
     def oscillate_size(self):
         self.scale += 0.2 * math.sin(self.bloating_timer * 5*2*math.pi / self.bloating_time)
