@@ -97,7 +97,7 @@
         "name": "Bloat",
         "hp": 2,
         "follow radius": 2048,
-        "speed": 2,
+        "speed": 0.7,
         "sprint multiplier": 5,
         "random movement time": 3,
         "fade color": "brown",
