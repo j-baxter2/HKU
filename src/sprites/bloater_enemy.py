@@ -11,10 +11,12 @@ class BloatingEnemy(BaseEnemy):
         self.slime_move = None
 
         self.bloating = True
+        self.bloating_color = arcade.color.ORANGE
         self.bloating_timer = 0
         self.bloating_time = 4
 
         self.vulnerable = False
+        self.vulnerable_color = arcade.color.GOLD
         self.vulnerable_timer = 0
         self.vulnerable_time = 2
 
@@ -37,14 +39,13 @@ class BloatingEnemy(BaseEnemy):
         if self.bloating:
             self.bloating_timer += DELTA_TIME
             self.oscillate_size()
-            self.color = arcade.color.ORANGE
+            self.color = self.bloating_color
             if self.bloating_timer >= self.bloating_time:
                 self.stop_bloating()
 
     def stop_bloating(self):
         self.bloating = False
         self.bloating_timer = 0
-        self.color = arcade.color.WHITE
         self.slime_move.start()
         self.start_vulnerable()
 
@@ -55,14 +56,13 @@ class BloatingEnemy(BaseEnemy):
     def update_vulnerable(self):
         if self.vulnerable:
             self.vulnerable_timer += DELTA_TIME
-            self.color = arcade.color.PURPLE
+            self.color = self.vulnerable_color
             if self.vulnerable_timer >= self.vulnerable_time:
                 self.stop_vulnerable()
 
     def stop_vulnerable(self):
         self.vulnerable = False
         self.vulnerable_timer = 0
-        self.color = arcade.color.WHITE
 
     def monitor_player_position(self):
         if arcade.get_distance_between_sprites(self, self.player) < 256 and not self.bloating and not self.vulnerable:
