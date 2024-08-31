@@ -100,7 +100,7 @@
         "speed": 0.7,
         "sprint multiplier": 5,
         "random movement time": 3,
-        "fade color": "brown",
+        "fade color": "black",
         "spritesheet": {
             "path": "resources/spritesheets/gobu.png",
             "columns": 6,

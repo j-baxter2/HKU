@@ -186,5 +186,25 @@
         "draw circle": false,
         "start sound": "explosion2",
         "stop sound": null
+    },
+    "9" : {
+        "name": "slimeball",
+        "type": "basic",
+        "damage": 5,
+        "damage resist": null,
+        "cost": 10,
+        "active time": 5,
+        "refresh time": 3,
+        "range": 512,
+        "origin mobile while charging": true,
+        "origin mobile while active": true,
+        "affectees mobile while active": true,
+        "affects": "Player",
+        "charge time": null,
+        "color": "GREEN",
+        "draw lines": false,
+        "draw circle": false,
+        "start sound": "explosion2",
+        "stop sound": null
     }
 }

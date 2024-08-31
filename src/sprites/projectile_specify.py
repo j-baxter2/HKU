@@ -7,13 +7,14 @@ from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
 from pyglet.math import Vec2
 
 class ProjectileSpecify(MovingSprite):
-    def __init__(self, id: int, scene: arcade.Scene, origin_move: Move, start: tuple, target: tuple = (0,0), angle: float = 0, targetting_method: str = "tuple", range = 512):
+    def __init__(self, id: int, scene: arcade.Scene, origin_move: Move, start: tuple, target: tuple = (0,0), angle: float = 0, targetting_method: str = "tuple", range = 512, color = arcade.color.WHITE):
         with open("resources/data/projectile.json", "r") as file:
             projectile_dict = json.load(file)
         self.projectile_data = projectile_dict[str(id)]
         self.scene = scene
         super().__init__(self.projectile_data)
         self.scene = scene
+        self.spec_color = color
         self.origin_move = origin_move
         self.active = False
         self.range = range
@@ -29,11 +30,11 @@ class ProjectileSpecify(MovingSprite):
             self.target_x = start[0] + math.sin(math.radians(angle))
             self.target_y = start[1] + math.cos(math.radians(angle))
 
-
     def update(self):
         self.update_movement()
         self.update_activity()
         self.update_animation()
+        self.color = self.spec_color
         super().update()
 
     def start(self):

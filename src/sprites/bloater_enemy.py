@@ -17,7 +17,7 @@ class BloatingEnemy(BaseEnemy):
 
     def setup(self):
         super().setup()
-        self.slime_move = MoveEnemyBloat(id=6, scene=self.scene, origin_sprite=self)
+        self.slime_move = MoveEnemyBloat(id=9, scene=self.scene, origin_sprite=self)
         self.attack = self.slime_move.damage
 
     def update_while_alive(self):
@@ -33,13 +33,15 @@ class BloatingEnemy(BaseEnemy):
         if self.bloating:
             self.bloating_timer += DELTA_TIME
             self.oscillate_size()
-            self.color = arcade.color.PURPLE_MOUNTAIN_MAJESTY
+            self.color = arcade.color.ORANGE
             if self.bloating_timer >= self.bloating_time:
                 self.stop_bloating()
 
     def stop_bloating(self):
         self.bloating = False
         self.bloating_timer = 0
+        self.color = arcade.color.WHITE
+        self.slime_move.start()
 
     def monitor_player_position(self):
         if arcade.get_distance_between_sprites(self, self.player) < 256 and not self.bloating:
