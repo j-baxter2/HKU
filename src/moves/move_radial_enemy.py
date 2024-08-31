@@ -10,7 +10,7 @@ class MoveEnemyBloat(Move):
     def start(self):
         origin_pos_when_fired = self.origin_sprite.position
         for i in range(8):
-            self.projectile = ProjectileSpecify(id=0, scene=self.scene, origin_move=self, start=origin_pos_when_fired, angle=45*i, targetting_method="angle", range=512, color=arcade.color.YELLOW)
+            self.projectile = ProjectileSpecify(id=0, scene=self.scene, origin_move=self, start=origin_pos_when_fired, angle=45*i, targetting_method="angle", range=512)
             self.scene.add_sprite("Projectile", self.projectile)
             self.projectile.start()
 
