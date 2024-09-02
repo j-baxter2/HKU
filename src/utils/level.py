@@ -84,7 +84,6 @@ class Level:
         map_bounds = [MAP_WIDTH, MAP_HEIGHT]
         current_enemy_counts = {"0": 0, "1": 0, "2": 0, "3": 0}
 
-        # Count current enemies
         for enemy in self.scene.get_sprite_list("Enemy"):
             if isinstance(enemy, DistruptorEnemy):
                 current_enemy_counts["0"] += 1
@@ -97,7 +96,6 @@ class Level:
         for enemy_id, initial_count in self.initial_enemy_count.items():
             threshold = 0.7 * initial_count
             if current_enemy_counts[enemy_id] < threshold:
-                # Calculate how many enemies to respawn
                 respawn_count = int(threshold) - current_enemy_counts[enemy_id]
                 for _ in range(respawn_count):
                     self.spawn_enemy(enemy_id, map_bounds)
@@ -105,11 +103,10 @@ class Level:
     def spawn_treats(self):
         for kitty in self.scene.get_sprite_list("Kitty"):
             self.treat_amount += kitty.hunger
-        edge_margin = 64  # Avoid spawning too close to the edge
+        edge_margin = 64
 
         for i in range(self.treat_amount):
             x, y = self._generate_xy()
-            # Create and place the treat
             treat = Treat(scene=self.scene, image_file="resources/spritesheets/treat.png", scale=4, decayed=True)
             treat.position = (x, y)
             self.scene.add_sprite("Treat", treat)
