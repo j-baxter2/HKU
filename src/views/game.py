@@ -529,7 +529,7 @@ class GameView(arcade.View):
 
         self.my_music = arcade.load_sound(self.songs[self.curr_song_key])
 
-        self.crossfade_time = 1  # Crossfade duration in seconds
+        self.crossfade_time = 1
         self.crossfade_timer = 0
         self.new_media_player = None
 
@@ -595,7 +595,6 @@ class GameView(arcade.View):
             self.curr_song_key = new_song_key
             self.crossfade_to_new_music(new_song_key)
 
-        # Handle crossfade if in progress
         if self.crossfade_timer > 0:
             self.crossfade_timer -= delta_time
             progress = (self.crossfade_time - self.crossfade_timer) / self.crossfade_time

@@ -16,13 +16,14 @@ class BloatingEnemy(BaseEnemy):
         self.treats_held = []
         self.treat_capacity = 4
 
+        self.normal_color = arcade.color.GOLD
+
         self.bloating = False
         self.bloating_color = arcade.color.ORANGE
         self.bloating_timer = 0
         self.bloating_time = 4
 
         self.vulnerable = False
-        self.vulnerable_color = arcade.color.GOLD
         self.vulnerable_timer = 0
         self.vulnerable_time = 2
 
@@ -32,6 +33,7 @@ class BloatingEnemy(BaseEnemy):
         super().setup()
         self.slime_move = MoveEnemyBloat(id=9, scene=self.scene, origin_sprite=self)
         self.attack = self.slime_move.damage
+        self.color = self.normal_color
 
     def update_while_alive(self):
         if not self.vulnerable and not self.bloating:
@@ -137,6 +139,7 @@ class BloatingEnemy(BaseEnemy):
     def stop_vulnerable(self):
         self.vulnerable = False
         self.vulnerable_timer = 0
+        self.color = self.normal_color
 
     def monitor_player_position(self):
         if arcade.get_distance_between_sprites(self, self.player) < 256 and not self.bloating and not self.vulnerable:
@@ -154,6 +157,19 @@ class BloatingEnemy(BaseEnemy):
 
     def oscillate_size(self):
         self.scale += 0.2 * math.sin(self.bloating_timer * 5*2*math.pi / self.bloating_time)
+
+    @property
+    def vulnerable_color(self):
+        bloating_green = self.bloating_color[1]
+        normal_green = self.normal_color[1]
+        green_diff = normal_green - bloating_green
+
+        sine_factor = 0.5 * math.sin(self.vulnerable_timer * 10 * math.pi / self.vulnerable_time)
+        vulnerable_green = (green_diff * sine_factor) + (green_diff / 2 + bloating_green)
+
+        vulnerable_green = int(max(0, min(vulnerable_green, 255)))
+
+        return (255, vulnerable_green, 0)
 
     @property
     def should_stop(self):
