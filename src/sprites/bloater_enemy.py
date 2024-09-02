@@ -166,7 +166,6 @@ class BloatingEnemy(BaseEnemy):
 
         sine_factor = 0.5 * math.sin(self.vulnerable_timer * 10 * math.pi / self.vulnerable_time)
         vulnerable_green = (green_diff * sine_factor) + (green_diff / 2 + bloating_green)
-
         vulnerable_green = int(max(0, min(vulnerable_green, 255)))
 
         return (255, vulnerable_green, 0)

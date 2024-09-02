@@ -18,7 +18,6 @@ class MovingSprite(arcade.Sprite):
         width = sprite_data["width"]
         height = sprite_data["height"]
 
-        # Calculate scale using the formula
         true_scale = (tile_scale * M) / max(width, height)
 
         super().__init__(sheet_path, true_scale)
