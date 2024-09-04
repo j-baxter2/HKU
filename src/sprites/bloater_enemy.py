@@ -4,6 +4,7 @@ from src.sprites.enemy import BaseEnemy
 from src.moves.move_radial_enemy import MoveEnemyBloat
 from src.data.constants import DELTA_TIME
 from pyglet.math import Vec2
+from src.utils.sound import load_sound, play_sound
 
 class BloatingEnemy(BaseEnemy):
     def __init__(self, id: int, scene: arcade.Scene):
@@ -26,6 +27,9 @@ class BloatingEnemy(BaseEnemy):
         self.vulnerable = False
         self.vulnerable_timer = 0
         self.vulnerable_time = 2
+
+        self.hum_sound = load_sound(name="bloater_hum", source="hku")
+        self.hum_player = None
 
         self.holding_treat = False
 
@@ -103,11 +107,12 @@ class BloatingEnemy(BaseEnemy):
         elif self.vulnerable:
             self.speed = self.sprint_multiplier * self.base_speed
         elif self.bloating or self.target_treat:
-            self.speed = (self.sprint_multiplier/2) * self.base_speed
+            self.speed = (self.sprint_multiplier/2) * self.base_speed + 15 * (self.bloating_fraction)
         else:
             self.speed = self.base_speed
 
     def start_bloating(self):
+        self.hum_player = play_sound(self.hum_sound, volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos(), speed=0, looping=True, return_player=True)
         self.bloating = True
         self.bloating_timer = 0
 
@@ -116,6 +121,7 @@ class BloatingEnemy(BaseEnemy):
             self.bloating_timer += DELTA_TIME
             self.oscillate_size()
             self.color = self.bloating_color
+            self.hum_player.volume = self.bloating_fraction
             if self.bloating_timer >= self.bloating_time:
                 self.stop_bloating()
 
