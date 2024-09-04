@@ -49,6 +49,9 @@ class FollowingSprite(LivingSprite):
             self.randomize_velocity()
             self.random_movement_timer = 0
 
+    def avoid_walls(self):
+        pass
+
     def update_ocean(self):
         ocean = self.scene.get_sprite_list("Ocean")
         if arcade.check_for_collision_with_list(self, sprite_list=ocean):

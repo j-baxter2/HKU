@@ -103,15 +103,21 @@ class MovingSprite(arcade.Sprite):
             self.faded = True
             self.kill()
 
+    def avoid_walls(self):
+        pass
+
     def update_movement(self):
         self.update_movement_direction()
         self.velocity = Vec2(self.velocity[0], self.velocity[1])
-        self.velocity = self.velocity.normalize()
-        self.update_movement_speed()
-        self.speed *= self.speed_multiplier
-        self.velocity = self.velocity.scale(self.speed)
+        self.avoid_walls()
+        if self.velocity.mag > 0:
+            self.velocity = self.velocity.normalize().scale(self.get_current_speed())
         self.velocity = [self.velocity.x, self.velocity.y]
         self.handle_out_of_bounds()
+
+    def get_current_speed(self):
+        self.update_movement_speed()
+        return self.speed * self.speed_multiplier
 
     def update_movement_direction(self):
         if self.should_turn:
