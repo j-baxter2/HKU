@@ -17,6 +17,7 @@ class MoveBossHoriz(Move):
     def start(self):
         self.active = True
         self.active_timer = 0
+        self.proj_fired = 0
 
     def fire(self):
         range_ = 512
@@ -43,7 +44,6 @@ class MoveBossHoriz(Move):
     def update_activity(self):
         if self.active:
             self.active_timer += DELTA_TIME
-
             if (self.projectile is None or not self.projectile.active) and arcade.get_distance_between_sprites(self.origin_sprite, self.origin_sprite.player) <= self.range and self.proj_fired < self.proj_max:
                 self.fire()
             elif self.proj_fired >= self.proj_max:
@@ -58,7 +58,7 @@ class MoveBossHoriz(Move):
             return
 
     def execute(self):
-        if self.executable and len(self.scene.get_sprite_list("Player") > 0):
+        if self.executable and len(self.scene.get_sprite_list("Player")) > 0:
             self.start()
 
     def draw_debug(self, index: int):
