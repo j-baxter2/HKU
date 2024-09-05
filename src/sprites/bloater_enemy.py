@@ -121,7 +121,7 @@ class BloatingEnemy(BaseEnemy):
             self.bloating_timer += DELTA_TIME
             self.oscillate_size()
             self.color = self.bloating_color
-            self.hum_player.volume = self.bloating_fraction
+            self.hum_player.volume = self.get_volume_from_player_pos()
             if self.bloating_timer >= self.bloating_time:
                 self.stop_bloating()
 
@@ -139,12 +139,14 @@ class BloatingEnemy(BaseEnemy):
         if self.vulnerable:
             self.vulnerable_timer += DELTA_TIME
             self.color = self.vulnerable_color
+            self.hum_player.volume = max(1 - self.vulnerable_fraction, 0) * self.get_volume_from_player_pos()
             if self.vulnerable_timer >= self.vulnerable_time:
                 self.stop_vulnerable()
 
     def stop_vulnerable(self):
         self.vulnerable = False
         self.vulnerable_timer = 0
+        self.hum_player.pause()
         self.color = self.normal_color
 
     def monitor_player_position(self):
@@ -162,7 +164,10 @@ class BloatingEnemy(BaseEnemy):
         super().start_fade()
 
     def oscillate_size(self):
-        self.scale += 0.2 * math.sin(self.bloating_timer * 5*2*math.pi / self.bloating_time)
+        sine_term_scale = 0.2 * math.sin(self.bloating_timer * 5*2*math.pi / self.bloating_time)
+        self.scale += sine_term_scale
+        sine_term_pitch = 0.1 * math.sin(self.bloating_timer * 5*2*math.pi / self.bloating_time)
+        self.hum_player._audio_player.set_pitch(1 + sine_term_pitch)
 
     @property
     def vulnerable_color(self):
