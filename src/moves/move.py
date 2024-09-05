@@ -165,7 +165,7 @@ class Move:
     def draw_debug(self, index: int):
         start_x = self.origin_sprite.center_x+self.origin_sprite.width
         start_y = self.origin_sprite.top-index*(LINE_HEIGHT*4)
-        active_debug_text = arcade.Text(f"{self.name} active: {self.active}\nactiveprogress: {round(self.progress_fraction, 2)}", start_x=start_x, start_y=start_y, color=arcade.color.BLACK, font_size=12, width=self.origin_sprite.width, anchor_x="left", anchor_y="top", multiline=True)
+        active_debug_text = arcade.Text(f"{self.name} active: {self.active}\nactiveprogress: {round(self.progress_fraction, 2)}\nactivetimer: {round(self.active_timer, 2)}", start_x=start_x, start_y=start_y, color=arcade.color.BLACK, font_size=12, width=self.origin_sprite.width, anchor_x="left", anchor_y="top", multiline=True)
         active_debug_text.draw()
         if self.refreshing:
             refresh_debug_text = arcade.Text(f"refreshing: {self.refreshing}\nrefreshprogress: {round(self.refresh_fraction, 2)}", start_x=start_x+self.origin_sprite.width, start_y=start_y, color=arcade.color.BLACK, font_size=12, width=self.origin_sprite.width, anchor_x="left", anchor_y="top", multiline=True)

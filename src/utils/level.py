@@ -5,6 +5,7 @@ import random
 from src.sprites.distruptor_enemy import DistruptorEnemy
 from src.sprites.shooting_enemy import ShootingEnemy
 from src.sprites.bloater_enemy import BloatingEnemy
+from src.sprites.boss import Boss
 from src.sprites.treat import Treat
 from src.sprites.kitty import Kitty
 from src.sprites.slime import Slime
@@ -52,6 +53,8 @@ class Level:
             enemy = ShootingEnemy(id=int(enemy_id), scene=self.scene)
         elif enemy_id == "3":
             enemy = BloatingEnemy(id=int(enemy_id), scene=self.scene)
+        elif enemy_id == "4":
+            enemy = Boss(id=int(enemy_id), scene=self.scene)
 
         x, y = self._generate_xy()
         enemy.position = (x, y)
@@ -82,7 +85,7 @@ class Level:
 
     def update_respawn_enemies(self):
         map_bounds = [MAP_WIDTH, MAP_HEIGHT]
-        current_enemy_counts = {"0": 0, "1": 0, "2": 0, "3": 0}
+        current_enemy_counts = {"0": 0, "1": 0, "2": 0, "3": 0, "4": 0}
 
         for enemy in self.scene.get_sprite_list("Enemy"):
             if isinstance(enemy, DistruptorEnemy):
@@ -92,6 +95,8 @@ class Level:
                 current_enemy_counts["2"] += 1
             elif isinstance(enemy, BloatingEnemy):
                 current_enemy_counts["3"] += 1
+            elif isinstance(enemy, Boss):
+                current_enemy_counts["4"] += 1
 
         for enemy_id, initial_count in self.initial_enemy_count.items():
             threshold = 0.7 * initial_count
