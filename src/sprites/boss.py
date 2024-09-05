@@ -21,7 +21,7 @@ class Boss(BaseEnemy):
 
         self.life_timer = 0
 
-        self.vulnerable = False
+        self.vulnerable = True
         self.vulnerable_timer = 0
         self.vulnerable_time = 4
 

@@ -27,48 +27,12 @@
             }
         },
         "kitties": {
-        "kitty amount": 10,
+        "kitty amount": 0,
         "kitty ratio": {
             "0": 0,
             "1": 1
             }
         },
         "traps": 20
-    },
-    "2": {
-        "enemies": {
-        "enemy amount": 5,
-        "enemy ratio": {
-            "0": 1,
-            "1": 0,
-            "2": 0
-            }
-        },
-        "kitties": {
-        "kitty amount": 15,
-        "kitty ratio": {
-            "0": 0,
-            "1": 1
-            }
-        },
-        "traps": 25
-    },
-    "3": {
-        "enemies": {
-        "enemy amount": 15,
-        "enemy ratio": {
-            "0": 10,
-            "1": 0,
-            "2": 5
-            }
-        },
-        "kitties": {
-        "kitty amount": 20,
-        "kitty ratio": {
-            "0": 0,
-            "1": 1
-            }
-        },
-        "traps": 25
     }
 }

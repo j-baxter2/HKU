@@ -666,8 +666,9 @@ class GameView(arcade.View):
         projectile_count = len(self.game_section.scene.get_sprite_list("Projectile"))
         player_pos = self.game_section.player.get_integer_position()
         terrain = self.game_section.player.walking_on
+        boss_fight = self.game_section.current_level.boss_fight
 
-        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nMouse: {self.mouse_pos}\nProjectiles: {projectile_count}\nTerrain: {terrain}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
+        debug_text = arcade.Text(f"Debug Info\nEnemies: {enemy_count}\nKitties: {kitty_count}/{kitty_count_max}\nTreats on floor: {treat_count}\nPlayer Pos: {player_pos}\nMouse: {self.mouse_pos}\nProjectiles: {projectile_count}\nTerrain: {terrain}\nBoss fight: {boss_fight}", start_x=20, start_y=self.window.height - 20, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top", multiline=True, width=256)
         debug_text.draw()
         if self.between_levels:
             between_levels_text = arcade.Text(f"Between Levels {int((self.between_levels_timer/self.between_levels_time)*100)}%", start_x=20, start_y=self.window.height - 20 - LINE_HEIGHT*12, color=arcade.color.RED, font_size=12, anchor_x="left", anchor_y="top")
@@ -705,11 +706,18 @@ class GameView(arcade.View):
 
     @property
     def should_change_level(self):
-        return not self.between_levels and not self.game_section.any_kitties
+        if self.game_section.current_level.boss_fight:
+            return not self.between_levels and not self.game_section.any_enemies
+        else:
+            return not self.between_levels and not self.game_section.any_kitties
 
     @property
     def completed(self):
-        return not self.game_section.more_levels and not self.game_section.any_kitties
+        if self.game_section.current_level.boss_fight:
+            return not self.game_section.more_levels and not self.game_section.any_enemies
+        else:
+            return not self.game_section.more_levels and not self.game_section.any_kitties
+
 
     def to_dict(self):
         unlocked_moves = []
