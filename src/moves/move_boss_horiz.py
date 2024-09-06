@@ -14,6 +14,9 @@ class MoveBossHoriz(Move):
     def on_update(self, delta_time: float):
         self.update_activity()
 
+    def draw(self):
+        pass
+
     def start(self):
         self.active = True
         self.active_timer = 0

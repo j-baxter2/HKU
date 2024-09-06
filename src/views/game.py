@@ -91,9 +91,13 @@ class GameSection(arcade.Section):
         self.scene.draw(names=["Floor", "Wall", "Trap", "Treat", "Workbench", "Kitty", "Enemy", "Player", "Projectile"])
         self.draw_border()
         self.draw_button_hints()
-        active_moves = self.player.get_active_moves()
-        for move in active_moves:
+        active_moves_player = self.player.get_active_moves()
+        for move in active_moves_player:
             move.draw()
+        if self.current_level.boss_fight:
+            active_moves_boss = self.scene.get_sprite_list("Enemy")[0].get_active_moves()
+            for move in active_moves_boss:
+                move.draw()
         charging_moves = self.player.get_charge_moves()
         for move in charging_moves:
             move.draw()

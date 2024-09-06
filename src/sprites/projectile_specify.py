@@ -65,9 +65,10 @@ class ProjectileSpecify(MovingSprite):
         self.hit_sprites = hit_sprites
 
     def damage_sprite(self, sprite):
-        sprite.take_damage(self.origin_move.damage)
-        if sprite.is_dead:
-            self.origin_move.origin_sprite.give_xp(sprite.max_hp*sprite.attack)
+        if not sprite.just_been_hit:
+            sprite.take_damage(self.origin_move.damage)
+            if sprite.is_dead:
+                self.origin_move.origin_sprite.give_xp(sprite.max_hp*sprite.attack)
 
     def update_movement_direction(self):
         pass

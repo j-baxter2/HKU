@@ -135,9 +135,9 @@
         "random movement time": 3,
         "fade color": "black",
         "spritesheet": {
-            "path": "resources/spritesheets/norris.png",
-            "columns": 1,
-            "count": 1,
+            "path": "resources/spritesheets/norris-Sheet.png",
+            "columns": 5,
+            "count": 5,
             "width": 96,
             "height": 96,
             "scale": 4,
