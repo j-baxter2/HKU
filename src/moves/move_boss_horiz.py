@@ -47,7 +47,7 @@ class MoveBossHoriz(Move):
     def update_activity(self):
         if self.active:
             self.active_timer += DELTA_TIME
-            if (self.projectile is None or not self.projectile.active) and arcade.get_distance_between_sprites(self.origin_sprite, self.origin_sprite.player) <= self.range and self.proj_fired < self.proj_max:
+            if (self.projectile is None or not self.projectile.active) and self.proj_fired < self.proj_max:
                 self.fire()
             elif self.proj_fired >= self.proj_max:
                 self.stop()

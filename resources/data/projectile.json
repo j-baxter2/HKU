@@ -27,5 +27,19 @@
         },
         "fade color": "orange",
         "speed": 10
+    }, "2": {
+        "spritesheet": {
+            "path": "resources/spritesheets/fireball.png",
+            "columns": 2,
+            "count": 2,
+            "width": 32,
+            "height": 32,
+            "scale": 0.5
+        },
+        "animation": {
+            "fps": 10
+        },
+        "fade color": "orange",
+        "speed": 20
     }
 }

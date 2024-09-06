@@ -30,6 +30,8 @@ class Boss(BaseEnemy):
 
         self.player_found = False
 
+        self.move_index = 0
+
     def setup(self):
         super().setup()
         self.horiz_move = MoveBossHoriz(id=10, scene=self.scene, origin_sprite=self)
@@ -95,16 +97,22 @@ class Boss(BaseEnemy):
         self.color = arcade.color.WHITE
 
     def start_attacking(self):
-        self.horiz_move.start()
         self.attacking = True
         self.set_texture(2)
+        self.move_index = 0
         self.attacking_timer = 0
 
     def update_attacking(self):
         if self.attacking:
             self.attacking_timer += DELTA_TIME
             self.update_attacking_animation()
-            if self.horiz_move.active == False:
+            if self.horiz_move.active == False and self.move_index == 0:
+                self.horiz_move.start()
+                self.move_index = 1
+            elif self.horiz_move.active == False and self.move_index == 1:
+                self.vert_move.start()
+                self.move_index = 2
+            elif self.vert_move.active == False and self.move_index == 2:
                 self.start_vulnerable()
                 self.stop_attacking()
 
