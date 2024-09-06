@@ -383,6 +383,8 @@ class UISection(arcade.Section):
             self.draw_hp_bar()
             self.draw_treat_count()
             self.draw_move_status()
+            if self.view.game_section.current_level.boss_fight:
+                self.draw_boss_hp()
             if not self.view.completed:
                 self.draw_level_id()
 
@@ -435,6 +437,23 @@ class UISection(arcade.Section):
                                          height=10,
                                          color=arcade.color.RED[:3] + (200,))
 
+    def draw_boss_hp(self):
+        boss = self.enemies[0]
+        base_width = 600
+        height = 80
+        filled_width = (boss.hp / boss.max_hp) * base_width
+
+        arcade.draw_rectangle_filled(center_x=self.width // 2,
+                                     center_y=self.bottom + 120,
+                                     width=base_width,
+                                     height=height,
+                                     color=arcade.color.BLACK[:3] + (128,))
+
+        arcade.draw_rectangle_filled(center_x=self.width // 2 - (base_width/2 - filled_width / 2),
+                                     center_y=self.bottom + 120,
+                                     width=filled_width,
+                                     height=height,
+                                     color=arcade.color.RED[:3] + (200,))
 
 
     def draw_move_status(self):

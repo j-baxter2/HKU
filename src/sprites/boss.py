@@ -5,6 +5,7 @@ from src.data.constants import DELTA_TIME, LINE_HEIGHT
 from src.moves.move_boss_horiz import MoveBossHoriz
 from src.moves.move_boss_vert import MoveBossVert
 from src.moves.move_boss_seek import MoveBossSeek
+from src.utils.sound import load_sound, play_sound
 
 
 class Boss(BaseEnemy):
@@ -31,6 +32,11 @@ class Boss(BaseEnemy):
         self.player_found = False
 
         self.move_index = 0
+
+        self.vulnerable_sound = load_sound("norris_vulnerable", source="hku")
+        self.attacking_sound = load_sound("norris_attack", source="hku")
+        self.attacking_player = None
+        self.hit_sound = load_sound("norris_hit", source="hku")
 
     def setup(self):
         super().setup()
@@ -65,6 +71,7 @@ class Boss(BaseEnemy):
     def start_vulnerable(self):
         self.vulnerable = True
         self.set_texture(0)
+        self.vulnerable_sound.play(volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
         self.vulnerable_timer = 0
 
     def update_vulnerable(self):
@@ -99,6 +106,7 @@ class Boss(BaseEnemy):
     def start_attacking(self):
         self.attacking = True
         self.set_texture(2)
+        self.attacking_player = self.attacking_sound.play(volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
         self.move_index = 0
         self.attacking_timer = 0
 
@@ -115,19 +123,26 @@ class Boss(BaseEnemy):
             elif self.vert_move.active == False and self.move_index == 2:
                 self.start_vulnerable()
                 self.stop_attacking()
+            elif self.player.is_dead:
+                self.stop_attacking(player_killed = True)
 
     def update_attacking_animation(self):
         if self.player.just_been_hit:
             if self.player.just_been_hit_timer < 0.02 and self.texture == self.textures[2]:
                 self.set_texture(3)
+                if not self.attacking_player.playing:
+                    self.hit_sound.play(volume=self.get_volume_from_player_pos(), pan=self.get_pan_from_player_pos())
             if self.player.just_been_hit_timer >= 0.02 and self.texture == self.textures[3]:
                 self.set_texture(4)
         else:
             self.set_texture(2)
 
-    def stop_attacking(self):
+    def stop_attacking(self, player_killed = False):
         self.attacking = False
         self.attacking_timer = 0
+        if player_killed:
+            pass
+            #play some victory sound
 
     def take_damage(self, amount: int):
         if self.vulnerable:
