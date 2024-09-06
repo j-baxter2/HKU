@@ -39,7 +39,6 @@ class MoveBossVert(Move):
 
             if self.proj_fired >= self.n_proj:
                 self.stop()
-                print("Move stopped")
 
     def stop(self):
         self.active = False
