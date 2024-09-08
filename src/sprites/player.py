@@ -331,6 +331,9 @@ class Player(LivingSprite):
 
     def do_move(self, move):
         if move.type == "basic":
+            if move.active and hasattr(move, "abrupt_stop") and move.abrupt_stop:
+                move.stop()
+                return
             move.execute()
         elif move.type == "charge" or move.type == "charge and release":
             move.start_charge()

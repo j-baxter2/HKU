@@ -153,7 +153,7 @@
         "damage resist": null,
         "cost": 10,
         "active time": 5,
-        "refresh time": 3,
+        "refresh time": 10,
         "range": 480,
         "origin mobile while charging": true,
         "origin mobile while active": true,

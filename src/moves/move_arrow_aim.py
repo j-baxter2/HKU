@@ -17,6 +17,7 @@ class MoveArrowAim(MoveByPlayer):
         self.choosing_target = False
         self.origin_sprite = origin_sprite
         self.target = origin_sprite.position
+        self.abrupt_stop = True
         self.direction = "right"
 
     def start(self):
@@ -25,6 +26,11 @@ class MoveArrowAim(MoveByPlayer):
         self.sub_active_timer = 0
         self.projectiles_fired = 0
         self.target = (self.origin_sprite.left, self.origin_sprite.top)
+
+    def stop(self):
+        active_time_at_stop = self.active_timer
+        super().stop()
+        self.refresh_timer = (1 - active_time_at_stop/self.active_time) * self.refresh_time
 
     def fire_projectile(self):
         start = self.origin_sprite.position

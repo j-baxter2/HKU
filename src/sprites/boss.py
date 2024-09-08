@@ -2,6 +2,7 @@ import arcade
 import math
 from src.sprites.enemy import BaseEnemy
 from src.data.constants import DELTA_TIME, LINE_HEIGHT
+import src.data.color as color
 from src.moves.move_boss_horiz import MoveBossHoriz
 from src.moves.move_boss_vert import MoveBossVert
 from src.moves.move_boss_seek import MoveBossSeek
@@ -12,6 +13,8 @@ class Boss(BaseEnemy):
     def __init__(self, id: int, scene: arcade.Scene):
         self.scene = scene
         super().__init__(id, self.scene)
+        self._hit_box_detail = 4.5
+
         self.horiz_move = None
 
         self.vert_move = None
@@ -67,6 +70,13 @@ class Boss(BaseEnemy):
     def update_player_found(self):
         if not self.player_found and self.should_stop:
             self.start_player_found()
+        if self.player_found:
+            self.handle_player_collision()
+
+    def handle_player_collision(self):
+        if self.collides_with_sprite(self.player) and not self.player.just_been_hit and self.attacking:
+            self.player.take_damage(self.attack)
+            self.player.start_just_been_hit()
 
     def start_vulnerable(self):
         self.vulnerable = True

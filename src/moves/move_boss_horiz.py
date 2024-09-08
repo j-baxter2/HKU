@@ -1,4 +1,5 @@
 import arcade
+import math
 from src.sprites.living_sprite import LivingSprite
 from src.sprites.projectile_specify import ProjectileSpecify
 from src.moves.move import Move
@@ -10,12 +11,14 @@ class MoveBossHoriz(Move):
         self.proj_fired = 0
         self.proj_max = 8
         self.projectile = None
+        self.active_color = arcade.color.BURNT_ORANGE
 
     def on_update(self, delta_time: float):
         self.update_activity()
 
     def draw(self):
-        pass
+        if self.active:
+            self.origin_sprite.draw_hit_box(color=self.active_color,line_thickness=math.sin(self.active_timer)*8+4)
 
     def start(self):
         self.active = True
@@ -46,6 +49,7 @@ class MoveBossHoriz(Move):
 
     def update_activity(self):
         if self.active:
+            self.active_color = self.active_color[:3] + (128,)
             self.active_timer += DELTA_TIME
             if (self.projectile is None or not self.projectile.active) and self.proj_fired < self.proj_max:
                 self.fire()
