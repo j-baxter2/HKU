@@ -131,10 +131,13 @@ class Boss(BaseEnemy):
                 self.vert_move.start()
                 self.move_index = 2
             elif self.vert_move.active == False and self.move_index == 2:
-                self.start_vulnerable()
+                self.seek_move.start()
+                self.move_index = 3
+            elif self.seek_move.active == False and self.move_index == 3:
                 self.stop_attacking()
+                self.start_vulnerable()
             elif self.player.is_dead:
-                self.stop_attacking(player_killed = True)
+                self.stop_attacking(player_killed=True)
 
     def update_attacking_animation(self):
         if self.player.just_been_hit:

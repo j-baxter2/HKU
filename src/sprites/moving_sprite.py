@@ -132,6 +132,7 @@ class MovingSprite(arcade.Sprite):
 
     def face(self, position):
         self.velocity = Vec2(position[0] - self.center_x, position[1] - self.center_y)
+        self.velocity = self.velocity.normalize()
 
     def face_away(self, position):
         self.velocity = Vec2(self.center_x - position[0], self.center_y - position[1])
