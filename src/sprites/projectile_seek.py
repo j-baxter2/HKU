@@ -28,7 +28,7 @@ class ProjectileSeek(MovingSprite):
             self.target_x = start[0] + math.sin(math.radians(angle))
             self.target_y = start[1] + math.cos(math.radians(angle))
         self.n_turns = 0
-        self.max_turns = 8
+        self.max_turns = 16
 
     def update(self):
         self.update_movement()
@@ -87,7 +87,7 @@ class ProjectileSeek(MovingSprite):
                 self.origin_move.origin_sprite.give_xp(sprite.max_hp*sprite.attack)
 
     def handle_boss_collision(self):
-        if self.active_timer >= 3:
+        if self.active_timer >= 1:
             boss = self.scene.get_sprite_list("Enemy")[0]
             if arcade.check_for_collision(self, boss):
                 print("projectile hit boss")
