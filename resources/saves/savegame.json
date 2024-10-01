@@ -1,26 +1,15 @@
 {
-    "xp": 382,
+    "xp": 0,
     "level": 1,
     "unlocked moves": [
-        "basic pat",
-        "basic heal",
-        "scare kitty",
-        "radial",
-        "fire spiral",
-        "fire stream",
-        "shock",
-        "ranged"
+        "basic pat"
     ],
     "equipped moves": {
-        "quick attack": "basic pat",
-        "special": "fire stream",
-        "alt special": "ranged",
-        "heal": "basic heal",
-        "scare": "scare kitty"
+        "quick attack": "basic pat"
     },
     "position": [
-        3138,
-        2598
+        3125,
+        2537
     ],
     "settings": {
         "sfx vol": 0.29,
