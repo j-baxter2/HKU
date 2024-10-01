@@ -1,14 +1,14 @@
 import arcade
 import json
-from src.sprites.following_sprite import FollowingSprite
-from src.sprites.player import Player
-from src.sprites.treat import Treat
+from sprites.following_sprite import FollowingSprite
+from sprites.player import Player
+from sprites.treat import Treat
 from pyglet.math import Vec2
 import random
 import math
 import json
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
-from src.utils.sound import load_sound, play_sound
+from data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
+from utils.sound import load_sound, play_sound
 
 class Kitty(FollowingSprite):
     def __init__(self, id : int, scene: arcade.Scene):

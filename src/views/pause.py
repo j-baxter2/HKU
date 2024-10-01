@@ -3,10 +3,10 @@ import arcade.experimental
 import arcade.experimental.uislider
 import arcade.gui
 import json
-from src.data import controls
-from src.data import color
-from src.data.constants import UI_FONT, UI_FONT_PATH, SOUND_EFFECT_VOL
-from src.utils.sound import load_sound, play_sound
+from data import controls
+from data import color
+from data.constants import UI_FONT, UI_FONT_PATH, SOUND_EFFECT_VOL
+from utils.sound import load_sound, play_sound
 
 class PauseView(arcade.View):
     def __init__(self, game_view):

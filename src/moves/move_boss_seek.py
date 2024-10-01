@@ -1,10 +1,10 @@
 import arcade
 import random
 import math
-from src.sprites.living_sprite import LivingSprite
-from src.sprites.projectile_seek import ProjectileSeek
-from src.moves.move import Move
-from src.data.constants import DELTA_TIME, LINE_HEIGHT
+from sprites.living_sprite import LivingSprite
+from sprites.projectile_seek import ProjectileSeek
+from moves.move import Move
+from data.constants import DELTA_TIME, LINE_HEIGHT
 
 class MoveBossSeek(Move):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):

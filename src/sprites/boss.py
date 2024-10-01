@@ -1,12 +1,12 @@
 import arcade
 import math
-from src.sprites.enemy import BaseEnemy
-from src.data.constants import DELTA_TIME, LINE_HEIGHT
+from sprites.enemy import BaseEnemy
+from data.constants import DELTA_TIME, LINE_HEIGHT
 import src.data.color as color
-from src.moves.move_boss_horiz import MoveBossHoriz
-from src.moves.move_boss_vert import MoveBossVert
-from src.moves.move_boss_seek import MoveBossSeek
-from src.utils.sound import load_sound, play_sound
+from moves.move_boss_horiz import MoveBossHoriz
+from moves.move_boss_vert import MoveBossVert
+from moves.move_boss_seek import MoveBossSeek
+from utils.sound import load_sound, play_sound
 
 
 class Boss(BaseEnemy):

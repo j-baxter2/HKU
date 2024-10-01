@@ -1,6 +1,6 @@
 import arcade
-from src.sprites.living_sprite import LivingSprite
-from src.moves.move_by_player import MoveByPlayer
+from sprites.living_sprite import LivingSprite
+from moves.move_by_player import MoveByPlayer
 
 class AffectAllMove(MoveByPlayer):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):

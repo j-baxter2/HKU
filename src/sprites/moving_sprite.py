@@ -1,8 +1,8 @@
 import arcade
 import random
 from pyglet.math import Vec2
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, TILE_SIZE, M
-from src.utils.sound import load_sound, play_sound
+from data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, TILE_SIZE, M
+from utils.sound import load_sound, play_sound
 
 class MovingSprite(arcade.Sprite):
     def __init__(self, data: dict):

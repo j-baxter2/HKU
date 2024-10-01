@@ -1,7 +1,7 @@
 import arcade
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL
-from src.utils.sound import load_sound, play_sound
-from src.sprites.moving_sprite import MovingSprite
+from data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL
+from utils.sound import load_sound, play_sound
+from sprites.moving_sprite import MovingSprite
 
 class LivingSprite(MovingSprite):
     def __init__(self, scene: arcade.Scene, data: dict):

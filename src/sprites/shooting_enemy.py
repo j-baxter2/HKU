@@ -1,7 +1,7 @@
 import arcade
-from src.sprites.enemy import BaseEnemy
-from src.moves.move_enemy_shoot import MoveEnemyShoot
-from src.data.constants import DELTA_TIME
+from sprites.enemy import BaseEnemy
+from moves.move_enemy_shoot import MoveEnemyShoot
+from data.constants import DELTA_TIME
 
 class ShootingEnemy(BaseEnemy):
     def __init__(self, id: int, scene: arcade.Scene):

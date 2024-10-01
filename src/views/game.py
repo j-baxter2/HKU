@@ -2,20 +2,19 @@ import arcade
 import arcade.color
 import math
 import json
-
 import arcade.color
-from src.views.pause import PauseView, MoveSelectView
-from src.sprites.player import Player
-from src.sprites.sound_player import AmbientPlayer
-from src.sprites.slime import Slime
+from views.pause import PauseView, MoveSelectView
+from sprites.player import Player
+from sprites.sound_player import AmbientPlayer
+from sprites.slime import Slime
 from utils.camera import HKUCamera
-from src.data import controls
+from data import controls
 from pyglet.math import Vec2
-from src.utils.level import Level
-from src.utils.sound import load_sound, play_sound
-from src.utils.physics_engine import HKUEngine
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
-import src.data.color as color
+from utils.level import Level
+from utils.sound import load_sound, play_sound
+from utils.physics_engine import HKUEngine
+from data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
+import data.color as color
 
 class GameSection(arcade.Section):
     def __init__(self, left: int, bottom: int, width: int, height: int,

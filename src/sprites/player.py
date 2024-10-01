@@ -1,19 +1,19 @@
 import arcade
-from src.sprites.living_sprite import LivingSprite
-from src.sprites.treat import Treat
+from sprites.living_sprite import LivingSprite
+from sprites.treat import Treat
 import json
 import math
 from pyglet.math import Vec2
-from src.moves.move import Move
-from src.moves.move_affect_all_in_range import AffectAllMove
-from src.moves.move_target_arrowkey import TargetArrowKey
-from src.moves.move_radial_fireball import RadialProjectile
-from src.moves.move_custom_fire import MoveCustomFire
-from src.moves.move_mouse_aim import MoveMouseAim
-from src.moves.move_arrow_aim import MoveArrowAim
+from moves.move import Move
+from moves.move_affect_all_in_range import AffectAllMove
+from moves.move_target_arrowkey import TargetArrowKey
+from moves.move_radial_fireball import RadialProjectile
+from moves.move_custom_fire import MoveCustomFire
+from moves.move_mouse_aim import MoveMouseAim
+from moves.move_arrow_aim import MoveArrowAim
 
-from src.utils.sound import load_sound, play_sound, FootstepSoundHandler
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
+from utils.sound import load_sound, play_sound, FootstepSoundHandler
+from data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
 
 class Player(LivingSprite):
     def __init__(self, id: int, scene: arcade.Scene):

@@ -1,10 +1,10 @@
 import arcade
 import math
-from src.sprites.enemy import BaseEnemy
-from src.moves.move_radial_enemy import MoveEnemyBloat
-from src.data.constants import DELTA_TIME
+from sprites.enemy import BaseEnemy
+from moves.move_radial_enemy import MoveEnemyBloat
+from data.constants import DELTA_TIME
 from pyglet.math import Vec2
-from src.utils.sound import load_sound, play_sound
+from utils.sound import load_sound, play_sound
 
 class BloatingEnemy(BaseEnemy):
     def __init__(self, id: int, scene: arcade.Scene):

@@ -2,14 +2,14 @@ import json
 import math
 import arcade
 import random
-from src.sprites.distruptor_enemy import DistruptorEnemy
-from src.sprites.shooting_enemy import ShootingEnemy
-from src.sprites.bloater_enemy import BloatingEnemy
-from src.sprites.boss import Boss
-from src.sprites.treat import Treat
-from src.sprites.kitty import Kitty
-from src.sprites.slime import Slime
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT
+from sprites.distruptor_enemy import DistruptorEnemy
+from sprites.shooting_enemy import ShootingEnemy
+from sprites.bloater_enemy import BloatingEnemy
+from sprites.boss import Boss
+from sprites.treat import Treat
+from sprites.kitty import Kitty
+from sprites.slime import Slime
+from data.constants import MAP_WIDTH, MAP_HEIGHT
 
 class Level:
     def __init__(self, level_id, scene: arcade.Scene):

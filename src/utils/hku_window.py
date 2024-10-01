@@ -1,6 +1,6 @@
 import arcade
 import arcade.key
-from src.data.constants import WINDOW_TITLE, DELTA_TIME, UI_FONT
+from data.constants import WINDOW_TITLE, DELTA_TIME, UI_FONT
 import src.data.color as color
 
 class MyWindow(arcade.Window):

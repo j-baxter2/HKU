@@ -1,9 +1,9 @@
 import arcade
 import json
 import math
-from src.sprites.moving_sprite import MovingSprite
-from src.moves.move import Move
-from src.data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
+from sprites.moving_sprite import MovingSprite
+from moves.move import Move
+from data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
 from pyglet.math import Vec2
 
 class ProjectileSpecify(MovingSprite):

@@ -1,9 +1,9 @@
 import arcade
 import random
-from src.sprites.living_sprite import LivingSprite
-from src.sprites.projectile_specify import ProjectileSpecify
-from src.moves.move import Move
-from src.data.constants import DELTA_TIME, LINE_HEIGHT
+from sprites.living_sprite import LivingSprite
+from sprites.projectile_specify import ProjectileSpecify
+from moves.move import Move
+from data.constants import DELTA_TIME, LINE_HEIGHT
 
 class MoveBossVert(Move):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):

@@ -1,7 +1,7 @@
 import arcade
-from src.sprites.living_sprite import LivingSprite
-from src.sprites.projectile_specify import ProjectileSpecify
-from src.moves.move import Move
+from sprites.living_sprite import LivingSprite
+from sprites.projectile_specify import ProjectileSpecify
+from moves.move import Move
 
 class MoveEnemyBloat(Move):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):

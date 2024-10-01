@@ -1,5 +1,5 @@
 import arcade
-from src.data.constants import DELTA_TIME
+from data.constants import DELTA_TIME
 import math
 
 class Treat(arcade.Sprite):

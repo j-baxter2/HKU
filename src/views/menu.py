@@ -1,8 +1,8 @@
 import arcade.gui
 import json
 from views.game import GameView
-from src.data.constants import UI_FONT, UI_FONT_PATH
-from src.data import color
+from data.constants import UI_FONT, UI_FONT_PATH
+from data import color
 
 class MenuView(arcade.View):
     def __init__(self):

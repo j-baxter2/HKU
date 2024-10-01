@@ -1,7 +1,7 @@
 import arcade
 import math
-from src.data.constants import M, DELTA_TIME, SOUND_EFFECT_VOL
-from src.utils.sound import play_sound
+from data.constants import M, DELTA_TIME, SOUND_EFFECT_VOL
+from utils.sound import play_sound
 
 class AmbientPlayer(arcade.Sprite):
     def __init__(self, scene: arcade.Scene = None, filename: str = None, scale: float = 1, image_x: float = 0, image_y: float = 0, image_width: float = 0, image_height: float = 0, center_x: float = 0, center_y: float = 0, sound: arcade.Sound = None, repeat_count_x: int = 1, repeat_count_y: int = 1, flipped_horizontally: bool = False, flipped_vertically: bool = False, flipped_diagonally: bool = False, hit_box_algorithm: str = "Simple", hit_box_detail: float = 4.5, texture: arcade.Texture = None, angle: float = 0):

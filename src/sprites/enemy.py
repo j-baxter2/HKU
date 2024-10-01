@@ -1,12 +1,12 @@
 import arcade
-from src.sprites.following_sprite import FollowingSprite
-from src.sprites.player import Player
+from sprites.following_sprite import FollowingSprite
+from sprites.player import Player
 from pyglet.math import Vec2
 import random
 import math
 import json
-from src.data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
-from src.utils.sound import load_sound, play_sound
+from data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
+from utils.sound import load_sound, play_sound
 
 class BaseEnemy(FollowingSprite):
     def __init__(self, id : int, scene: arcade.Scene):

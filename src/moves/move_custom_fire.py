@@ -1,8 +1,8 @@
 import arcade
-from src.sprites.living_sprite import LivingSprite
-from src.sprites.projectile import Projectile
-from src.moves.move_by_player import MoveByPlayer
-from src.data.constants import DELTA_TIME
+from sprites.living_sprite import LivingSprite
+from sprites.projectile import Projectile
+from moves.move_by_player import MoveByPlayer
+from data.constants import DELTA_TIME
 
 class MoveCustomFire(MoveByPlayer):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):

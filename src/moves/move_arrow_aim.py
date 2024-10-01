@@ -1,10 +1,10 @@
 import arcade
 from pyglet.math import Vec2
-from src.sprites.living_sprite import LivingSprite
-from src.sprites.projectile_specify import ProjectileSpecify
-from src.moves.move_by_player import MoveByPlayer
-from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL
-from src.utils.sound import load_sound, play_sound
+from sprites.living_sprite import LivingSprite
+from sprites.projectile_specify import ProjectileSpecify
+from moves.move_by_player import MoveByPlayer
+from data.constants import DELTA_TIME, SOUND_EFFECT_VOL
+from utils.sound import load_sound, play_sound
 
 class MoveArrowAim(MoveByPlayer):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):

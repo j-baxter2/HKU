@@ -1,6 +1,6 @@
 import arcade
-from src.sprites.living_sprite import LivingSprite
-from src.moves.move import Move
+from sprites.living_sprite import LivingSprite
+from moves.move import Move
 
 class MoveByPlayer(Move):
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):

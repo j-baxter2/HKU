@@ -1,5 +1,5 @@
 import arcade
-from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL
+from data.constants import DELTA_TIME, SOUND_EFFECT_VOL
 
 def load_sound(name:str, source = "builtin", file_type = "wav"):
     if source == "builtin":

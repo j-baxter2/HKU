@@ -1,9 +1,9 @@
 import arcade
 from pyglet.math import Vec2
 import math
-from src.data.constants import M, DELTA_TIME, SOUND_EFFECT_VOL
-from src.sprites.following_sprite import FollowingSprite
-from src.utils.sound import load_sound, play_sound
+from data.constants import M, DELTA_TIME, SOUND_EFFECT_VOL
+from sprites.following_sprite import FollowingSprite
+from utils.sound import load_sound, play_sound
 
 class Slime(arcade.Sprite):
     def __init__(self, scene: arcade.Scene = None, finite: bool = False, filename: str = None, scale: float = 1, image_x: float = 0, image_y: float = 0, image_width: float = 0, image_height: float = 0, center_x: float = 0, center_y: float = 0, repeat_count_x: int = 1, repeat_count_y: int = 1, flipped_horizontally: bool = False, flipped_vertically: bool = False, flipped_diagonally: bool = False, hit_box_algorithm: str = "Simple", hit_box_detail: float = 4.5, texture: arcade.Texture = None, angle: float = 0):
