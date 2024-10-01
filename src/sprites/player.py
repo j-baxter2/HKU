@@ -113,13 +113,7 @@ class Player(LivingSprite):
         custom_fire = MoveCustomFire(8, self.scene, self)
         arrow_aim = MoveArrowAim(7, self.scene, self)
         self.unlock_moves(basic_attack)
-        self.unlock_moves(basic_heal)
-        self.unlock_moves(scare)
-        self.unlock_moves(radial)
-        self.unlock_moves(custom_fire)
-        self.unlock_moves(arrow_aim)
         self.equip_move("quick attack", basic_attack)
-        self.equip_move("special", arrow_aim)
 
     def update(self):
         super().update()

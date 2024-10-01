@@ -17,6 +17,106 @@
     },
     "1": {
         "enemies": {
+        "enemy amount": 0,
+        "enemy ratio": {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0
+            }
+        },
+        "kitties": {
+        "kitty amount": 10,
+        "kitty ratio": {
+            "0": 0,
+            "1": 1
+            }
+        },
+        "traps": 10
+    },
+    "2": {
+        "enemies": {
+        "enemy amount": 5,
+        "enemy ratio": {
+            "0": 0,
+            "1": 1,
+            "2": 0,
+            "3": 0,
+            "4": 0
+            }
+        },
+        "kitties": {
+        "kitty amount": 15,
+        "kitty ratio": {
+            "0": 0,
+            "1": 1
+            }
+        },
+        "traps": 5
+    },
+    "3": {
+        "enemies": {
+        "enemy amount": 7,
+        "enemy ratio": {
+            "0": 0,
+            "1": 0.86,
+            "2": 0.14,
+            "3": 0,
+            "4": 0
+            }
+        },
+        "kitties": {
+        "kitty amount": 20,
+        "kitty ratio": {
+            "0": 0,
+            "1": 1
+            }
+        },
+        "traps": 15
+    },
+    "4": {
+        "enemies": {
+        "enemy amount": 12,
+        "enemy ratio": {
+            "0": 0,
+            "1": 0.58,
+            "2": 0.33,
+            "3": 0.09,
+            "4": 0
+            }
+        },
+        "kitties": {
+        "kitty amount": 20,
+        "kitty ratio": {
+            "0": 0,
+            "1": 1
+            }
+        },
+        "traps": 15
+    },
+    "5": {
+        "enemies": {
+        "enemy amount": 15,
+        "enemy ratio": {
+            "0": 0,
+            "1": 0.53,
+            "2": 0.27,
+            "3": 0.2,
+            "4": 0
+            }
+        },
+        "kitties": {
+        "kitty amount": 25,
+        "kitty ratio": {
+            "0": 0,
+            "1": 1
+            }
+        },
+        "traps": 15
+    },
+    "6": {
+        "enemies": {
         "enemy amount": 1,
         "enemy ratio": {
             "0": 0,
@@ -33,6 +133,6 @@
             "1": 1
             }
         },
-        "traps": 20
+        "traps": 0
     }
 }
