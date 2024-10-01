@@ -24,7 +24,7 @@
         "name": "basic heal",
         "type": "charge",
         "slot": "heal",
-        "damage": -20,
+        "damage": -30,
         "damage resist": 0.3,
         "cost": 50,
         "active time": 15,
@@ -128,7 +128,7 @@
     "6" : {
         "name": "slimeball",
         "type": "basic",
-        "damage": 5,
+        "damage": 10,
         "damage resist": null,
         "cost": 10,
         "active time": 5,
@@ -190,7 +190,7 @@
     "9" : {
         "name": "slimeball",
         "type": "basic",
-        "damage": 20,
+        "damage": 6,
         "damage resist": null,
         "cost": 10,
         "active time": 5,
@@ -210,7 +210,7 @@
     "10" : {
         "name": "boss horiz",
         "type": "basic",
-        "damage": 1,
+        "damage": 15,
         "damage resist": null,
         "cost": 10,
         "active time": 5,
@@ -230,7 +230,7 @@
     "11" : {
         "name": "boss vert",
         "type": "basic",
-        "damage": 20,
+        "damage": 10,
         "damage resist": null,
         "cost": 10,
         "active time": 5,

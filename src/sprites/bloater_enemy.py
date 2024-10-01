@@ -36,7 +36,7 @@ class BloatingEnemy(BaseEnemy):
     def setup(self):
         super().setup()
         self.slime_move = MoveEnemyBloat(id=9, scene=self.scene, origin_sprite=self)
-        self.attack = self.slime_move.damage
+        self.attack = self.slime_move.damage * self.slime_move.n_proj
         self.color = self.normal_color
 
     def update_while_alive(self):

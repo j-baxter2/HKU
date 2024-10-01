@@ -648,7 +648,7 @@ class GameView(arcade.View):
     def start_between_levels(self):
         self.between_levels = True
         self.between_levels_timer = 0
-        self.game_section.player.give_xp(10*self.game_section.current_level_id)
+        self.game_section.player.give_xp(25*self.game_section.current_level_id)
         enemies = self.game_section.scene.get_sprite_list("Enemy")
         for enemy in enemies:
             enemy.start_fade()

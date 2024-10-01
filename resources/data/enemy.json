@@ -95,7 +95,7 @@
     },
     "3" : {
         "name": "Bloat",
-        "hp": 2,
+        "hp": 1,
         "follow radius": 16384,
         "speed": 0.7,
         "sprint multiplier": 10,
