@@ -3,7 +3,7 @@ from pyglet.math import Vec2
 from src.sprites.living_sprite import LivingSprite
 from src.sprites.projectile_specify import ProjectileSpecify
 from src.moves.move_by_player import MoveByPlayer
-from src.data.constants import DELTA_TIME
+from src.data.constants import DELTA_TIME, SOUND_EFFECT_VOL
 from src.utils.sound import load_sound, play_sound
 
 class MoveArrowAim(MoveByPlayer):
@@ -56,7 +56,7 @@ class MoveArrowAim(MoveByPlayer):
             self.origin_sprite.color = self.color
             if self.sub_active_timer >= self.active_time / self.n_projectiles:
                 self.fire_projectile()
-                play_sound(self.fire_sound)
+                play_sound(self.fire_sound, volume=SOUND_EFFECT_VOL*arcade.get_window().sfx_vol)
                 self.projectiles_fired+=1
                 self.sub_active_timer=0
             if self.active_timer > self.active_time:
