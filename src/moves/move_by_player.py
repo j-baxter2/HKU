@@ -9,6 +9,7 @@ class MoveByPlayer(Move):
         self.damage_resist = self.move_data["damage resist"]
         self.cost = self.move_data["cost"]
         self.origin_sprite.all_moves.append(self)
+        self.ever_been_equipped = False
 
     def start(self):
         super().start()

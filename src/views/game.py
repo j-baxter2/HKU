@@ -6,6 +6,7 @@ import arcade.color
 from views.pause import PauseView, MoveSelectView
 from sprites.player import Player
 from sprites.sound_player import AmbientPlayer
+from sprites.bench import Bench
 from sprites.slime import Slime
 from utils.camera import HKUCamera
 from data import controls
@@ -70,8 +71,9 @@ class GameSection(arcade.Section):
         for point in self.tile_map.object_lists["workbench"]:
             x = point.shape[0]
             y = point.shape[1] + 90
-            bench = arcade.Sprite(center_x=x, center_y=y, filename="resources/spritesheets/bench.png", scale=3)
+            bench = Bench(scene=self.scene, center_x=x, center_y=y, filename="resources/spritesheets/bench.png", scale=3)
             self.scene.add_sprite("Workbench", bench)
+            bench.play()
         self.create_tile_terrain_mapping()
         self.camera = HKUCamera(self.width, self.height)
         self.player.setup()

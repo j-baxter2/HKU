@@ -322,6 +322,7 @@ class Player(LivingSprite):
                     self.equipped_moves[alt] = None
                     print("unequipped move from alt slot")
             self.equipped_moves[slot] = move
+            move.ever_been_equipped = True
 
     def do_move(self, move):
         if move.type == "basic":
@@ -425,6 +426,13 @@ class Player(LivingSprite):
             return distance <= 1024 or self.just_been_hit
         else:
             return False
+
+    @property
+    def has_never_equipped_move(self):
+        for move in self.unlocked_moves:
+            if not move.ever_been_equipped:
+                return True
+        return False
 
     def draw_debug(self):
         index = 0
