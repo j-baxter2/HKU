@@ -12,6 +12,7 @@ from data import controls
 from pyglet.math import Vec2
 from utils.level import Level
 from utils.sound import load_sound, play_sound
+from utils.path_manager import get_resource_path
 from utils.physics_engine import HKUEngine
 from data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME, BAR_SPACING, SOUND_EFFECT_VOL, MUSIC_VOL, LINE_HEIGHT, UI_FONT, UI_FONT_PATH, UI_FONT_SIZE, TILE_SIZE, M
 import data.color as color
@@ -33,7 +34,7 @@ class GameSection(arcade.Section):
         self.animated_pos = []
 
     def setup(self):
-        self.load_map("resources/maps/map2.json")
+        self.load_map(get_resource_path("resources/maps/map2.json"))
         self.player = Player(id=1, scene=self.scene)
         self.scene.add_sprite_list(name="Player", use_spatial_hash=True)
         self.scene.add_sprite("Player", self.player)
@@ -61,16 +62,16 @@ class GameSection(arcade.Section):
         for point in self.tile_map.object_lists["river noise"]:
             x = point.shape[0]
             y = point.shape[1]
-            ambient_player = AmbientPlayer(scene=self.scene, sound=self.river_sound, center_x=x, center_y=y, filename="resources/spritesheets/cat.png")
+            ambient_player = AmbientPlayer(scene=self.scene, sound=self.river_sound, center_x=x, center_y=y, filename=get_resource_path("resources/spritesheets/cat.png"))
             self.scene.add_sprite("River Sounds", ambient_player)
             ambient_player.play()
-        slime = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", center_x= 1260, center_y=1024, scale=3, finite=True)
+        slime = Slime(scene=self.scene, filename=get_resource_path("resources/spritesheets/slime.png"), center_x= 1260, center_y=1024, scale=3, finite=True)
         self.scene.add_sprite("Trap", slime)
         map_bounds = self.tile_map.object_lists["map bounds"]
         for point in self.tile_map.object_lists["workbench"]:
             x = point.shape[0]
             y = point.shape[1] + 90
-            bench = arcade.Sprite(center_x=x, center_y=y, filename="resources/spritesheets/bench.png", scale=3)
+            bench = arcade.Sprite(center_x=x, center_y=y, filename=get_resource_path("resources/spritesheets/bench.png"), scale=3)
             self.scene.add_sprite("Workbench", bench)
         self.create_tile_terrain_mapping()
         self.camera = HKUCamera(self.width, self.height)
@@ -220,7 +221,7 @@ class GameSection(arcade.Section):
         for integer, tile in tile_data.items():
             if tile.properties:
                 terrain_dict[tile.id] = tile.properties.get("Terrain", "unknown")
-        with open('resources/maps/terrain_mapping.json', 'w') as json_file:
+        with open(get_resource_path('resources/maps/terrain_mapping.json'), 'w') as json_file:
             json.dump(terrain_dict, json_file, indent=4)
 
     def update_camera(self):
@@ -543,8 +544,8 @@ class GameView(arcade.View):
 
         self.media_player = None
         self.songs = {
-            "normal": "resources/sounds/music/hkusong1.wav",
-            "battle": "resources/sounds/music/battlemusic1.wav"
+            "normal": get_resource_path("resources/sounds/music/hkusong1.wav"),
+            "battle": get_resource_path("resources/sounds/music/battlemusic1.wav")
         }
 
         self.curr_song_key = "normal"

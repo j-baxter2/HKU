@@ -5,10 +5,11 @@ from sprites.moving_sprite import MovingSprite
 from moves.move import Move
 from data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT
 from pyglet.math import Vec2
+from utils.path_manager import get_resource_path
 
 class Projectile(MovingSprite):
     def __init__(self, id: int, scene: arcade.Scene, origin_move: Move, start: tuple, target: tuple = (0,0), angle: float = 0, targetting_method: str = "tuple"):
-        with open("resources/data/projectile.json", "r") as file:
+        with open(get_resource_path("resources/data/projectile.json"), "r") as file:
             projectile_dict = json.load(file)
         self.projectile_data = projectile_dict[str(id)]
         self.scene = scene

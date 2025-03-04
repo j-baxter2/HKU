@@ -7,6 +7,7 @@ from data import controls
 from data import color
 from data.constants import UI_FONT, UI_FONT_PATH, SOUND_EFFECT_VOL
 from utils.sound import load_sound, play_sound
+from utils.path_manager import get_resource_path
 
 class PauseView(arcade.View):
     def __init__(self, game_view):
@@ -157,7 +158,7 @@ class MoveSelectView(arcade.View):
 
 
     def save_game_view(self):
-        with open('resources/saves/savegame.json', 'w') as json_file:
+        with open(get_resource_path('resources/saves/savegame.json'), 'w') as json_file:
             json.dump(self.game_view.to_dict(), json_file, indent=4)
         self.game_saved = True
 

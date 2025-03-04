@@ -3,10 +3,12 @@ from sprites.living_sprite import LivingSprite
 import json
 from data.constants import DELTA_TIME, SOUND_EFFECT_VOL, LINE_HEIGHT
 from utils.sound import load_sound, play_sound
+from utils.path_manager import get_resource_path
+
 
 class Move:
     def __init__(self, id: int, scene: arcade.Scene, origin_sprite: LivingSprite):
-        with open("resources/data/move.json", "r") as file:
+        with open(get_resource_path("resources/data/move.json"), "r") as file:
             moves_dict = json.load(file)
         self.move_data = moves_dict[str(id)]
 

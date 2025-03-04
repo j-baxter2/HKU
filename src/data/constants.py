@@ -1,9 +1,11 @@
 import json
+import os
+from utils.path_manager import get_resource_path
 
 WINDOW_TITLE = "( Hungry Kitty Uprising | A BestKitty Game )"
 
-with open("resources/maps/map2.json", "r") as file:
-            map_dict = json.load(file)
+with open(get_resource_path('resources/maps/map2.json'), 'r') as file:
+    map_dict = json.load(file)
 
 M = 128
 
@@ -26,6 +28,6 @@ CIRCLE_RADIUS = 20
 SOUND_EFFECT_VOL = 0.5
 MUSIC_VOL = 0.1
 
-UI_FONT_PATH = "resources/fonts/GWIBBLE_.ttf"
+UI_FONT_PATH = get_resource_path('resources/fonts/GWIBBLE_.ttf')  # Use the utility function
 UI_FONT = "Gwibble"
 UI_FONT_SIZE = 36

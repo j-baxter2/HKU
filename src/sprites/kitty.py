@@ -9,10 +9,11 @@ import math
 import json
 from data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 from utils.sound import load_sound, play_sound
+from utils.path_manager import get_resource_path
 
 class Kitty(FollowingSprite):
     def __init__(self, id : int, scene: arcade.Scene):
-        with open("resources/data/kitty.json", "r") as file:
+        with open(get_resource_path("resources/data/kitty.json"), "r") as file:
             kitty_dict = json.load(file)
         self.kitty_data = kitty_dict[str(id)]
         self.scene = scene
@@ -94,7 +95,7 @@ class Kitty(FollowingSprite):
                 x = random.uniform(edge_margin+1304, MAP_WIDTH - edge_margin)
                 y = random.uniform(edge_margin+1823, MAP_HEIGHT - edge_margin)
 
-                treat = Treat(scene=self.scene, image_file="resources/spritesheets/treat.png", scale=4, decayed=True)
+                treat = Treat(scene=self.scene, image_file=get_resource_path("resources/spritesheets/treat.png"), scale=4, decayed=True)
                 treat.position = (x, y)
                 self.scene.add_sprite("Treat", treat)
                 self.need_second_timer = 0

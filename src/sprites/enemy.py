@@ -7,10 +7,11 @@ import math
 import json
 from data.constants import MAP_WIDTH, MAP_HEIGHT, DELTA_TIME
 from utils.sound import load_sound, play_sound
+from utils.path_manager import get_resource_path
 
 class BaseEnemy(FollowingSprite):
     def __init__(self, id : int, scene: arcade.Scene):
-        with open("resources/data/enemy.json", "r") as file:
+        with open(get_resource_path("resources/data/enemy.json"), "r") as file:
             enemy_dict = json.load(file)
         self.enemy_data = enemy_dict[str(id)]
         super().__init__(self.enemy_data, self.scene)

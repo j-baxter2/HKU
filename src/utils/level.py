@@ -10,6 +10,7 @@ from sprites.treat import Treat
 from sprites.kitty import Kitty
 from sprites.slime import Slime
 from data.constants import MAP_WIDTH, MAP_HEIGHT
+from utils.path_manager import get_resource_path
 
 class Level:
     def __init__(self, level_id, scene: arcade.Scene):
@@ -37,7 +38,7 @@ class Level:
         self.boss_fight = False
 
     def load_level_data(self, level_id):
-        with open("resources/data/level.json", "r") as file:
+        with open(get_resource_path("resources/data/level.json"), "r") as file:
             level_data = json.load(file)
         self.level_list = [int(level) for level in level_data.keys()]
         return level_data[str(level_id)]
@@ -79,7 +80,7 @@ class Level:
         map_bounds = [MAP_WIDTH, MAP_HEIGHT]
         traps_to_replace = self.trap_amount - len(self.scene.get_sprite_list("Trap"))
         for i in range(traps_to_replace):
-            trap = Slime(scene=self.scene, filename="resources/spritesheets/slime.png", scale=3)
+            trap = Slime(scene=self.scene, filename=get_resource_path("resources/spritesheets/slime.png"), scale=3)
             x, y = self._generate_xy()
             trap.position = (x,y)
             self.scene.add_sprite("Trap", trap)
@@ -118,7 +119,7 @@ class Level:
 
         for i in range(self.treat_amount):
             x, y = self._generate_xy()
-            treat = Treat(scene=self.scene, image_file="resources/spritesheets/treat.png", scale=4, decayed=True)
+            treat = Treat(scene=self.scene, image_file=get_resource_path("resources/spritesheets/treat.png"), scale=4, decayed=True)
             treat.position = (x, y)
             self.scene.add_sprite("Treat", treat)
 

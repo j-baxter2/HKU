@@ -14,10 +14,11 @@ from moves.move_arrow_aim import MoveArrowAim
 
 from utils.sound import load_sound, play_sound, FootstepSoundHandler
 from data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, LINE_HEIGHT
+from utils.path_manager import get_resource_path
 
 class Player(LivingSprite):
     def __init__(self, id: int, scene: arcade.Scene):
-        with open("resources/data/player.json", "r") as file:
+        with open(get_resource_path("resources/data/player.json"), "r") as file:
             player_dict = json.load(file)
         self.player_data = player_dict[str(id)]
 
@@ -96,7 +97,7 @@ class Player(LivingSprite):
 
         self.inside = False
 
-        with open("resources/maps/terrain_mapping.json", "r") as file:
+        with open(get_resource_path("resources/maps/terrain_mapping.json"), "r") as file:
             self.terrain_mapping = json.load(file)
 
         self.color = self.color[:3]+(int(0),)
@@ -148,7 +149,7 @@ class Player(LivingSprite):
                 self.fade_in_timer = 0
 
     def load_ranking_data(self):
-        with open("resources/data/player_levelling.json", "r") as file:
+        with open(get_resource_path("resources/data/player_levelling.json"), "r") as file:
             ranking_data = json.load(file)
         self.ranking_data = ranking_data
 
@@ -268,7 +269,7 @@ class Player(LivingSprite):
         self.advance_animation()
 
     def drop_treat(self):
-        treat = Treat(scene=self.scene, image_file="resources/spritesheets/treat.png", scale=4)
+        treat = Treat(scene=self.scene, image_file=get_resource_path("resources/spritesheets/treat.png"), scale=4)
         treat.center_x = self.left
         treat.center_y = self.center_y
         self.scene.add_sprite("Treat", treat)

@@ -3,13 +3,15 @@ import random
 from pyglet.math import Vec2
 from data.constants import DELTA_TIME, MAP_WIDTH, MAP_HEIGHT, SOUND_EFFECT_VOL, TILE_SIZE, M
 from utils.sound import load_sound, play_sound
+from utils.path_manager import get_resource_path
+
 
 class MovingSprite(arcade.Sprite):
     def __init__(self, data: dict):
 
         sprite_data = data["spritesheet"]
 
-        sheet_path = sprite_data["path"]
+        sheet_path = get_resource_path(sprite_data["path"])
         tile_scale = sprite_data["scale"]
 
 

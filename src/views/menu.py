@@ -1,8 +1,11 @@
+import os
 import arcade.gui
 import json
 from views.game import GameView
 from data.constants import UI_FONT, UI_FONT_PATH
 from data import color
+from utils.path_manager import get_resource_path
+
 
 class MenuView(arcade.View):
     def __init__(self):
@@ -10,7 +13,7 @@ class MenuView(arcade.View):
         self.window.views["menu"] = self
         self.save_detected = False
 
-        self.background = arcade.load_texture("resources/textures/ui/landscape.png")
+        self.background = arcade.load_texture(get_resource_path('resources/textures/ui/landscape.png'))
 
         arcade.load_font(UI_FONT_PATH)
 
@@ -20,7 +23,8 @@ class MenuView(arcade.View):
 
         style = arcade.get_window().button_style
 
-        title_sprite = arcade.Sprite("resources/textures/ui/title.png")
+        title_sprite = arcade.Sprite(get_resource_path("resources/textures/ui/title.png"))
+
 
         title_widget = arcade.gui.UISpriteWidget(sprite=title_sprite, width=736, height=256)
         self.v_box.add(title_widget.with_space_around(bottom=40))
@@ -54,7 +58,7 @@ class MenuView(arcade.View):
             game_view = GameView()
             game_view.main_menu = self
             game_view.setup()
-            with open("resources/saves/savegame.json", "r") as file:
+            with open(get_resource_path("resources/saves/savegame.json"), "r") as file:
                 self.savegame_dict = json.load(file)
             game_view.from_dict(self.savegame_dict)
             self.window.show_view(game_view)
@@ -84,7 +88,7 @@ class MenuView(arcade.View):
 
     def check_for_save(self):
         try:
-            with open("resources/saves/savegame.json", "r") as file:
+            with open(get_resource_path("resources/saves/savegame.json"), "r") as file:
                 self.savegame_dict = json.load(file)
             if len(self.savegame_dict) > 0:
                 self.save_detected = True
