@@ -1,10 +1,14 @@
 import arcade
+import sys
 from data.constants import DELTA_TIME, SOUND_EFFECT_VOL
 from utils.path_manager import get_resource_path
 
 def load_sound(name:str, source = "builtin", file_type = "wav"):
     if source == "builtin":
-        path = get_resource_path(f"lib/arcade/resources/sounds/{name}.{file_type}")
+        if getattr(sys, 'frozen', False):
+            path = get_resource_path(f"lib/arcade/resources/sounds/{name}.{file_type}")
+        else:
+            path = get_resource_path(f":resources:sounds/{name}.{file_type}")
     elif source == "hku":
         path = get_resource_path(f"resources/sounds/{name}.{file_type}")
     else:
