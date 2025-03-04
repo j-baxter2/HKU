@@ -9,6 +9,11 @@ def load_sound(name:str, source = "builtin", file_type = "wav"):
             path = get_resource_path(f"lib/arcade/resources/sounds/{name}.{file_type}")
         else:
             path = f":resources:sounds/{name}.{file_type}"
+            if name != None:
+                sound = arcade.load_sound(path)
+                return sound
+            else:
+                pass
     elif source == "hku":
         path = get_resource_path(f"resources/sounds/{name}.{file_type}")
     else:
